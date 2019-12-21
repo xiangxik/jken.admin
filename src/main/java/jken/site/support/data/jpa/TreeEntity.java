@@ -2,7 +2,7 @@
  * Copyright (c) 2019.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2019-12-20T22:23:11.875+08:00
+ * @LastModified: 2019-12-21T21:19:36.169+08:00
  *
  */
 
@@ -16,6 +16,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@MappedSuperclass
 public class TreeEntity<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends SortEntity<U, I> implements Hierarchical<T> {
 
     @Column(length = 500)

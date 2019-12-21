@@ -2,7 +2,7 @@
  * Copyright (c) 2019.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2019-12-20T22:23:11.864+08:00
+ * @LastModified: 2019-12-21T21:19:36.162+08:00
  *
  */
 
@@ -14,6 +14,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-public class DataEntity<U, I extends Serializable> extends AbstractAuditable<U, I> implements Entity<I> {
+public abstract class DataEntity<U, I extends Serializable> extends AbstractAuditable<U, I> implements Entity<I> {
 
 }

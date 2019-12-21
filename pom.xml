@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019.
+  ~ @Link: http://jken.site
+  ~ @Author: ken kong
+  ~ @LastModified: 2019-12-21T21:19:36.173+08:00
+  ~
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jken.site</groupId>
+    <groupId>jken</groupId>
     <artifactId>jken.site</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
@@ -13,7 +21,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.13</java.version>
+        <java.version>13</java.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <springboot.version>2.2.2.RELEASE</springboot.version>
         <querydsl.version>4.2.2</querydsl.version>
@@ -98,6 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <skip>true</skip>
                     <source>${java.version}</source>
@@ -111,10 +120,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.2.RELEASE</version>
             </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
+                <version>1.1.3</version>
                 <executions>
                     <execution>
                         <goals>

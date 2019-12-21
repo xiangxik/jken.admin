@@ -2,7 +2,7 @@
  * Copyright (c) 2019.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2019-12-20T22:23:11.878+08:00
+ * @LastModified: 2019-12-21T21:19:36.170+08:00
  *
  */
 
@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.List;
 
-public class TreeRepositoryImpl<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, U, I> {
+public abstract class TreeRepositoryImpl<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, U, I> {
 
     public TreeRepositoryImpl(CorpDetection corpDetection, JpaEntityInformation<T, I> entityInformation, EntityManager entityManager) {
         super(corpDetection, entityInformation, entityManager);

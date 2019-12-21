@@ -2,7 +2,7 @@
  * Copyright (c) 2019.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2019-12-20T22:23:11.865+08:00
+ * @LastModified: 2019-12-21T21:19:36.165+08:00
  *
  */
 
@@ -46,9 +46,11 @@ public class DataRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I exten
         protected JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information, EntityManager entityManager) {
             if (isEntityRepository(information.getRepositoryInterface())) {
                 if (isTreeRepository(information.getRepositoryInterface())) {
-                    return new TreeRepositoryImpl(corpDetection, getEntityInformation(information.getDomainType()), entityManager);
+                    return new TreeRepositoryImpl(corpDetection, getEntityInformation(information.getDomainType()), entityManager) {
+                    };
                 }
-                return new EntityRepositoryImpl<>(corpDetection, getEntityInformation(information.getDomainType()), entityManager);
+                return new EntityRepositoryImpl(corpDetection, getEntityInformation(information.getDomainType()), entityManager) {
+                };
             }
             return super.getTargetRepository(information, entityManager);
         }
