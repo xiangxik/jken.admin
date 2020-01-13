@@ -8,9 +8,13 @@
 
 package jken.site.security;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import jken.site.support.data.Corpable;
+import jken.site.support.data.jpa.Entity;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,7 +40,13 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
 
         String corpCode = obtainCorpCode();
 
-        return loadUserByUsernameAndCorpCode(username, corpCode);
+        U user = loadUserByUsernameAndCorpCode(username, corpCode);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Not found user " + username);
+        }
+        return new CustomUserDetails(user instanceof Corpable ? ((Corpable) user).getCorpCode() : null, user instanceof Entity ? ((Entity<? extends Serializable>) user).getId() : null, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+                user.getAuthorities() == null ? AuthorityUtils.createAuthorityList("ROLE_USER") : user.getAuthorities());
     }
 
     @Override

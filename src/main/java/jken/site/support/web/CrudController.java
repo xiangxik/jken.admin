@@ -24,19 +24,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.Serializable;
 
-public abstract class CrudController<T extends Entity<I>, U extends UserDetails, I extends Serializable> extends BaseController implements InitializingBean {
-
-    @Autowired
-    private AuditorAware<U> auditorAware;
+public abstract class CrudController<T extends Entity<I>, I extends Serializable> extends BaseController implements InitializingBean {
 
     @Autowired
     private CrudService<T, I> service;
 
     private String viewDir;
-
-    public U getCurrentUser() {
-        return auditorAware.getCurrentAuditor().orElse(null);
-    }
 
     @Override
     public void afterPropertiesSet() {

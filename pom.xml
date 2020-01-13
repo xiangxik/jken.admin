@@ -121,6 +121,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.2.2.RELEASE</version>
+                <configuration>
+                    <mainClass>jken.site.JkenSiteApplication</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
