@@ -10,8 +10,8 @@ public class IndexEndpoint {
         return "/index";
     }
 
-    @GetMapping({"/dashboard"})
-    public String dashboardPage() {
-        return "/dashboard";
+    @GetMapping({"/home"})
+    public String homePage() {
+        return "/home";
     }
 }

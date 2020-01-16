@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css" media="all">
-    <link rel="stylesheet" th:href="@{/static/style/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
 </head>
 <body class="layui-layout-body">
 
@@ -93,17 +93,15 @@
 
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
-                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+
+                    <li data-name="home" class="layui-nav-item layui-this">
+                        <a href="javascript:;" th:lay-href="home" lay-tips="主页" lay-direction="2">
                             <i class="layui-icon layui-icon-home"></i>
                             <cite>主页</cite>
                         </a>
-                        <dl class="layui-nav-child">
-                            <dd data-name="dashboard" class="layui-this">
-                                <a lay-href="dashboard">工作台</a>
-                            </dd>
-                        </dl>
                     </li>
+
+
                     <li data-name="user" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="人员管理" lay-direction="2">
                             <i class="layui-icon layui-icon-user"></i>
@@ -171,7 +169,7 @@
             </div>
             <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
                 <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                    <li lay-id="dashboard" lay-attr="dashboard" class="layui-this"><i
+                    <li lay-id="home" lay-attr="home" class="layui-this"><i
                             class="layui-icon layui-icon-home"></i></li>
                 </ul>
             </div>
@@ -181,7 +179,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="dashboard" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe src="home" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
 
@@ -196,7 +194,7 @@
 </script>
 <script>
     layui.config({
-        base: base + '/static/' //静态资源所在路径
+        base: base + '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use('index');

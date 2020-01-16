@@ -8,8 +8,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css" media="all">
-    <link rel="stylesheet" th:href="@{/static/style/admin.css}" media="all">
-    <link rel="stylesheet" th:href="@{/static/style/login.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/login.css}" media="all">
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 
     <div class="layadmin-user-login-main">
         <div class="layadmin-user-login-box layadmin-user-login-header">
-            <h2>Autumn Web Application</h2>
+            <h2>Web Application</h2>
             <p>通用后台管理系统</p>
         </div>
         <form class="layadmin-user-login-box layadmin-user-login-body layui-form" method="post" th:action="@{/login}">
@@ -64,7 +64,7 @@
                 <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
                 <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
 
-                <a href="reg.html" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
+                <a th:href="@{/register}" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
             </div>
         </form>
     </div>
