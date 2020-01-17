@@ -14,6 +14,6 @@ public class CorpController extends CrudController<Corp, Long> {
 
     @Override
     public Page<Corp> doPage(Predicate predicate, Pageable pageable) {
-        return null;
+        return super.doInternalPage(predicate, pageable);
     }
 }

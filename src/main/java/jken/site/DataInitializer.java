@@ -5,8 +5,8 @@ import jken.site.modules.core.entity.User;
 import jken.site.modules.core.service.CorpService;
 import jken.site.modules.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
+public class DataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private CorpService corpService;
@@ -28,7 +28,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     private volatile boolean nonExecuted = true;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         if (nonExecuted) {
             synchronized (this) {
                 if (nonExecuted) {
