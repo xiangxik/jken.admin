@@ -10,7 +10,7 @@ package jken.site.support.service;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import jken.site.support.data.jpa.EntityRepository;
+import jken.site.support.data.jpa.QuerydslEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -24,9 +24,9 @@ import java.util.Optional;
 public abstract class CrudService<T, I extends Serializable> {
 
     @Autowired
-    private EntityRepository<T, I> repository;
+    private QuerydslEntityRepository<T, I> repository;
 
-    protected EntityRepository<T, I> getRepository() {
+    protected QuerydslEntityRepository<T, I> getRepository() {
         return repository;
     }
 

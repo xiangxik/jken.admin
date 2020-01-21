@@ -1,39 +1,26 @@
-/*
- * Copyright (c) 2019.
- * @Link: http://jken.site
- * @Author: ken kong
- * @LastModified: 2019-12-20T22:23:11.856+08:00
- *
- */
-
 package jken.site.security;
 
 import com.google.common.base.Strings;
-import jken.site.support.data.CorpDetection;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CurrentCorpDetection implements CorpDetection {
-    private static final ThreadLocal<String> corpCodeHolder = new NamedThreadLocal<>("corp");
+public class CorpCodeHolder {
+    private static final ThreadLocal<String> HOLDER = new NamedThreadLocal<>("corp");
 
     public static String getCorpCode() {
-        return corpCodeHolder.get();
+        return HOLDER.get();
     }
 
     public static void setCorpCode(String corpCode) {
-        corpCodeHolder.set(corpCode);
+        HOLDER.set(corpCode);
     }
 
     public static void cleanup() {
-        corpCodeHolder.remove();
+        HOLDER.remove();
     }
 
-    @Override
-    public String getCurrentCorpCode() {
-
+    public static String getCurrentCorpCode() {
         String corpCode = getCorpCode();
         if (Strings.isNullOrEmpty(corpCode)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,11 +31,8 @@ public class CurrentCorpDetection implements CorpDetection {
                     setCorpCode(corpCode);
                 }
             }
-
         }
 
         return corpCode;
     }
-
-
 }

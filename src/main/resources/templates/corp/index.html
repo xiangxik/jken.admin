@@ -72,19 +72,13 @@
             </script>
 
             <table class="layui-table"
-                   lay-data="{height:'full-100', url:'/static/layuiadmin/json/table/user.js', page:true, id:'main-table', toolbar: '#test-table-toolbar-toolbarDemo'}"
+                   lay-data="{height: 'full-200', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/corp/page', id:'main-table', toolbar: '#test-table-toolbar-toolbarDemo'}"
                    lay-filter="main-table">
                 <thead>
                 <tr>
-                    <th lay-data="{checkbox:true}"></th>
-                    <th lay-data="{field:'id', width:80, sort: true}">ID</th>
-                    <th lay-data="{field:'username', width:80}">用户名</th>
-                    <th lay-data="{field:'sex', width:80, sort: true}">性别</th>
-                    <th lay-data="{field:'city'}">城市</th>
-                    <th lay-data="{field:'sign'}">签名</th>
-                    <th lay-data="{field:'experience', sort: true}">积分</th>
-                    <th lay-data="{field:'score', sort: true}">评分</th>
-                    <th lay-data="{field:'classify'}">职业</th>
+                    <th lay-data="{field:'id', checkbox:true}"></th>
+                    <th lay-data="{field:'name', sort: true}">名称</th>
+                    <th lay-data="{field:'code', width:80, sort: true}">代号</th>
                     <th lay-data="{width:120,toolbar: '#test-table-toolbar-barDemo'}">操作</th>
                 </tr>
                 </thead>
@@ -111,6 +105,22 @@
     var table = layui.table
     ,form = layui.form;
 
+table.on('sort(main-table)', function(obj){ //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  console.log(obj.field); //当前排序的字段名
+  console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+  console.log(this); //当前排序的 th 对象
+
+  //尽管我们的 table 自带排序功能，但并没有请求服务端。
+  //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+  table.reload('main-table', {
+    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+      sort: obj.field +','+obj.type //排序字段//排序方式
+    }
+  });
+
+  layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
+});
 
      //头工具栏事件
     table.on('toolbar(main-table)', function(obj){

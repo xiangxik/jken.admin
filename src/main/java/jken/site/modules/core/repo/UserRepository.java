@@ -9,9 +9,9 @@
 package jken.site.modules.core.repo;
 
 import jken.site.modules.core.entity.User;
-import jken.site.support.data.jpa.EntityRepository;
+import jken.site.support.data.jpa.QuerydslEntityRepository;
 
-public interface UserRepository extends EntityRepository<User, Long> {
+public interface UserRepository extends QuerydslEntityRepository<User, Long> {
 
     User findByUsernameAndCorpCode(String username, String corpCode);
 

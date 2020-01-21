@@ -16,10 +16,10 @@ import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class TreeRepositoryImpl<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, U, I> {
+public class TreeRepositoryImpl<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, U, I> {
 
-    public TreeRepositoryImpl(CorpDetection corpDetection, JpaEntityInformation<T, I> entityInformation, EntityManager entityManager) {
-        super(corpDetection, entityInformation, entityManager);
+    public TreeRepositoryImpl(JpaEntityInformation<T, I> entityInformation, EntityManager entityManager) {
+        super(entityInformation, entityManager);
     }
 
     @Override
