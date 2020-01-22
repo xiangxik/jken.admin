@@ -20,28 +20,26 @@ public class JacksonResponseCustomizer extends AbstractMappingJacksonResponseBod
     @Override
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType, ServerHttpRequest request, ServerHttpResponse response) {
         Object value = bodyContainer.getValue();
-        if (value != null) {
-            if (value instanceof Page) {
-                Page<?> page = (Page<?>) value;
-                bodyContainer.setValue(new LayuiPage(0, "", page));
-            }
+
+        if (value instanceof Page) {
+            Page<?> page = (Page<?>) value;
+            bodyContainer.setValue(new LayuiPage(0, "", page));
         }
     }
 
-    static class LayuiPage {
+    static class Result {
+
+        public static final Result SUCCESS = new Result(0, "");
+
         private Integer code;
         private String msg;
-        private Long count;
-        private List<?> data;
 
-        public LayuiPage() {
+        public Result() {
         }
 
-        public LayuiPage(Integer code, String msg, Page<?> page) {
+        public Result(Integer code, String msg) {
             this.code = code;
             this.msg = msg;
-            this.count = page.getTotalElements();
-            this.data = page.getContent();
         }
 
         public Integer getCode() {
@@ -58,6 +56,21 @@ public class JacksonResponseCustomizer extends AbstractMappingJacksonResponseBod
 
         public void setMsg(String msg) {
             this.msg = msg;
+        }
+    }
+
+    static class LayuiPage extends Result {
+        private Long count;
+        private List<?> data;
+
+        public LayuiPage() {
+        }
+
+        public LayuiPage(Integer code, String msg, Page<?> page) {
+            setCode(code);
+            setMsg(msg);
+            this.count = page.getTotalElements();
+            this.data = page.getContent();
         }
 
         public Long getCount() {
