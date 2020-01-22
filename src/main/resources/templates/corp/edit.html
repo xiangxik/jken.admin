@@ -10,35 +10,38 @@
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
 </head>
 <body>
-<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
+<div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
         <label class="layui-form-label">公司名称</label>
         <div class="layui-input-inline">
-            <input type="text" name="name" lay-verify="required" placeholder="请输入公司名称" autocomplete="off" class="layui-input">
+            <input autocomplete="off" class="layui-input" lay-verify="required" name="name" placeholder="请输入公司名称"
+                   type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司代号</label>
         <div class="layui-input-inline">
-            <input type="text" name="code" lay-verify="required" placeholder="请输入公司代号" autocomplete="off" class="layui-input">
+            <input autocomplete="off" class="layui-input" lay-verify="required" name="code" placeholder="请输入公司代号"
+                   type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司网站</label>
         <div class="layui-input-inline">
-            <input type="text" name="website" placeholder="请输入公司网站" autocomplete="off" class="layui-input">
+            <input autocomplete="off" class="layui-input" name="website" placeholder="请输入公司网站" type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司简介</label>
         <div class="layui-input-inline">
-            <textarea name="introduction" style="width: 400px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+            <textarea autocomplete="off" class="layui-textarea" name="introduction"
+                      style="width: 400px; height: 150px;"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
-            <select name="status" lay-verify="required">
+            <select lay-verify="required" name="status">
                 <option value="NORMAL">正常</option>
                 <option value="ARREARAGE">欠费</option>
             </select>
@@ -47,12 +50,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">是否停用</label>
         <div class="layui-input-inline">
-            <input type="checkbox" lay-verify="required" lay-filter="disabled" name="disabled" lay-skin="switch" lay-text="已停用|启用中">
+            <input lay-filter="disabled" lay-skin="switch" lay-text="已停用|启用中" lay-verify="required" name="disabled"
+                   type="checkbox">
         </div>
     </div>
     <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
-        <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
+        <input id="jk-form-submit" lay-filter="jk-form-submit" lay-submit type="button" value="确认添加">
+        <input id="jk-form-edit" lay-filter="jk-form-edit" lay-submit type="button" value="确认编辑">
     </div>
 </div>
 
@@ -61,108 +65,23 @@
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
 </script>
 <script>
-layui.config({
-  base: base + '/static/layuiadmin/'
-}).use(['table'], function () {
-  var table = layui.table, form = layui.form;
+  layui.config({
+    base: base + '/static/layuiadmin/'
+  }).use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
 
-  table.on('sort(jk-table)', function (obj) {
-    table.reload('jk-table', {
-      initSort: obj,
-      where: {
-        sort: obj.field + ',' + obj.type
-      }
+    //监听提交
+    form.on('submit(jk-form-submit)', function(data){
+      var field = data.field; //获取提交的字段
+      var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+      //提交 Ajax 成功后，关闭当前弹层并重载表格
+      //$.ajax({});
+      parent.layui.table.reload('jk-table'); //重载表格
+      parent.layer.close(index); //再执行关闭
     });
-  });
-
-  table.on('toolbar(jk-table)', function (obj) {
-    var checkStatus = table.checkStatus(obj.config.id);
-    switch (obj.event) {
-      case 'create':
-        layer.open({
-          type: 2
-          , title: '添加公司'
-          , content: 'listform.html'
-          , maxmin: true
-          , area: ['550px', '550px']
-          , btn: ['确定', '取消']
-          , yes: function (index, layero) {
-            //点击确认触发 iframe 内容中的按钮提交
-            var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
-            submit.click();
-          }
-        });
-        break;
-      case 'batchDelete':
-        var data = checkStatus.data;
-        console.log(data);
-        break;
-    };
-  });
-
-  //监听行工具事件
-  table.on('tool(jk-table)', function (obj) {
-    var data = obj.data;
-    if (obj.event === 'del') {
-      layer.confirm('真的删除行么', function (index) {
-        obj.del();
-        layer.close(index);
-      });
-    } else if (obj.event === 'edit') {
-      layer.prompt({
-        formType: 2
-        , value: data.email
-      }, function (value, index) {
-        obj.update({
-          email: value
-        });
-        layer.close(index);
-      });
-    }
-  });
-
-  //监听搜索
-  form.on('submit(jk-search)', function (data) {
-    var field = data.field;
-
-    //执行重载
-    table.reload('jk-table', {
-      where: field
-    });
-  });
-
-  var $ = layui.$, active = {
-    batchdel: function () {
-      var checkStatus = table.checkStatus('LAY-app-content-list')
-        , checkData = checkStatus.data; //得到选中的数据
-
-      if (checkData.length === 0) {
-        return layer.msg('请选择数据');
-      }
-
-      layer.confirm('确定删除吗？', function (index) {
-
-        //执行 Ajax 后重载
-        /*
-        admin.req({
-          url: 'xxx'
-          //,……
-        });
-        */
-        table.reload('LAY-app-content-list');
-        layer.msg('已删除');
-      });
-    },
-    add: function () {
-
-    }
-  };
-
-  $('.layui-btn.layuiadmin-btn-list').on('click', function () {
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
-  });
-});
+  })
 </script>
 </body>
 </html>
