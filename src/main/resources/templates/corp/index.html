@@ -18,38 +18,31 @@
             <div class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">文章ID</label>
+                        <label class="layui-form-label">名称</label>
                         <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="id" placeholder="请输入" type="text">
+                            <input autocomplete="off" class="layui-input" name="name" placeholder="请输入" type="text">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">作者</label>
+                        <label class="layui-form-label">代号</label>
                         <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="author" placeholder="请输入" type="text">
+                            <input autocomplete="off" class="layui-input" name="code" placeholder="请输入" type="text">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">标题</label>
+                        <label class="layui-form-label">状态</label>
                         <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="title" placeholder="请输入" type="text">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">文章标签</label>
-                        <div class="layui-input-inline">
-                            <select name="label">
-                                <option value="">请选择标签</option>
-                                <option value="0">美食</option>
-                                <option value="1">新闻</option>
-                                <option value="2">八卦</option>
-                                <option value="3">体育</option>
-                                <option value="4">音乐</option>
+                            <select name="status">
+                                <option value="">请选择状态</option>
+                                <option value="0">正常</option>
+                                <option value="1">欠费</option>
+                                <option value="2">禁用</option>
+                                <option value="3">锁定</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <button class="layui-btn layuiadmin-btn-list" lay-filter="LAY-app-contlist-search" lay-submit>
+                        <button class="layui-btn layuiadmin-btn-list" lay-filter="jk-search" lay-submit>
                             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                         </button>
                     </div>
@@ -95,136 +88,111 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+
 </script>
 <script>
-    layui.config({
-        base: base + '/static/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function(){
-    var table = layui.table
-    ,form = layui.form;
+layui.config({
+  base: base + '/static/layuiadmin/'
+}).use(['table'], function () {
+  var table = layui.table, form = layui.form;
 
-table.on('sort(main-table)', function(obj){ //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-  console.log(obj.field); //当前排序的字段名
-  console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
-  console.log(this); //当前排序的 th 对象
-
-  //尽管我们的 table 自带排序功能，但并没有请求服务端。
-  //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
-  table.reload('main-table', {
-    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
-    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
-      sort: obj.field +','+obj.type //排序字段//排序方式
-    }
+  table.on('sort(main-table)', function (obj) {
+    table.reload('main-table', {
+      initSort: obj,
+      where: {
+        sort: obj.field + ',' + obj.type
+      }
+    });
   });
 
-  layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
-});
-
-     //头工具栏事件
-    table.on('toolbar(main-table)', function(obj){
-      var checkStatus = table.checkStatus(obj.config.id);
-      switch(obj.event){
-        case 'create':
-            layer.open({
-              type: 2
-              ,title: '添加文章'
-              ,content: 'listform.html'
-              ,maxmin: true
-              ,area: ['550px', '550px']
-              ,btn: ['确定', '取消']
-              ,yes: function(index, layero){
-                //点击确认触发 iframe 内容中的按钮提交
-                var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
-                submit.click();
-              }
-            });
+  table.on('toolbar(main-table)', function (obj) {
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch (obj.event) {
+      case 'create':
+        layer.open({
+          type: 2
+          , title: '添加公司'
+          , content: 'listform.html'
+          , maxmin: true
+          , area: ['550px', '550px']
+          , btn: ['确定', '取消']
+          , yes: function (index, layero) {
+            //点击确认触发 iframe 内容中的按钮提交
+            var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+            submit.click();
+          }
+        });
         break;
-        case 'batchDelete':
+      case 'batchDelete':
         var data = checkStatus.data;
         console.log(data);
         break;
-      };
-    });
-
-    //监听行工具事件
-    table.on('tool(main-table)', function(obj){
-      var data = obj.data;
-      if(obj.event === 'del'){
-        layer.confirm('真的删除行么', function(index){
-          obj.del();
-          layer.close(index);
-        });
-      } else if(obj.event === 'edit'){
-        layer.prompt({
-          formType: 2
-          ,value: data.email
-        }, function(value, index){
-          obj.update({
-            email: value
-          });
-          layer.close(index);
-        });
-      }
-    });
-
-    //监听搜索
-    form.on('submit(LAY-app-contlist-search)', function(data){
-      var field = data.field;
-
-      //执行重载
-      table.reload('LAY-app-content-list', {
-        where: field
-      });
-    });
-
-    var $ = layui.$, active = {
-      batchdel: function(){
-        var checkStatus = table.checkStatus('LAY-app-content-list')
-        ,checkData = checkStatus.data; //得到选中的数据
-
-        if(checkData.length === 0){
-          return layer.msg('请选择数据');
-        }
-
-        layer.confirm('确定删除吗？', function(index) {
-
-          //执行 Ajax 后重载
-          /*
-          admin.req({
-            url: 'xxx'
-            //,……
-          });
-          */
-          table.reload('LAY-app-content-list');
-          layer.msg('已删除');
-        });
-      },
-      add: function(){
-
-      }
     };
-
-    $('.layui-btn.layuiadmin-btn-list').on('click', function(){
-      var type = $(this).data('type');
-      active[type] ? active[type].call(this) : '';
-    });
-
   });
 
+  //监听行工具事件
+  table.on('tool(main-table)', function (obj) {
+    var data = obj.data;
+    if (obj.event === 'del') {
+      layer.confirm('真的删除行么', function (index) {
+        obj.del();
+        layer.close(index);
+      });
+    } else if (obj.event === 'edit') {
+      layer.prompt({
+        formType: 2
+        , value: data.email
+      }, function (value, index) {
+        obj.update({
+          email: value
+        });
+        layer.close(index);
+      });
+    }
+  });
 
+  //监听搜索
+  form.on('submit(jk-search)', function (data) {
+    var field = data.field;
 
+    //执行重载
+    table.reload('main-table', {
+      where: field
+    });
+  });
 
+  var $ = layui.$, active = {
+    batchdel: function () {
+      var checkStatus = table.checkStatus('LAY-app-content-list')
+        , checkData = checkStatus.data; //得到选中的数据
 
+      if (checkData.length === 0) {
+        return layer.msg('请选择数据');
+      }
 
+      layer.confirm('确定删除吗？', function (index) {
 
+        //执行 Ajax 后重载
+        /*
+        admin.req({
+          url: 'xxx'
+          //,……
+        });
+        */
+        table.reload('LAY-app-content-list');
+        layer.msg('已删除');
+      });
+    },
+    add: function () {
 
+    }
+  };
 
-
-
-
-
+  $('.layui-btn.layuiadmin-btn-list').on('click', function () {
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
 </script>
 </body>
 </html>
