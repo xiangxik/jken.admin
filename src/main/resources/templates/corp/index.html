@@ -33,11 +33,8 @@
                         <label class="layui-form-label">状态</label>
                         <div class="layui-input-inline">
                             <select name="status">
-                                <option value="">请选择状态</option>
-                                <option value="0">正常</option>
-                                <option value="1">欠费</option>
-                                <option value="2">禁用</option>
-                                <option value="3">锁定</option>
+                                <option value="NORMAL">正常</option>
+                                <option value="ARREARAGE">欠费</option>
                             </select>
                         </div>
                     </div>
@@ -54,33 +51,31 @@
 
         <div class="layui-card-body">
 
-
-            <script id="test-table-toolbar-toolbarDemo" type="text/html">
-
-
+            <script id="jk-toolbar" type="text/html">
                 <div class="layui-btn-container">
-                    <button class="layui-btn layui-btn-sm" lay-event="create">新增</button>
-                    <button class="layui-btn layui-btn-sm" lay-event="batchDelete">删除</button>
+                    <button class="layui-btn" lay-event="create">新增</button>
+                    <button class="layui-btn" lay-event="batchDelete">删除</button>
                 </div>
             </script>
 
             <table class="layui-table"
-                   lay-data="{height: 'full-200', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/corp/page', id:'main-table', toolbar: '#test-table-toolbar-toolbarDemo'}"
-                   lay-filter="main-table">
+                   lay-data="{height: 'full-200', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/corp/page', id:'jk-table', toolbar: '#jk-toolbar'}"
+                   lay-filter="jk-table">
                 <thead>
                 <tr>
                     <th lay-data="{field:'id', checkbox:true}"></th>
                     <th lay-data="{field:'name', sort: true}">名称</th>
                     <th lay-data="{field:'code', width:80, sort: true}">代号</th>
-                    <th lay-data="{width:120,toolbar: '#test-table-toolbar-barDemo'}">操作</th>
+                    <th lay-data="{width:120,toolbar: '#jk-tool'}">操作</th>
                 </tr>
                 </thead>
             </table>
 
-            <script id="test-table-toolbar-barDemo" type="text/html">
+            <script id="jk-tool" type="text/html">
                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
             </script>
+
         </div>
     </div>
 </div>
@@ -88,7 +83,6 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-
 </script>
 <script>
 layui.config({
@@ -96,8 +90,8 @@ layui.config({
 }).use(['table'], function () {
   var table = layui.table, form = layui.form;
 
-  table.on('sort(main-table)', function (obj) {
-    table.reload('main-table', {
+  table.on('sort(jk-table)', function (obj) {
+    table.reload('jk-table', {
       initSort: obj,
       where: {
         sort: obj.field + ',' + obj.type
@@ -105,19 +99,18 @@ layui.config({
     });
   });
 
-  table.on('toolbar(main-table)', function (obj) {
+  table.on('toolbar(jk-table)', function (obj) {
     var checkStatus = table.checkStatus(obj.config.id);
     switch (obj.event) {
       case 'create':
         layer.open({
-          type: 2
-          , title: '添加公司'
-          , content: 'listform.html'
-          , maxmin: true
-          , area: ['550px', '550px']
-          , btn: ['确定', '取消']
-          , yes: function (index, layero) {
-            //点击确认触发 iframe 内容中的按钮提交
+          type: 2,
+          title: '添加公司',
+          content: base+'/corp/add',
+          maxmin: true,
+          area: ['550px', '550px'],
+          btn: ['确定', '取消'],
+          yes: function (index, layero) {
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
             submit.click();
           }
@@ -131,7 +124,7 @@ layui.config({
   });
 
   //监听行工具事件
-  table.on('tool(main-table)', function (obj) {
+  table.on('tool(jk-table)', function (obj) {
     var data = obj.data;
     if (obj.event === 'del') {
       layer.confirm('真的删除行么', function (index) {
@@ -140,8 +133,8 @@ layui.config({
       });
     } else if (obj.event === 'edit') {
       layer.prompt({
-        formType: 2
-        , value: data.email
+        formType: 2,
+        value: data.email
       }, function (value, index) {
         obj.update({
           email: value
@@ -156,7 +149,7 @@ layui.config({
     var field = data.field;
 
     //执行重载
-    table.reload('main-table', {
+    table.reload('jk-table', {
       where: field
     });
   });
