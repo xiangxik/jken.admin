@@ -10,47 +10,47 @@
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
 </head>
 <body>
-<div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;">
+<div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
     <div class="layui-form-item">
         <label class="layui-form-label">公司名称</label>
         <div class="layui-input-inline">
-            <input autocomplete="off" class="layui-input" lay-verify="required" name="name" placeholder="请输入公司名称"
+            <input autocomplete="off" class="layui-input" lay-verify="required" th:field="*{name}" placeholder="请输入公司名称"
                    type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司代号</label>
         <div class="layui-input-inline">
-            <input autocomplete="off" class="layui-input" lay-verify="required" name="code" placeholder="请输入公司代号"
+            <input autocomplete="off" class="layui-input" lay-verify="required" th:field="*{code}" placeholder="请输入公司代号"
                    type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司网站</label>
         <div class="layui-input-inline">
-            <input autocomplete="off" class="layui-input" name="website" placeholder="请输入公司网站" type="text">
+            <input autocomplete="off" class="layui-input" th:field="*{website}" placeholder="请输入公司网站" type="text">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司简介</label>
         <div class="layui-input-inline">
-            <textarea autocomplete="off" class="layui-textarea" name="introduction"
+            <textarea autocomplete="off" class="layui-textarea" th:field="*{introduction}"
                       style="width: 400px; height: 150px;"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
-            <select lay-verify="required" name="status">
+            <select lay-verify="required" th:field="*{status}">
                 <option value="NORMAL">正常</option>
                 <option value="ARREARAGE">欠费</option>
             </select>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">是否停用</label>
+        <label class="layui-form-label">停用</label>
         <div class="layui-input-inline">
-            <input lay-filter="disabled" lay-skin="switch" lay-text="已停用|启用中" lay-verify="required" name="disabled"
+            <input lay-filter="disabled" lay-skin="switch" lay-text="已停用|启用中" lay-verify="required" th:field="*{disabled}"
                    type="checkbox">
         </div>
     </div>
@@ -63,6 +63,7 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+    var entityId = /*[[${entity.id}]]*/null;
 </script>
 <script>
 layui.config({
@@ -71,17 +72,30 @@ layui.config({
   var $ = layui.$, form = layui.form;
   //监听提交
   form.on('submit(jk-form-submit)', function (data) {
-    $.post(base + '/corp/save', data.field,
-								function(action) {
-									console.log(action);
-									var index = parent.layer.getFrameIndex(window.name);
-                                    parent.layui.table.reload('jk-table');
-                                    parent.layer.close(index);
-								}, "json");
-
-								return false;
+    $.ajax({
+        url: base + '/corp/save' + (entityId?'/'+entityId:''),
+        data: data.field,
+        dataType: 'json',
+        type: 'post',
+        success: function(resp) {
+            if(resp.code ==0) {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layui.table.reload('jk-table');
+                parent.layer.close(index);
+            } else {
+                layer.msg(resp.msg,{time:2000},function() {});
+            }
+        },
+        error: function(resp){console.log(resp)
+            layer.msg(resp.responseJSON.message,{time:2000},function() {});
+        }
+    });
+	return false;
   });
 })
+
+
+
 
 </script>
 </body>

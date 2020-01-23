@@ -46,7 +46,6 @@
                 </div>
             </div>
 
-
         </div>
 
         <div class="layui-card-body">
@@ -127,20 +126,40 @@ layui.config({
   table.on('tool(jk-table)', function (obj) {
     var data = obj.data;
     if (obj.event === 'del') {
-      layer.confirm('真的删除行么', function (index) {
-        obj.del();
-        layer.close(index);
+      layer.confirm('真的删除么？', function (index) {
+        $.ajax({
+            url: base + '/corp/delete',
+            data: {ids:[obj.data.id]},
+            dataType: 'json',
+            type: 'post',
+            success: function(resp) {
+                if(resp.code ==0) {
+                    obj.del();
+                    layer.close(index);
+                    table.reload('jk-table');
+                } else {
+                    layer.msg(resp.msg,{time:2000},function() {});
+                }
+            },
+            error: function(resp){console.log(resp)
+                layer.msg(resp.responseJSON.message,{time:2000},function() {});
+            }
+        });
+
       });
     } else if (obj.event === 'edit') {
-      layer.prompt({
-        formType: 2,
-        value: data.email
-      }, function (value, index) {
-        obj.update({
-          email: value
+      layer.open({
+          type: 2,
+          title: '编辑公司',
+          content: base+'/corp/edit/'+obj.data.id,
+          maxmin: true,
+          area: ['550px', '550px'],
+          btn: ['确定', '取消'],
+          yes: function (index, layero) {
+            var submit = layero.find('iframe').contents().find("#jk-form-submit");
+            submit.click();
+          }
         });
-        layer.close(index);
-      });
     }
   });
 

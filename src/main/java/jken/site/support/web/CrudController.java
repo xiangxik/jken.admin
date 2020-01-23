@@ -13,10 +13,8 @@ import jken.site.support.data.jpa.Entity;
 import jken.site.support.service.CrudService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -83,9 +81,9 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
         return getViewDir() + "/edit";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/save/{entity}")
     @ResponseBody
-    public void doSave(@ModelAttribute @Valid T entity, BindingResult bindingResult) {
+    public void doSave(@ModelAttribute("entity") @Valid T entity, BindingResult bindingResult) {
         onValidate(entity, bindingResult);
         if (bindingResult.hasErrors()) {
             //
