@@ -33,6 +33,7 @@
                         <label class="layui-form-label">状态</label>
                         <div class="layui-input-inline">
                             <select name="status">
+                                <option value="">请选择</option>
                                 <option value="NORMAL">正常</option>
                                 <option value="ARREARAGE">欠费</option>
                             </select>
@@ -197,38 +198,6 @@ layui.config({
     table.reload('jk-table', {
       where: field
     });
-  });
-
-  var $ = layui.$, active = {
-    batchdel: function () {
-      var checkStatus = table.checkStatus('LAY-app-content-list')
-        , checkData = checkStatus.data; //得到选中的数据
-
-      if (checkData.length === 0) {
-        return layer.msg('请选择数据');
-      }
-
-      layer.confirm('确定删除吗？', function (index) {
-
-        //执行 Ajax 后重载
-        /*
-        admin.req({
-          url: 'xxx'
-          //,……
-        });
-        */
-        table.reload('LAY-app-content-list');
-        layer.msg('已删除');
-      });
-    },
-    add: function () {
-
-    }
-  };
-
-  $('.layui-btn.layuiadmin-btn-list').on('click', function () {
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
   });
 });
 </script>
