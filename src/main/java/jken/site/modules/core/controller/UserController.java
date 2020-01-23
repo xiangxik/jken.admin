@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController extends CrudController<User, Long> {
     @Override
     public Page<User> list(Predicate predicate, Pageable pageable) {
-        return null;
+        return super.doInternalPage(predicate, pageable);
     }
 }
