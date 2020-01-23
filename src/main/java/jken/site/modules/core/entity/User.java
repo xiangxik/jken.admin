@@ -44,6 +44,8 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
 
     private String mobile;
 
+    private String introduction;
+
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
 
@@ -160,5 +162,13 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }

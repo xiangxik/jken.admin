@@ -46,13 +46,13 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             Corp wlCorp = createCorp("广州当凌信息科技有限公司", "wl000", null, "http://www.whenling.com", "");
             createAdmin("admin", "qwe123", wlCorp.getCode());
             for (int i = 0; i < 1000; i++) {
-                createUser("user" + Strings.padStart(String.valueOf(i), 3, '0'), "qwe123", wlCorp.getCode(), "用户");
+                createUser("user" + Strings.padStart(String.valueOf(i), 3, '0'), "qwe123", wlCorp.getCode(), "用户", i);
             }
 
             Corp wyCorp = createCorp("广州微禹信息科技有限公司", "wy000", null, "http://yisongshui.com", "");
             createAdmin("admin", "qwe123", wyCorp.getCode());
             for (int i = 0; i < 1000; i++) {
-                createUser("user" + Strings.padStart(String.valueOf(i), 3, '0'), "qwe123", wyCorp.getCode(), "用户");
+                createUser("user" + Strings.padStart(String.valueOf(i), 3, '0'), "qwe123", wyCorp.getCode(), "用户", i);
             }
         }
     }
@@ -78,11 +78,13 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         return userService.save(user);
     }
 
-    private User createUser(String username, String password, String corpCode, String name) {
+    private User createUser(String username, String password, String corpCode, String name, int i) {
         User user = userService.createNew();
         user.setName(name);
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setMail(username + "@whenling.com");
+        user.setMobile("13288888" + Strings.padStart(String.valueOf(i), 3, '0'));
         user.setCorpCode(corpCode);
         return userService.save(user);
     }
