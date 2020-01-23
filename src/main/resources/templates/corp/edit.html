@@ -12,14 +12,14 @@
 <body>
 <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
     <div class="layui-form-item">
-        <label class="layui-form-label"><i style="color:red">*</i> 公司名称</label>
+        <label class="layui-form-label" jk:required>公司名称</label>
         <div class="layui-input-inline">
             <input autocomplete="off" class="layui-input" lay-verify="required" th:field="*{name}" placeholder="请输入公司名称"
                    type="text">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">公司代号</label>
+        <label class="layui-form-label" jk:required>公司代号</label>
         <div class="layui-input-inline">
             <input autocomplete="off" class="layui-input" lay-verify="required" th:field="*{code}" placeholder="请输入公司代号"
                    type="text">
@@ -50,7 +50,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">停用</label>
         <div class="layui-input-inline">
-            <input lay-filter="disabled" lay-skin="switch" lay-text="已停用|启用中" lay-verify="required" th:field="*{disabled}"
+            <input lay-filter="disabled" lay-skin="switch" lay-text="已停用|启用中" th:field="*{disabled}"
                    type="checkbox">
         </div>
     </div>
