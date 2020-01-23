@@ -73,10 +73,10 @@ layui.config({
   //监听提交
   form.on('submit(jk-form-submit)', function (data) {
     $.ajax({
-        url: base + '/corp/save' + (entityId?'/'+entityId:''),
+        url: base + '/corp' + (entityId?'/'+entityId:''),
         data: data.field,
         dataType: 'json',
-        type: 'post',
+        type: entityId?'put':'post',
         success: function(resp) {
             if(resp.code ==0) {
                 var index = parent.layer.getFrameIndex(window.name);

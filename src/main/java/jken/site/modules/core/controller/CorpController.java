@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CorpController extends CrudController<Corp, Long> {
 
     @Override
-    public Page<Corp> doPage(Predicate predicate, Pageable pageable) {
+    public Page<Corp> list(Predicate predicate, Pageable pageable) {
         return super.doInternalPage(predicate, pageable);
     }
 }
