@@ -6,8 +6,9 @@ import jken.site.support.data.jpa.CorpableEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_role")
@@ -32,10 +33,9 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-    @ManyToMany
-    @JoinTable(name = "tbl_role_authority",
-            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-    private Set<Authority> authorities;
+    @ElementCollection
+    @CollectionTable(name = "tbl_role_authority")
+    private List<String> authorities = new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -79,11 +79,11 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
         this.users = users;
     }
 
-    public Set<Authority> getAuthorities() {
+    public List<String> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(List<String> authorities) {
         this.authorities = authorities;
     }
 }
