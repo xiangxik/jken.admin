@@ -17,7 +17,6 @@ import jken.site.support.data.Lockedable;
 import jken.site.support.data.LogicDeleteable;
 import jken.site.support.data.Sortable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -70,18 +69,6 @@ public class EntityRepositoryImpl<T, I extends Serializable> extends SimpleJpaRe
             }
         }
 
-        // 数据默认按创建时间倒序排序
-        if (ClassUtils.isAssignable(AbstractAuditable.class, domainClass)) {
-            Sort createdDateDesc = Sort.by(Sort.Direction.DESC, "createdDate");
-
-            if (sort == null) {
-                sort = createdDateDesc;
-            } else {
-                if (!Iterables.tryFind(sort, s -> s != null && Objects.equal(s.getProperty(), "createdDate")).isPresent()) {
-                    sort.and(createdDateDesc);
-                }
-            }
-        }
         return super.getQuery(makeSpecification(spec, domainClass), domainClass, sort);
     }
 

@@ -13,7 +13,6 @@ import jken.site.support.data.Corpable;
 import jken.site.support.data.LogicDeleteable;
 import jken.site.support.data.Sortable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.Querydsl;
@@ -72,10 +71,6 @@ public class QuerydslEntityPredicateExecutor<T> extends QuerydslJpaPredicateExec
         if (ClassUtils.isAssignable(Sortable.class, domainClass)) {
             Sort sortNoAsc = Sort.by(Sort.Direction.ASC, "sortNo");
             query = querydsl.applySorting(sortNoAsc, query);
-        }
-        if (ClassUtils.isAssignable(AbstractAuditable.class, domainClass)) {
-            Sort createdDateDesc = Sort.by(Sort.Direction.DESC, "createdDate");
-            query = querydsl.applySorting(createdDateDesc, query);
         }
         return query;
     }
