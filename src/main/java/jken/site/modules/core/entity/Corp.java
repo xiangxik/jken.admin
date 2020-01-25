@@ -20,31 +20,20 @@ import javax.validation.constraints.NotNull;
 @Table(name = "tbl_corp")
 public class Corp extends DataEntity<User, Long> implements Disabledable {
 
-    public enum Status {
-        NORMAL,
-        ARREARAGE
-    }
-
     @NotNull
     @Column(length = 100, nullable = false)
     private String name;
-
     @NotNull
     @Column(unique = true, length = 100, nullable = false)
     private String code;
-
     @Column(length = 20)
     private Status status;
-
     @Column(length = 200)
     private String logo;
-
     @Column(length = 200)
     private String website;
-
     @Column(length = 1000)
     private String introduction;
-
     private boolean disabled = false;
 
     public String getName() {
@@ -103,5 +92,10 @@ public class Corp extends DataEntity<User, Long> implements Disabledable {
     @Override
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public enum Status {
+        NORMAL,
+        ARREARAGE
     }
 }

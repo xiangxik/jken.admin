@@ -8,7 +8,6 @@
 
 package jken.site.support.data.jpa;
 
-import jken.site.support.data.CorpDetection;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 
@@ -16,7 +15,7 @@ import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.List;
 
-public class TreeRepositoryImpl<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, U, I> {
+public class TreeRepositoryImpl<T extends TreeEntity<T, ?, I>, I extends Serializable> extends EntityRepositoryImpl<T, I> implements TreeRepository<T, I> {
 
     public TreeRepositoryImpl(JpaEntityInformation<T, I> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);

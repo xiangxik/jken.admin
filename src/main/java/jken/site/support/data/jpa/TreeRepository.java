@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @NoRepositoryBean
-public interface TreeRepository<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends EntityRepository<T, I> {
+public interface TreeRepository<T extends TreeEntity<T, ?, I>, I extends Serializable> extends EntityRepository<T, I> {
 
     List<T> findRoots();
 

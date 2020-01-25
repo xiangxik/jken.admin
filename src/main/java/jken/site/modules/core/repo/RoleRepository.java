@@ -1,5 +1,6 @@
 package jken.site.modules.core.repo;
 
+import com.querydsl.core.types.dsl.StringExpression;
 import jken.site.modules.core.entity.QRole;
 import jken.site.modules.core.entity.Role;
 import jken.site.support.data.jpa.QuerydslEntityRepository;
@@ -10,6 +11,6 @@ public interface RoleRepository extends QuerydslEntityRepository<Role, Long>, Qu
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QRole qRole) {
-        querydslBindings.bind(qRole.name).first(((path, value) -> path.contains(value)));
+        querydslBindings.bind(qRole.name).first((StringExpression::contains));
     }
 }

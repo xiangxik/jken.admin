@@ -43,12 +43,17 @@ public class DataRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I exten
         @Override
         protected JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information, EntityManager entityManager) {
             if (isEntityRepository(information.getRepositoryInterface())) {
+                Class<T> domainType = (Class<T>) information.getDomainType();
                 if (isTreeRepository(information.getRepositoryInterface())) {
-                    return new TreeRepositoryImpl(getEntityInformation(information.getDomainType()), entityManager);
+                    return (JpaRepositoryImplementation<?, ?>) buildTreeRepository(domainType, entityManager);
                 }
-                return new EntityRepositoryImpl(getEntityInformation(information.getDomainType()), entityManager);
+                return new EntityRepositoryImpl<>(getEntityInformation(domainType), entityManager);
             }
             return super.getTargetRepository(information, entityManager);
+        }
+
+        protected <TR extends TreeEntity<TR, ?, I>> TreeRepository<TR, I> buildTreeRepository(Class<T> domainType, EntityManager entityManager) {
+            return new TreeRepositoryImpl<>(getEntityInformation((Class<TR>) domainType), entityManager);
         }
 
         @Override

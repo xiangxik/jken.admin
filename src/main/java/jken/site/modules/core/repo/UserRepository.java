@@ -8,6 +8,7 @@
 
 package jken.site.modules.core.repo;
 
+import com.querydsl.core.types.dsl.StringExpression;
 import jken.site.modules.core.entity.QUser;
 import jken.site.modules.core.entity.User;
 import jken.site.support.data.jpa.QuerydslEntityRepository;
@@ -20,7 +21,7 @@ public interface UserRepository extends QuerydslEntityRepository<User, Long>, Qu
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QUser qUser) {
-        querydslBindings.bind(qUser.name, qUser.mail, qUser.mobile, qUser.username).first(((path, value) -> path.contains(value)));
+        querydslBindings.bind(qUser.name, qUser.mail, qUser.mobile, qUser.username).first((StringExpression::contains));
         querydslBindings.excluding(qUser.password);
     }
 }

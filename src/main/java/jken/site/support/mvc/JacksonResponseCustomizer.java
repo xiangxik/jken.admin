@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
@@ -51,11 +49,6 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
     static class Result {
 
         public static final Result SUCCESS = new Result(0, "");
-
-        public static Result failure(String msg) {
-            return new Result(1, msg);
-        }
-
         private Integer code;
         private String msg;
 
@@ -65,6 +58,10 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
         public Result(Integer code, String msg) {
             this.code = code;
             this.msg = msg;
+        }
+
+        public static Result failure(String msg) {
+            return new Result(1, msg);
         }
 
         public Integer getCode() {

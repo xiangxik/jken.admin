@@ -8,6 +8,7 @@
 
 package jken.site.modules.core.repo;
 
+import com.querydsl.core.types.dsl.StringExpression;
 import jken.site.modules.core.entity.Corp;
 import jken.site.modules.core.entity.QCorp;
 import jken.site.support.data.jpa.QuerydslEntityRepository;
@@ -17,6 +18,6 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 public interface CorpRepository extends QuerydslEntityRepository<Corp, Long>, QuerydslBinderCustomizer<QCorp> {
     @Override
     default void customize(QuerydslBindings querydslBindings, QCorp qCorp) {
-        querydslBindings.bind(qCorp.name, qCorp.code).first(((path, value) -> path.contains(value)));
+        querydslBindings.bind(qCorp.name, qCorp.code).first((StringExpression::contains));
     }
 }
