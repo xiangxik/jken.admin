@@ -43,10 +43,8 @@ public class EntityRepositoryImpl<T, I extends Serializable> extends SimpleJpaRe
 
     @Override
     public void delete(T entity) {
-        if (entity instanceof Lockedable) {
-            if (((Lockedable) entity).isLocked()) {
-                throw new RuntimeException("cannot delete the locked entity.");
-            }
+        if (entity instanceof Lockedable && ((Lockedable) entity).isLocked()) {
+            throw new RuntimeException("cannot delete the locked entity.");
         } else if (entity instanceof LogicDeleteable) {
             ((LogicDeleteable) entity).setDeleted(true);
             super.save(entity);

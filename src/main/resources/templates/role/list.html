@@ -18,27 +18,15 @@
             <div class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">账号</label>
-                        <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="username" placeholder="请输入" type="text">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">姓名</label>
+                        <label class="layui-form-label">名称</label>
                         <div class="layui-input-inline">
                             <input autocomplete="off" class="layui-input" name="name" placeholder="请输入" type="text">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">邮箱</label>
+                        <label class="layui-form-label">代号</label>
                         <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="mail" placeholder="请输入" type="text">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">手机号码</label>
-                        <div class="layui-input-inline">
-                            <input autocomplete="off" class="layui-input" name="mobile" placeholder="请输入" type="text">
+                            <input autocomplete="off" class="layui-input" name="code" placeholder="请输入" type="text">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -61,17 +49,13 @@
             </script>
 
             <table class="layui-table"
-                   lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/user', id:'jk-table', toolbar: '#jk-toolbar'}"
+                   lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/role', id:'jk-table', toolbar: '#jk-toolbar'}"
                    lay-filter="jk-table">
                 <thead>
                 <tr>
                     <th lay-data="{field:'id', checkbox:true}"></th>
-                    <th lay-data="{field:'username', width:120, sort: true}">账号</th>
-                    <th lay-data="{field:'name', width:120, sort: true}">姓名</th>
-                    <th lay-data="{field:'age', width:80, sort: true}">年龄</th>
-                    <th lay-data="{field:'mail', width:220, sort: true}">邮箱</th>
-                    <th lay-data="{field:'mobile', width:120, sort: true}">手机号码</th>
-                    <th lay-data="{field:'introduction', sort: true}">简介</th>
+                    <th lay-data="{field:'name', sort: true}">名称</th>
+                    <th lay-data="{field:'code', width:200, sort: true}">代号</th>
                     <th lay-data="{width:114, toolbar: '#jk-tool'}">操作</th>
                 </tr>
                 </thead>
@@ -113,7 +97,7 @@ layui.config({
         layer.open({
           type: 2,
           title: '添加用户',
-          content: base+'/user/add',
+          content: base+'/role/add',
           maxmin: true,
           area: ['550px', '550px'],
           btn: ['确定', '取消'],
@@ -132,7 +116,7 @@ layui.config({
             });
 
             $.ajax({
-                url: base + '/user',
+                url: base + '/role',
                 dataType: 'json',
                 data:{ids: ids},
                 type: 'delete',
@@ -163,7 +147,7 @@ layui.config({
     if (obj.event === 'del') {
       layer.confirm('真的删除么？', function (index) {
         $.ajax({
-            url: base + '/user/'+obj.data.id,
+            url: base + '/role/'+obj.data.id,
             dataType: 'json',
             type: 'delete',
             success: function(resp) {
@@ -184,7 +168,7 @@ layui.config({
       layer.open({
           type: 2,
           title: '编辑公司',
-          content: base+'/user/'+obj.data.id,
+          content: base+'/role/'+obj.data.id,
           maxmin: true,
           area: ['550px', '550px'],
           btn: ['确定', '取消'],

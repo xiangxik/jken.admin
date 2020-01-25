@@ -28,7 +28,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">公司网站</label>
         <div class="layui-input-inline">
-            <input autocomplete="off" class="layui-input" th:field="*{website}" placeholder="请输入公司网站" type="text">
+            <input autocomplete="off" minlength="4" maxlength="200" class="layui-input" lay-verify="url" th:field="*{website}" placeholder="请输入公司网站" type="text">
         </div>
     </div>
     <div class="layui-form-item">
