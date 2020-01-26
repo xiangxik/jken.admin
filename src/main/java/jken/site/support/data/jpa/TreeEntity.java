@@ -9,6 +9,7 @@
 package jken.site.support.data.jpa;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jken.site.support.data.Hierarchical;
 
@@ -17,8 +18,10 @@ import java.io.Serializable;
 import java.util.List;
 
 @MappedSuperclass
+@EntityListeners(value = TreeEntityListener.class)
 public class TreeEntity<T extends TreeEntity<T, U, I>, U, I extends Serializable> extends SortEntity<U, I> implements Hierarchical<T> {
 
+    @JsonIgnore
     @Column(length = 500)
     private String treePath;
 

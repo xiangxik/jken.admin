@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <title>jken application</title>
+        <meta content="webkit" name="renderer">
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+              name="viewport">
+        <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
+        <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <fieldset class="layui-elem-field">
+                <legend>主菜单</legend>
+                <div class="layui-field-box">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" type="button">新增</button>
+                    </div>
+                    <div id="jk-tree"></div>
+                </div>
+            </fieldset>
+        </div>
+
+        <script src="https://www.layuicdn.com/layui/layui.js"></script>
+        <script th:inline="javascript" type="text/javascript">
+    var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+
+        </script>
+        <script>
+layui.config({
+  base: base + '/static/layuiadmin/'
+}).use(['tree'], function () {
+  var tree = layui.tree;
+  var $ = layui.$;
+
+  $.ajax({
+        url: base + '/menu',
+        dataType: 'json',
+        data:{treePath: ','},
+        type: 'get',
+        success: function(resp) {
+            console.log(resp);
+        },
+        error: function(resp){console.log(resp)
+            layer.msg(resp.responseJSON.message,{time:2000},function() {});
+        }
+    });
+
+  tree.render({
+    elem: '#jk-tree',
+    showCheckbox: false,
+    accordion: false,
+    onlyIconControl: true,
+    text: {
+        defaultNodeName: '新菜单' //节点默认名称
+        ,none: '当前无菜单，请添加' //数据为空时的提示文本
+    },
+    data: [{
+    title: '江西'
+    ,id: 1
+    ,children: [{
+      title: '南昌'
+      ,id: 1000
+      ,children: [{
+        title: '青山湖区'
+        ,id: 10001
+      },{
+        title: '高新区'
+        ,id: 10002
+      }]
+    },{
+      title: '九江'
+      ,id: 1001
+    },{
+      title: '赣州'
+      ,id: 1002
+    }]
+  },{
+    title: '广西'
+    ,id: 2
+    ,children: [{
+      title: '南宁'
+      ,id: 2000
+    },{
+      title: '桂林'
+      ,id: 2001
+    }]
+  },{
+    title: '陕西'
+    ,id: 3
+    ,children: [{
+      title: '西安'
+      ,id: 3000
+    },{
+      title: '延安'
+      ,id: 3001
+    }]
+  }]
+    ,edit: ['add', 'update', 'del']
+    ,click: function(obj){
+      layer.msg(JSON.stringify(obj.data));
+    }
+    ,operate: function(obj){
+    var type = obj.type; //得到操作类型：add、edit、del
+    var data = obj.data; //得到当前节点的数据
+    var elem = obj.elem; //得到当前节点元素
+
+console.log(obj);
+    //Ajax 操作
+    var id = data.id; //得到节点索引
+    if(type === 'add'){ //增加节点
+      //返回 key 值
+      return 123;
+    } else if(type === 'update'){ //修改节点
+      console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
+    } else if(type === 'del'){ //删除节点
+
+    };
+
+    return false;
+  }
+  });
+});
+
+        </script>
+    </body>
+</html>

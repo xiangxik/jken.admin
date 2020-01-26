@@ -67,6 +67,16 @@ public class DataRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I exten
             return super.getRepositoryBaseClass(metadata);
         }
 
+        protected Class<?> getPredicateExecutorClass(RepositoryMetadata metadata) {
+            if (isEntityRepository(metadata.getRepositoryInterface())) {
+                if (isTreeRepository(metadata.getRepositoryInterface())) {
+                    return QuerydslTreePredicateExecutor.class;
+                }
+                return QuerydslEntityPredicateExecutor.class;
+            }
+            return super.getRepositoryBaseClass(metadata);
+        }
+
         @Override
         protected RepositoryComposition.RepositoryFragments getRepositoryFragments(RepositoryMetadata metadata) {
             RepositoryComposition.RepositoryFragments fragments = super.getRepositoryFragments(metadata);
@@ -81,7 +91,7 @@ public class DataRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I exten
                         CrudMethodMetadata crudMethodMetadata = (CrudMethodMetadata) getPrivateFieldValue(fragmentImpl, "metadata");
 
                         JpaEntityInformation<?, Serializable> entityInformation = getEntityInformation(metadata.getDomainType());
-                        fragment = RepositoryFragment.implemented(getTargetRepositoryViaReflection(QuerydslEntityPredicateExecutor.class, entityInformation, entityManager, entityPathResolver, crudMethodMetadata));
+                        fragment = RepositoryFragment.implemented(getTargetRepositoryViaReflection(getPredicateExecutorClass(metadata), entityInformation, entityManager, entityPathResolver, crudMethodMetadata));
                     }
                 }
                 transferred = transferred.append(fragment);

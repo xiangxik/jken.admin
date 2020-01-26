@@ -2,8 +2,10 @@ package jken.site;
 
 import com.google.common.base.Strings;
 import jken.site.modules.core.entity.Corp;
+import jken.site.modules.core.entity.MenuItem;
 import jken.site.modules.core.entity.User;
 import jken.site.modules.core.service.CorpService;
+import jken.site.modules.core.service.MenuItemService;
 import jken.site.modules.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -22,6 +24,9 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MenuItemService menuItemService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,13 +53,38 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             for (int i = 0; i < 100; i++) {
                 createUser("user" + Strings.padStart(String.valueOf(i), 2, '0'), "qwe123", wlCorp.getCode(), "用户", i);
             }
+            createMenu(wlCorp.getCode());
 
             Corp wyCorp = createCorp("广州微禹信息科技有限公司", "wy000", null, "http://yisongshui.com", "");
             createAdmin("admin", "qwe123", wyCorp.getCode());
             for (int i = 0; i < 100; i++) {
                 createUser("user" + Strings.padStart(String.valueOf(i), 2, '0'), "qwe123", wyCorp.getCode(), "用户", i);
             }
+            createMenu(wyCorp.getCode());
         }
+    }
+
+    private void createMenu(String corpCode) {
+        MenuItem home = createMenuItem("主页", "home", "home", "layui-icon-home", corpCode, null);
+
+        MenuItem set = createMenuItem("设置", "set", "javascript:;", "layui-icon-set", corpCode, home);
+        MenuItem orgSet = createMenuItem("组织架构", "org", "javascript:;", null, corpCode, set);
+        createMenuItem("公司管理", "corp", "corp", null, corpCode, orgSet);
+        createMenuItem("用户管理", "user", "user", null, corpCode, orgSet);
+        createMenuItem("角色管理", "role", "role", null, corpCode, orgSet);
+        createMenuItem("菜单管理", "menu", "menu", null, corpCode, orgSet);
+    }
+
+    private MenuItem createMenuItem(String name, String code, String href, String iconCls, String corpCode, MenuItem parent) {
+        MenuItem mi = menuItemService.createNew();
+        mi.setName(name);
+        mi.setCode(code);
+        mi.setHref(href);
+        mi.setIconCls(iconCls);
+        mi.setCorpCode(corpCode);
+        mi.setParent(parent);
+        menuItemService.save(mi);
+        return mi;
     }
 
     private Corp createCorp(String name, String code, String logo, String website, String introduction) {
