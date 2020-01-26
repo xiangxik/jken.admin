@@ -65,9 +65,9 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     }
 
     private void createMenu(String corpCode) {
-        MenuItem home = createMenuItem("主页", "home", "home", "layui-icon-home", corpCode, null);
+        createMenuItem("主页", "home", "home", "layui-icon-home", corpCode, null);
 
-        MenuItem set = createMenuItem("设置", "set", "javascript:;", "layui-icon-set", corpCode, home);
+        MenuItem set = createMenuItem("设置", "set", "javascript:;", "layui-icon-set", corpCode, null);
         MenuItem orgSet = createMenuItem("组织架构", "org", "javascript:;", null, corpCode, set);
         createMenuItem("公司管理", "corp", "corp", null, corpCode, orgSet);
         createMenuItem("用户管理", "user", "user", null, corpCode, orgSet);

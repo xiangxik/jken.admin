@@ -57,8 +57,10 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
      * @return
      */
     @GetMapping(value = "/add", produces = "text/html")
-    public String showDetailAdd(Model model) {
-        T entity = getService().createNew();
+    public String showDetailAdd(T entity, Model model) {
+        if (entity == null) {
+            entity = getService().createNew();
+        }
         return showDetailEdit(entity, model);
     }
 

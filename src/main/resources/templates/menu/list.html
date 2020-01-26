@@ -26,104 +26,127 @@
         <script src="https://www.layuicdn.com/layui/layui.js"></script>
         <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-
         </script>
         <script>
 layui.config({
-  base: base + '/static/layuiadmin/'
+    base: base + '/static/layuiadmin/'
 }).use(['tree'], function () {
-  var tree = layui.tree;
-  var $ = layui.$;
+    var tree = layui.tree;
+    var $ = layui.$;
 
-  $.ajax({
-        url: base + '/menu',
-        dataType: 'json',
-        data:{treePath: ','},
-        type: 'get',
-        success: function(resp) {
-            console.log(resp);
+    var dataToTree = function (data) {
+        return $.map(data, function (n, i) {
+            return {
+                id: n.id,
+                title: n.name,
+                children: dataToTree(n.children),
+                spread: true
+            };
+        });
+    }
+
+    tree.remoteReloadTree = function (id) {
+        $.ajax({
+            url: base + '/menu',
+            dataType: 'json',
+            type: 'get',
+            success: function (resp) {
+                var data = resp.data;
+                tree.reload(id, {
+                    data: dataToTree(data),
+                    text: {
+                        defaultNodeName: '新菜单',
+                        none: '当前无菜单，请添加'
+                    }
+                });
+            },
+            error: function (resp) {
+                layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+            }
+        });
+    }
+
+    tree.render({
+        id: 'jk-tree',
+        elem: '#jk-tree',
+        showCheckbox: false,
+        accordion: false,
+        onlyIconControl: true,
+        text: {
+            defaultNodeName: '新菜单',
+            none: '数据加载中...'
         },
-        error: function(resp){console.log(resp)
-            layer.msg(resp.responseJSON.message,{time:2000},function() {});
+        edit: ['add', 'del'],
+        click: function (obj) {
+            layer.open({
+                type: 2,
+                title: '编辑菜单',
+                content: base + '/menu/' + obj.data.id,
+                maxmin: true,
+                area: ['550px', '550px'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                    submit.click();
+                }
+            });
+        },
+        operate: function (obj) {
+            var type = obj.type; //得到操作类型：add、edit、del
+            var data = obj.data; //得到当前节点的数据
+            var elem = obj.elem; //得到当前节点元素
+
+            //Ajax 操作
+            var id = data.id; //得到节点索引
+            if (type === 'add') { //增加节点
+                layer.open({
+                    type: 2,
+                    title: '添加菜单',
+                    content: base + '/menu/add?parent=' + id,
+                    maxmin: true,
+                    area: ['550px', '550px'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                        submit.click();
+                    },
+                    btn2: function (index, layero) {
+                        return this.cancel(index, layero);
+                    },
+                    cancel: function (index, layero) {
+                        if (confirm('确定要关闭么')) {
+                            tree.reload('jk-tree', {});
+                            layer.close(index)
+                        }
+                        return false;
+                    }
+                });
+            } else if (type === 'update') { //修改节点
+
+            } else if (type === 'del') { //删除节点
+                $.ajax({
+                    url: base + '/menu/' + id,
+                    dataType: 'json',
+                    type: 'delete',
+                    success: function (resp) {
+                        if (resp.code == 0) {
+                            tree.remoteReloadTree('jk-tree');
+                        } else {
+                            layer.msg(resp.msg, { time: 2000 }, function () { });
+                        }
+                    },
+                    error: function (resp) {
+                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                    }
+                });
+            };
+
+            return false;
         }
     });
 
-  tree.render({
-    elem: '#jk-tree',
-    showCheckbox: false,
-    accordion: false,
-    onlyIconControl: true,
-    text: {
-        defaultNodeName: '新菜单' //节点默认名称
-        ,none: '当前无菜单，请添加' //数据为空时的提示文本
-    },
-    data: [{
-    title: '江西'
-    ,id: 1
-    ,children: [{
-      title: '南昌'
-      ,id: 1000
-      ,children: [{
-        title: '青山湖区'
-        ,id: 10001
-      },{
-        title: '高新区'
-        ,id: 10002
-      }]
-    },{
-      title: '九江'
-      ,id: 1001
-    },{
-      title: '赣州'
-      ,id: 1002
-    }]
-  },{
-    title: '广西'
-    ,id: 2
-    ,children: [{
-      title: '南宁'
-      ,id: 2000
-    },{
-      title: '桂林'
-      ,id: 2001
-    }]
-  },{
-    title: '陕西'
-    ,id: 3
-    ,children: [{
-      title: '西安'
-      ,id: 3000
-    },{
-      title: '延安'
-      ,id: 3001
-    }]
-  }]
-    ,edit: ['add', 'update', 'del']
-    ,click: function(obj){
-      layer.msg(JSON.stringify(obj.data));
-    }
-    ,operate: function(obj){
-    var type = obj.type; //得到操作类型：add、edit、del
-    var data = obj.data; //得到当前节点的数据
-    var elem = obj.elem; //得到当前节点元素
-
-console.log(obj);
-    //Ajax 操作
-    var id = data.id; //得到节点索引
-    if(type === 'add'){ //增加节点
-      //返回 key 值
-      return 123;
-    } else if(type === 'update'){ //修改节点
-      console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
-    } else if(type === 'del'){ //删除节点
-
-    };
-
-    return false;
-  }
-  });
+    tree.remoteReloadTree('jk-tree');
 });
-
         </script>
     </body>
 </html>
