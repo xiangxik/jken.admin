@@ -65,23 +65,25 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     }
 
     private void createMenu(String corpCode) {
-        createMenuItem("主页", "home", "home", "layui-icon-home", corpCode, null);
+        int sortNo = 0;
+        createMenuItem("主页", "home", "home", "layui-icon-home", sortNo++, corpCode, null);
 
-        MenuItem set = createMenuItem("设置", "set", "javascript:;", "layui-icon-set", corpCode, null);
-        MenuItem orgSet = createMenuItem("组织架构", "org", "javascript:;", null, corpCode, set);
-        createMenuItem("公司管理", "corp", "corp", null, corpCode, orgSet);
-        createMenuItem("用户管理", "user", "user", null, corpCode, orgSet);
-        createMenuItem("角色管理", "role", "role", null, corpCode, orgSet);
-        createMenuItem("菜单管理", "menu", "menu", null, corpCode, orgSet);
+        MenuItem set = createMenuItem("设置", "set", "javascript:;", "layui-icon-set", sortNo++, corpCode, null);
+        MenuItem orgSet = createMenuItem("组织架构", "org", "javascript:;", null, sortNo++, corpCode, set);
+        createMenuItem("公司管理", "corp", "corp", null, sortNo++, corpCode, orgSet);
+        createMenuItem("用户管理", "user", "user", null, sortNo++, corpCode, orgSet);
+        createMenuItem("角色管理", "role", "role", null, sortNo++, corpCode, orgSet);
+        createMenuItem("菜单管理", "menu", "menu", null, sortNo++, corpCode, orgSet);
     }
 
-    private MenuItem createMenuItem(String name, String code, String href, String iconCls, String corpCode, MenuItem parent) {
+    private MenuItem createMenuItem(String name, String code, String href, String iconCls, Integer sortNo, String corpCode, MenuItem parent) {
         MenuItem mi = menuItemService.createNew();
         mi.setName(name);
         mi.setCode(code);
         mi.setHref(href);
         mi.setIconCls(iconCls);
         mi.setCorpCode(corpCode);
+        mi.setSortNo(sortNo * 100);
         mi.setParent(parent);
         menuItemService.save(mi);
         return mi;
