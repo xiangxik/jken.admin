@@ -15,7 +15,7 @@
                 <label class="layui-form-label">上级菜单</label>
                 <div class="layui-input-inline">
                     <input th:field="*{parent}" type="hidden">
-                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="" readonly
+                    <input autocomplete="off" class="layui-input" placeholder="根菜单" readonly
                            th:value="*{parent==null?'':parent.name}"
                            type="text">
                 </div>
@@ -48,6 +48,14 @@
                 <div class="layui-input-inline">
                     <input autocomplete="off" class="layui-input" maxlength="20" minlength="4" placeholder="请输入图标样式"
                            th:field="*{iconCls}" type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序号</label>
+                <div class="layui-input-inline">
+                    <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
+                           th:field="*{sortNo}"
+                           type="text">
                 </div>
             </div>
             <div class="layui-form-item layui-hide">
