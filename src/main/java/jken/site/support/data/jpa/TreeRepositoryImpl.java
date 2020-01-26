@@ -8,7 +8,6 @@
 
 package jken.site.support.data.jpa;
 
-import jken.site.support.data.Tree;
 import jken.site.support.data.TreeHelper;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
@@ -34,7 +33,7 @@ public class TreeRepositoryImpl<T extends TreeEntity<T, ?, I>, I extends Seriali
     }
 
     @Override
-    public Tree<T> findByRoot(T root) {
+    public List<T> findByRoot(T root) {
         List<T> allChildren = root == null ? findAll() : findAllChildren(root);
         return TreeHelper.toTree(root, allChildren);
     }
