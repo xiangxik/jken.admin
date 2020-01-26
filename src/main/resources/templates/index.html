@@ -94,6 +94,7 @@
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
 
+
                     <li data-name="home" class="layui-nav-item layui-this">
                         <a href="javascript:;" th:lay-href="home" lay-tips="主页" lay-direction="2">
                             <i class="layui-icon layui-icon-home"></i>
@@ -122,12 +123,13 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="set" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="设置" lay-direction="2">
-                            <i class="layui-icon layui-icon-set"></i>
-                            <cite>设置</cite>
+
+                    <li class="layui-nav-item" th:data-name="${mi.code}" th:each="mi:${mis}">
+                        <a href="javascript:;" lay-direction="2" th:lay-tips="${mi.name}">
+                            <i th:class="'layui-icon '+${mi.iconCls}"></i>
+                            <cite th:text="${mi.name}">设置</cite>
                         </a>
-                        <dl class="layui-nav-child">
+                        <dl class="layui-nav-child" th:if="${mi.children!=null&&mi.children.size()>0}">
                             <dd class="layui-nav-itemed">
                                 <a href="javascript:;">系统设置</a>
                                 <dl class="layui-nav-child">
