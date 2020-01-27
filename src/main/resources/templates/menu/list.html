@@ -12,15 +12,52 @@
     </head>
     <body>
         <div class="layui-fluid">
-            <fieldset class="layui-elem-field">
-                <legend>主菜单</legend>
-                <div class="layui-field-box">
-                    <div class="layui-btn-container">
-                        <button class="layui-btn layui-btn-sm" type="button">新增</button>
+            <div class="layui-card">
+                <div class="layui-card-header layuiadmin-card-header-auto">
+
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">名称</label>
+                                <div class="layui-input-inline">
+                                    <input autocomplete="off" class="layui-input" name="name" placeholder="请输入"
+                                           type="text">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">代号</label>
+                                <div class="layui-input-inline">
+                                    <input autocomplete="off" class="layui-input" name="code" placeholder="请输入"
+                                           type="text">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-list" lay-filter="jk-search" lay-submit>
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div id="jk-tree"></div>
+
                 </div>
-            </fieldset>
+
+                <div class="layui-card-body">
+                    <script id="jk-toolbar" type="text/html">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn" lay-event="create">新增</button>
+                            <button class="layui-btn" lay-event="batchDelete">批量删除</button>
+                        </div>
+                    </script>
+
+                    <table class="layui-hidden" id="jk-treeGrid" lay-filter="jk-treeGrid"></table>
+
+                    <script id="jk-tool" type="text/html">
+                        <a class="layui-btn layui-btn-xs" lay-event="add">添加下级</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                    </script>
+                </div>
+            </div>
         </div>
 
         <script src="https://www.layuicdn.com/layui/layui.js"></script>
@@ -29,123 +66,41 @@
         </script>
         <script>
 layui.config({
-    base: base + '/static/layuiadmin/'
-}).use(['tree'], function () {
-    var tree = layui.tree;
-    var $ = layui.$;
+  base: base + '/static/layuiadmin/'
+}).extend({
+  treeGrid: 'lib/extend/treeGrid' //主入口模块
+}).use(['treeGrid', 'tree'], function () {
+  var treeGrid = layui.treeGrid;
+  var tree = layui.tree;
+  var $ = layui.$;
 
-    var dataToTree = function (data) {
-        return $.map(data, function (n, i) {
-            return {
-                id: n.id,
-                title: n.name,
-                children: dataToTree(n.children),
-                spread: true
-            };
-        });
-    }
-
-    tree.remoteReloadTree = function (id) {
-        $.ajax({
-            url: base + '/menu',
-            dataType: 'json',
-            type: 'get',
-            success: function (resp) {
-                var data = resp.data;
-                tree.reload(id, {
-                    data: dataToTree(data),
-                    text: {
-                        defaultNodeName: '新菜单',
-                        none: '当前无菜单，请添加'
-                    }
-                });
-            },
-            error: function (resp) {
-                layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-            }
-        });
-    }
-
-    tree.render({
-        id: 'jk-tree',
-        elem: '#jk-tree',
-        showCheckbox: false,
-        accordion: false,
-        onlyIconControl: true,
-        text: {
-            defaultNodeName: '新菜单',
-            none: '数据加载中...'
-        },
-        edit: ['add', 'del'],
-        click: function (obj) {
-            layer.open({
-                type: 2,
-                title: '编辑菜单',
-                content: base + '/menu/' + obj.data.id,
-                maxmin: true,
-                area: ['550px', '550px'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-                    var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                    submit.click();
-                }
-            });
-        },
-        operate: function (obj) {
-            var type = obj.type; //得到操作类型：add、edit、del
-            var data = obj.data; //得到当前节点的数据
-            var elem = obj.elem; //得到当前节点元素
-
-            //Ajax 操作
-            var id = data.id; //得到节点索引
-            if (type === 'add') { //增加节点
-                layer.open({
-                    type: 2,
-                    title: '添加菜单',
-                    content: base + '/menu/add?parent=' + id,
-                    maxmin: true,
-                    area: ['550px', '550px'],
-                    btn: ['确定', '取消'],
-                    yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                        submit.click();
-                    },
-                    btn2: function (index, layero) {
-                        return this.cancel(index, layero);
-                    },
-                    cancel: function (index, layero) {
-                        if (confirm('确定要关闭么')) {
-                            tree.reload('jk-tree', {});
-                            layer.close(index)
-                        }
-                        return false;
-                    }
-                });
-            } else if (type === 'update') { //修改节点
-
-            } else if (type === 'del') { //删除节点
-                $.ajax({
-                    url: base + '/menu/' + id,
-                    dataType: 'json',
-                    type: 'delete',
-                    success: function (resp) {
-                        if (resp.code == 0) {
-                            tree.remoteReloadTree('jk-tree');
-                        } else {
-                            layer.msg(resp.msg, { time: 2000 }, function () { });
-                        }
-                    },
-                    error: function (resp) {
-                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-                    }
-                });
-            };
-
-            return false;
-        }
-    });
-
-    tree.remoteReloadTree('jk-tree');
+  treeGrid.render({
+    id: "jk-treeGrid",
+    elem: '#jk-treeGrid',
+    url: base + '/menu',
+    toolbar: '#jk-toolbar',
+    cellMinWidth: 100,
+    idField: 'id',//必須字段
+    treeId: 'id',//树形id字段名称
+    treeUpId: 'pId',//树形父id字段名称
+    treeShowName: 'name',//以树形式显示的字段
+    heightRemove: [".dHead", 10],//不计算的高度,表格设定的是固定高度，此项不生效
+    height: 'full-128',
+    isFilter: false,
+    iconOpen: false,//是否显示图标【默认显示】
+    isOpenDefault: true,//节点默认是展开还是折叠【默认展开】
+    loading: true,
+    method: 'get',
+    isPage: false,
+    cols: [ [
+      { type: 'checkbox', field: 'id' },
+      { field: 'name', width: 300, title: '菜单名称', sort: true },
+      { field: 'href', title: '访问地址', sort: true },
+      {
+        width: 160, title: '操作', align: 'center', toolbar: '#jk-tool'
+      }
+    ] ]
+  });
 });
         </script>
     </body>
