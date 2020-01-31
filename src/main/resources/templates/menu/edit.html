@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
     <head>
         <meta charset="utf-8">
         <title>jken application</title>
@@ -9,6 +10,7 @@
               name="viewport">
         <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
     </head>
+
     <body>
         <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
             <div class="layui-form-item">
@@ -16,24 +18,21 @@
                 <div class="layui-input-inline">
                     <input th:field="*{parent}" type="hidden">
                     <input autocomplete="off" class="layui-input" placeholder="根菜单" readonly
-                           th:value="*{parent==null?'':parent.name}"
-                           type="text">
+                           th:value="*{parent==null?'':parent.name}" type="text">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" jk:required>名称</label>
                 <div class="layui-input-inline">
                     <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入菜单名称"
-                           th:field="*{name}"
-                           type="text">
+                           th:field="*{name}" type="text">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" jk:required>代号</label>
                 <div class="layui-input-inline">
                     <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入菜单代号"
-                           th:field="*{code}"
-                           type="text">
+                           th:field="*{code}" type="text">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -54,8 +53,7 @@
                 <label class="layui-form-label">排序号</label>
                 <div class="layui-input-inline">
                     <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
-                           th:field="*{sortNo}"
-                           type="text">
+                           th:field="*{sortNo}" type="text">
                 </div>
             </div>
             <div class="layui-form-item layui-hide">
@@ -66,40 +64,44 @@
 
         <script src="https://www.layuicdn.com/layui/layui.js"></script>
         <script th:inline="javascript" type="text/javascript">
-    var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-    var entityId = /*[[${entity.id}]]*/null;
+        var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+        var entityId = /*[[${entity.id}]]*/null;
+
 
         </script>
         <script>
-layui.config({
-  base: base + '/static/layuiadmin/'
-}).use(['form'], function () {
-  var $ = layui.$, form = layui.form;
-  //监听提交
-  form.on('submit(jk-form-submit)', function (data) {
-    $.ajax({
-        url: base + '/menu' + (entityId?'/'+entityId:''),
-        data: data.field,
-        dataType: 'json',
-        type: entityId?'put':'post',
-        success: function(resp) {
-            if(resp.code ==0) {
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layui.tree.remoteReloadTree('jk-tree');
-                parent.layer.close(index);
-            } else {
-                layer.msg(resp.msg,{time:2000},function() {});
-            }
-        },
-        error: function(resp){console.log(resp)
-            layer.msg(resp.responseJSON.message,{time:2000},function() {});
-        }
-    });
-	return false;
-  });
-})
+        layui.config({
+            base: base + '/static/layuiadmin/'
+        }).use(['form'], function () {
+            var $ = layui.$, form = layui.form;
+            //监听提交
+            form.on('submit(jk-form-submit)', function (data) {
+                $.ajax({
+                    url: base + '/menu' + (entityId ? '/' + entityId : ''),
+                    data: data.field,
+                    dataType: 'json',
+                    type: entityId ? 'put' : 'post',
+                    success: function (resp) {
+                        if (resp.code == 0) {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layui.treeTable.reload();
+                            parent.layer.close(index);
+                        } else {
+                            layer.msg(resp.msg, { time: 2000 }, function () { });
+                        }
+                    },
+                    error: function (resp) {
+                        console.log(resp)
+                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                    }
+                });
+                return false;
+            });
+        })
+
 
 
         </script>
     </body>
+
 </html>

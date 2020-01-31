@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <title>登录 - jken</title>
@@ -11,6 +12,7 @@
     <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
     <link rel="stylesheet" th:href="@{/static/layuiadmin/style/login.css}" media="all">
 </head>
+
 <body>
 
 <div class="layadmin-user-login layadmin-user-display-show">
@@ -20,43 +22,45 @@
             <h2>Web Application</h2>
             <p>通用后台管理系统</p>
         </div>
-        <form class="layadmin-user-login-box layadmin-user-login-body layui-form" method="post" th:action="@{/login}">
-            <input type="hidden" name="corpCode" value="wl000">
+        <form class="layadmin-user-login-box layadmin-user-login-body layui-form" method="post"
+              th:action="@{/login}">
+            <input name="corpCode" type="hidden" value="wl000">
             <p style="text-align: center; color: red;" th:text="${errorMsg}"></p>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-username"
                        for="LAY-user-login-username"></label>
-                <input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名"
-                       class="layui-input" value="admin">
+                <input class="layui-input" id="LAY-user-login-username" lay-verify="required" name="username"
+                       placeholder="用户名" type="text" value="admin">
             </div>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-password"
                        for="LAY-user-login-password"></label>
-                <input type="password" name="password" id="LAY-user-login-password" lay-verify="required"
-                       placeholder="密码" class="layui-input" value="qwe123">
+                <input class="layui-input" id="LAY-user-login-password" lay-verify="required" name="password"
+                       placeholder="密码" type="password" value="qwe123">
             </div>
             <!--<div class="layui-form-item">
-                <div class="layui-row">
-                    <div class="layui-col-xs7">
-                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
-                               for="LAY-user-login-vercode"></label>
-                        <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required"
-                               placeholder="图形验证码" class="layui-input">
-                    </div>
-                    <div class="layui-col-xs5">
-                        <div style="margin-left: 10px;">
-                            <img src="https://www.oschina.net/action/user/captcha" class="layadmin-user-login-codeimg"
-                                 id="LAY-user-get-vercode">
-                        </div>
+            <div class="layui-row">
+                <div class="layui-col-xs7">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
+                           for="LAY-user-login-vercode"></label>
+                    <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required"
+                           placeholder="图形验证码" class="layui-input">
+                </div>
+                <div class="layui-col-xs5">
+                    <div style="margin-left: 10px;">
+                        <img src="https://www.oschina.net/action/user/captcha" class="layadmin-user-login-codeimg"
+                             id="LAY-user-get-vercode">
                     </div>
                 </div>
-            </div>-->
+            </div>
+        </div>-->
             <div class="layui-form-item" style="margin-bottom: 20px;">
-                <input type="checkbox" name="remember-me" lay-skin="primary" title="记住密码">
-                <a href="forget.html" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
+                <input lay-skin="primary" name="remember-me" title="记住密码" type="checkbox">
+                <a class="layadmin-user-jump-change layadmin-link" href="forget.html"
+                   style="margin-top: 7px;">忘记密码？</a>
             </div>
             <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
+                <button class="layui-btn layui-btn-fluid" lay-filter="LAY-user-login-submit" lay-submit>登 入</button>
             </div>
             <div class="layui-trans layui-form-item layadmin-user-login-other">
                 <label>社交账号登入</label>
@@ -64,7 +68,7 @@
                 <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
                 <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
 
-                <a th:href="@{/register}" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
+                <a class="layadmin-user-jump-change layadmin-link" th:href="@{/register}">注册帐号</a>
             </div>
         </form>
     </div>
@@ -82,15 +86,18 @@
 </div>
 
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
-<script type="text/javascript" th:inline="javascript">
-    var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+<script th:inline="javascript" type="text/javascript">
+        var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+
 </script>
 <script>
-    layui.use('form', function () {
-        var form = layui.form;
+        layui.use('form', function () {
+            var form = layui.form;
 
-        //各种基于事件的操作，下面会有进一步介绍
-    });
+            //各种基于事件的操作，下面会有进一步介绍
+        });
+
 </script>
 </body>
+
 </html>

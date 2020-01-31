@@ -1,107 +1,167 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8">
-        <title>jken application</title>
-        <meta content="webkit" name="renderer">
-        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-        <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
-              name="viewport">
-        <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
-        <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
-    </head>
-    <body>
-        <div class="layui-fluid">
-            <div class="layui-card">
-                <div class="layui-card-header layuiadmin-card-header-auto">
 
-                    <div class="layui-form">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">名称</label>
-                                <div class="layui-input-inline">
-                                    <input autocomplete="off" class="layui-input" name="name" placeholder="请输入"
-                                           type="text">
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <label class="layui-form-label">代号</label>
-                                <div class="layui-input-inline">
-                                    <input autocomplete="off" class="layui-input" name="code" placeholder="请输入"
-                                           type="text">
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <button class="layui-btn layuiadmin-btn-list" lay-filter="jk-search" lay-submit>
-                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+  <head>
+    <meta charset="utf-8">
+    <title>jken application</title>
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          name="viewport">
+    <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
+    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+  </head>
 
-                </div>
+  <body>
+    <div class="layui-fluid">
+      <div class="layui-card">
 
-                <div class="layui-card-body">
-                    <script id="jk-toolbar" type="text/html">
-                        <div class="layui-btn-container">
-                            <button class="layui-btn" lay-event="create">新增</button>
-                            <button class="layui-btn" lay-event="batchDelete">批量删除</button>
-                        </div>
-                    </script>
+        <div class="layui-card-body">
 
-                    <table class="layui-hidden" id="jk-treeGrid" lay-filter="jk-treeGrid"></table>
+          <button class="layui-btn" id="jk-create">新增</button>
 
-                    <script id="jk-tool" type="text/html">
-                        <a class="layui-btn layui-btn-xs" lay-event="add">添加下级</a>
-                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-                    </script>
-                </div>
-            </div>
+          <table class="layui-table layui-form" id="jk-treeTable"></table>
+
         </div>
+      </div>
+    </div>
 
-        <script src="https://www.layuicdn.com/layui/layui.js"></script>
-        <script th:inline="javascript" type="text/javascript">
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-        </script>
-        <script>
-layui.config({
-  base: base + '/static/layuiadmin/'
-}).extend({
-  treeGrid: 'lib/extend/treeGrid' //主入口模块
-}).use(['treeGrid', 'tree'], function () {
-  var treeGrid = layui.treeGrid;
-  var tree = layui.tree;
-  var $ = layui.$;
 
-  treeGrid.render({
-    id: "jk-treeGrid",
-    elem: '#jk-treeGrid',
-    url: base + '/menu',
-    toolbar: '#jk-toolbar',
-    cellMinWidth: 100,
-    idField: 'id',//必須字段
-    treeId: 'id',//树形id字段名称
-    treeUpId: 'pId',//树形父id字段名称
-    treeShowName: 'name',//以树形式显示的字段
-    heightRemove: [".dHead", 10],//不计算的高度,表格设定的是固定高度，此项不生效
-    height: 'full-128',
-    isFilter: false,
-    iconOpen: false,//是否显示图标【默认显示】
-    isOpenDefault: true,//节点默认是展开还是折叠【默认展开】
-    loading: true,
-    method: 'get',
-    isPage: false,
-    cols: [ [
-      { type: 'checkbox', field: 'id' },
-      { field: 'name', width: 300, title: '菜单名称', sort: true },
-      { field: 'href', title: '访问地址', sort: true },
-      {
-        width: 160, title: '操作', align: 'center', toolbar: '#jk-tool'
-      }
-    ] ]
-  });
-});
-        </script>
-    </body>
+    </script>
+    <script>
+    layui.config({
+      base: base + '/static/layuiadmin/'
+    }).extend({
+      treeTable: 'lib/extend/treeTable' //主入口模块
+    }).use(['treeTable', 'layer'], function () {
+      var treeTable = layui.treeTable;
+      var $ = layui.$;
+
+      treeTable.reload = function () {
+        treeTable.render({
+          id: "jk-treeTable",
+          elem: '#jk-treeTable',
+          url: base + '/menu?tree=',
+          icon_key: 'name',
+          is_checkbox: false,
+          cols: [
+            {
+              key: 'name',
+              title: '名称',
+              width: '200px',
+              align: 'left'
+            },
+            {
+              key: 'iconCls',
+              title: '图标样式',
+              width: '100px',
+              align: 'center'
+            },
+            {
+              key: 'href',
+              title: '访问地址',
+              align: 'left'
+            },
+            {
+              key: 'sortNo',
+              title: '排序号',
+              width: '60px',
+              align: 'right'
+            },
+            {
+              title: '操作',
+              align: 'center',
+              width: '140px',
+              template: function (item) {
+                var btn_add = "<button type='button' class='layui-btn layui-btn-xs tool' data-action='add' data-item='" + item.id + "'>添加下级</button>";
+                var btn_edit = "<button type='button' class='layui-btn layui-btn-xs tool' data-action='edit' data-item='" + item.id + "'>编辑</button>";
+                var btn_delete = "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger tool' data-action='delete' data-item='" + item.id + "'>删除</button>";
+
+                return "<div class='layui-btn-group'>" + btn_add + btn_edit + btn_delete + "</div>";
+              }
+            }]
+        });
+      };
+      $("#jk-create").on("click", function () {
+        layer.open({
+          type: 2,
+          title: '添加菜单',
+          content: base + '/menu/add',
+          maxmin: true,
+          area: ['550px', '550px'],
+          btn: ['确定', '取消'],
+          yes: function (index, layero) {
+            var submit = layero.find('iframe').contents().find("#jk-form-submit");
+            submit.click();
+          }
+        });
+      });
+
+      treeTable.reload();
+
+      $("#jk-treeTable").delegate(".tool", "click", function () {
+        var $this = $(this);
+        var action = $this.data("action");
+        var id = $this.data("item");
+        switch (action) {
+          case 'add':
+            layer.open({
+              type: 2,
+              title: '添加菜单',
+              content: base + '/menu/add?parent=' + id,
+              maxmin: true,
+              area: ['550px', '550px'],
+              btn: ['确定', '取消'],
+              yes: function (index, layero) {
+                var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                submit.click();
+              }
+            });
+            break;
+          case 'edit':
+            layer.open({
+              type: 2,
+              title: '编辑菜单',
+              content: base + '/menu/' + id,
+              maxmin: true,
+              area: ['550px', '550px'],
+              btn: ['确定', '取消'],
+              yes: function (index, layero) {
+                var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                submit.click();
+              }
+            });
+            break;
+          case 'delete':
+            layer.confirm('真的删除么？', function (index) {
+              $.ajax({
+                url: base + '/menu/' + id,
+                dataType: 'json',
+                type: 'delete',
+                success: function (resp) {
+                  if (resp.code == 0) {
+                    layer.close(index);
+                    treeTable.reload();
+                  } else {
+                    layer.msg(resp.msg, { time: 2000 }, function () { });
+                  }
+                },
+                error: function (resp) {
+                  console.log(resp)
+                  layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                }
+              });
+            });
+            break;
+        }
+      });
+    });
+
+
+    </script>
+  </body>
+
 </html>

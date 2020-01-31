@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <title>jken application</title>
@@ -10,6 +11,7 @@
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
     <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
 </head>
+
 <body class="layui-layout-body">
 
 <div id="LAY_app">
@@ -34,8 +36,8 @@
                 </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <input autocomplete="off" class="layui-input layui-input-search"
-                           lay-action="template/search.html?keywords=" layadmin-event="serach"
-                           placeholder="搜索..." type="text">
+                           lay-action="template/search.html?keywords=" layadmin-event="serach" placeholder="搜索..."
+                           type="text">
                 </li>
             </ul>
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
@@ -80,7 +82,8 @@
                             class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
                 <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
-                    <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                    <a href="javascript:;" layadmin-event="more"><i
+                            class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
             </ul>
         </div>
@@ -92,12 +95,11 @@
                     <span>jken system</span>
                 </div>
 
-                <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu"
-                    lay-shrink="all">
+                <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
+                    lay-filter="layadmin-system-side-menu" lay-shrink="all">
 
                     <li class="layui-nav-item" th:classappend="${miStat.first?' layui-this':''}"
-                        th:data-name="${mi.code}"
-                        th:each="mi:${mis}">
+                        th:data-name="${mi.code}" th:each="mi:${mis}">
                         <a href="javascript:;" lay-direction="2" th:attrappend="lay-href=${mi.href}"
                            th:if="${mi.children==null||mi.children.size()==0}" th:lay-tips="${mi.name}">
                             <i th:class="'layui-icon '+${mi.iconCls}"></i>
@@ -110,7 +112,8 @@
                         </a>
                         <dl class="layui-nav-child" th:if="${mi.children!=null&&mi.children.size()>0}">
                             <th:block th:each="child:${mi.children}">
-                                <dd class="layui-nav-itemed" th:if="${child.children!=null&&child.children.size()>0}">
+                                <dd class="layui-nav-itemed"
+                                    th:if="${child.children!=null&&child.children.size()>0}">
                                     <a href="javascript:;" th:text="${child.name}">menu2</a>
                                     <dl class="layui-nav-child">
                                         <dd th:each="sub:${child.children}">
@@ -147,8 +150,8 @@
             </div>
             <div class="layui-tab" lay-allowClose="true" lay-filter="layadmin-layout-tabs" lay-unauto>
                 <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                    <li class="layui-this" lay-attr="home" lay-id="home"><i
-                            class="layui-icon layui-icon-home"></i></li>
+                    <li class="layui-this" lay-attr="home" lay-id="home"><i class="layui-icon layui-icon-home"></i>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -168,19 +171,20 @@
 
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
-    var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+        var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+
 
 
 </script>
 <script>
-    layui.config({
-        base: base + '/static/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use('index');
+        layui.config({
+            base: base + '/static/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
+
 
 </script>
 </body>
+
 </html>
-
-
