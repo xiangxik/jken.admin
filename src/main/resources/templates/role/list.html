@@ -136,7 +136,6 @@
                                         }
                                     },
                                     error: function (resp) {
-                                        console.log(resp)
                                         layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                                     }
                                 });
@@ -168,7 +167,6 @@
                                 }
                             },
                             error: function (resp) {
-                                console.log(resp)
                                 layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                             }
                         });

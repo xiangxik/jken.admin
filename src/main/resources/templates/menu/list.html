@@ -55,6 +55,12 @@
               align: 'left'
             },
             {
+              key: 'code',
+              title: '代号',
+              width: '100px',
+              align: 'left'
+            },
+            {
               key: 'iconCls',
               title: '图标样式',
               width: '100px',
@@ -150,7 +156,6 @@
                   }
                 },
                 error: function (resp) {
-                  console.log(resp)
                   layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                 }
               });

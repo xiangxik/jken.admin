@@ -123,7 +123,7 @@
                                 </dd>
 
                                 <dd th:if="${child.children==null||child.children.size()==0}">
-                                    <a th:lay-href="child.href" th:text="">menu2</a>
+                                    <a th:lay-href="child.href" th:text="${child.name}">menu2</a>
                                 </dd>
                             </th:block>
                         </dl>
@@ -172,9 +172,6 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-
-
-
 </script>
 <script>
         layui.config({
@@ -182,8 +179,6 @@
         }).extend({
             index: 'lib/index' //主入口模块
         }).use('index');
-
-
 </script>
 </body>
 
