@@ -2,11 +2,12 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.413+08:00
+ * @LastModified: 2020-02-01T21:44:55.233+08:00
  */
 
 package jken.security;
 
+import jken.integration.IntegrationServiceLoader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        IntegrationServiceLoader.getModuleMetadata();
         http.csrf().disable().headers().frameOptions().disable().and().authorizeRequests()
                 .anyRequest().authenticated().and().formLogin().loginPage("/login").successHandler(authenticationSuccessHandler()).permitAll().and().rememberMe().and().logout().permitAll();
     }
