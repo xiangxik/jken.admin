@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.498+08:00
+  ~ @LastModified: 2020-02-02T21:11:00.882+08:00
   -->
 
 <!DOCTYPE html>
@@ -74,7 +74,8 @@
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-
+        var addAble = /*[[${#authorization.expr("hasAuthority('corp-add')")}]]*/false;
+        var editAble = /*[[${#authorization.expr("hasAuthority('corp-edit')")}]]*/false;
 </script>
 <script>
         layui.config({
@@ -83,24 +84,28 @@
             var $ = layui.$, form = layui.form;
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
-                $.ajax({
-                    url: base + '/corp' + (entityId ? '/' + entityId : ''),
-                    data: data.field,
-                    dataType: 'json',
-                    type: entityId ? 'put' : 'post',
-                    success: function (resp) {
-                        if (resp.code == 0) {
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layui.table.reload('jk-table');
-                            parent.layer.close(index);
-                        } else {
-                            layer.msg(resp.msg, { time: 2000 }, function () { });
+                if(entityId && editAble || !entityId && addAble) {
+                    $.ajax({
+                        url: base + '/corp' + (entityId ? '/' + entityId : ''),
+                        data: data.field,
+                        dataType: 'json',
+                        type: entityId ? 'put' : 'post',
+                        success: function (resp) {
+                            if (resp.code == 0) {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layui.table.reload('jk-table');
+                                parent.layer.close(index);
+                            } else {
+                                layer.msg(resp.msg, { time: 2000 }, function () { });
+                            }
+                        },
+                        error: function (resp) {
+                            layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                         }
-                    },
-                    error: function (resp) {
-                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-                    }
-                });
+                    });
+                } else {
+                    layer.msg('无权限');
+                }
                 return false;
             });
         })

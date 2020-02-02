@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.479+08:00
+ * @LastModified: 2020-02-02T21:11:00.879+08:00
  */
 
 package jken.module.core.entity;
@@ -13,6 +13,7 @@ import jken.support.data.Lockedable;
 import jken.support.data.LogicDeleteable;
 import jken.support.data.jpa.CorpableEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -79,7 +80,10 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return AuthorityUtils.createAuthorityList("corp-list", "corp-view", "corp-add", "corp-edit", "corp-delete",
+                "user-list", "user-view", "user-add", "user-edit", "user-delete",
+                "role-list", "role-view", "role-add", "role-edit", "role-delete",
+                "menu-list", "menu-view", "menu-add", "menu-edit", "menu-delete");
     }
 
     @Override

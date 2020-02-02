@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.507+08:00
+  ~ @LastModified: 2020-02-02T21:11:00.886+08:00
   -->
 
 <!DOCTYPE html>
@@ -67,7 +67,7 @@
                     <th lay-data="{field:'id', checkbox:true}"></th>
                     <th lay-data="{field:'name', sort: true}">名称</th>
                     <th lay-data="{field:'code', width:200, sort: true}">代号</th>
-                    <th lay-data="{width:114, toolbar: '#jk-tool', align: 'center'}">操作</th>
+                    <th lay-data="{width:180, toolbar: '#jk-tool', align: 'center'}">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -76,6 +76,9 @@
                 <div class="layui-btn-group">
                     <button type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
                     <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</button>
+
+                    <button type="button" class="layui-btn layui-btn-xs" lay-event="viewUser">用户</button>
+                    <button type="button" class="layui-btn layui-btn-xs" lay-event="updateAuthority">权限</button>
                 </div>
             </script>
 

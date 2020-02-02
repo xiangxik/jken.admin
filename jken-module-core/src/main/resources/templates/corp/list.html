@@ -2,11 +2,11 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.500+08:00
+  ~ @LastModified: 2020-02-02T21:11:00.884+08:00
   -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -63,8 +63,12 @@
             <script id="jk-toolbar" type="text/html">
                 <div class="layui-btn-container">
                     <div class="layui-btn-group">
-                        <button type="button" class="layui-btn" lay-event="create">新增</button>
-                        <button type="button" class="layui-btn" lay-event="batchDelete">批量删除</button>
+                        <button sec:authorize="hasAuthority('corp-add')" type="button" class="layui-btn"
+                                lay-event="create">新增
+                        </button>
+                        <button sec:authorize="hasAuthority('corp-delete')" type="button" class="layui-btn"
+                                lay-event="batchDelete">批量删除
+                        </button>
                     </div>
                 </div>
             </script>
@@ -78,15 +82,21 @@
                     <th lay-data="{field:'name', sort: true}">名称</th>
                     <th lay-data="{field:'code', width:80, sort: true}">代号</th>
                     <th lay-data="{field:'website', width:200, sort: true}">网站</th>
-                    <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}">操作</th>
+                    <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}"
+                        sec:authorize="hasAuthority('corp-edit')&&hasAuthority('corp-delete')">操作
+                    </th>
                 </tr>
                 </thead>
             </table>
 
             <script id="jk-tool" type="text/html">
                 <div class="layui-btn-group">
-                    <button type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
-                    <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</button>
+                    <button sec:authorize="hasAuthority('corp-view')" type="button" class="layui-btn layui-btn-xs"
+                            lay-event="edit">编辑
+                    </button>
+                    <button sec:authorize="hasAuthority('corp-delete')" type="button"
+                            class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除
+                    </button>
                 </div>
             </script>
 
@@ -97,14 +107,23 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+        var listAble = /*[[${#authorization.expr("hasAuthority('corp-list')")}]]*/false;
+        var viewAble = /*[[${#authorization.expr("hasAuthority('corp-view')")}]]*/false;
+        var addAble = /*[[${#authorization.expr("hasAuthority('corp-add')")}]]*/false;
+        var editAble = /*[[${#authorization.expr("hasAuthority('corp-edit')")}]]*/false;
+        var deleteAble = /*[[${#authorization.expr("hasAuthority('corp-delete')")}]]*/false;
 
 </script>
 <script>
         layui.config({
             base: base + '/static/layuiadmin/'
         }).use(['table'], function () {
+            if (!listAble) {
+                return false;
+            }
             var table = layui.table, form = layui.form;
             var $ = layui.$;
+
 
             table.on('sort(jk-table)', function (obj) {
                 table.reload('jk-table', {
@@ -127,38 +146,45 @@
                             area: ['550px', '550px'],
                             btn: ['确定', '取消'],
                             yes: function (index, layero) {
-                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                                submit.click();
+                                if (addAble) {
+                                    var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                                    submit.click();
+                                } else {
+                                    layer.msg('无权限');
+                                }
                             }
                         });
                         break;
                     case 'batchDelete':
                         var data = checkStatus.data;
                         if (data.length > 0) {
-                            layer.confirm('真的删除么？', function (index) {
-                                var ids = $.map(data, function (n, i) {
-                                    return n.id
-                                });
+                            if (deleteAble) {
+                                layer.confirm('真的删除么？', function (index) {
+                                    var ids = $.map(data, function (n, i) {
+                                        return n.id
+                                    });
 
-                                $.ajax({
-                                    url: base + '/corp',
-                                    dataType: 'json',
-                                    data: { ids: ids },
-                                    type: 'delete',
-                                    success: function (resp) {
-                                        if (resp.code == 0) {
-                                            layer.close(index);
-                                            table.reload('jk-table');
-                                        } else {
-                                            layer.msg(resp.msg, { time: 2000 }, function () { });
+                                    $.ajax({
+                                        url: base + '/corp',
+                                        dataType: 'json',
+                                        data: { ids: ids },
+                                        type: 'delete',
+                                        success: function (resp) {
+                                            if (resp.code == 0) {
+                                                layer.close(index);
+                                                table.reload('jk-table');
+                                            } else {
+                                                layer.msg(resp.msg, { time: 2000 }, function () { });
+                                            }
+                                        },
+                                        error: function (resp) {
+                                            layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                                         }
-                                    },
-                                    error: function (resp) {
-                                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-                                    }
+                                    });
                                 });
-                            });
-
+                            } else {
+                                layer.msg('无权限');
+                            }
                         } else {
                             layer.msg('请至少选择一条记录', { time: 2000 }, function () { });
                         }
@@ -170,38 +196,50 @@
             table.on('tool(jk-table)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'del') {
-                    layer.confirm('真的删除么？', function (index) {
-                        $.ajax({
-                            url: base + '/corp/' + obj.data.id,
-                            dataType: 'json',
-                            type: 'delete',
-                            success: function (resp) {
-                                if (resp.code == 0) {
-                                    obj.del();
-                                    layer.close(index);
-                                    table.reload('jk-table');
-                                } else {
-                                    layer.msg(resp.msg, { time: 2000 }, function () { });
+                    if (deleteAble) {
+                        layer.confirm('真的删除么？', function (index) {
+                            $.ajax({
+                                url: base + '/corp/' + obj.data.id,
+                                dataType: 'json',
+                                type: 'delete',
+                                success: function (resp) {
+                                    if (resp.code == 0) {
+                                        obj.del();
+                                        layer.close(index);
+                                        table.reload('jk-table');
+                                    } else {
+                                        layer.msg(resp.msg, { time: 2000 }, function () { });
+                                    }
+                                },
+                                error: function (resp) {
+                                    layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                                 }
-                            },
-                            error: function (resp) {
-                                layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                            });
+                        });
+                    } else {
+                        layer.msg('无权限');
+                    }
+                } else if (obj.event === 'edit') {
+                    if (viewAble) {
+                        layer.open({
+                            type: 2,
+                            title: '编辑公司',
+                            content: base + '/corp/' + obj.data.id,
+                            maxmin: true,
+                            area: ['550px', '550px'],
+                            btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                if (editAble) {
+                                    var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                                    submit.click();
+                                } else {
+                                    layer.msg('无权限');
+                                }
                             }
                         });
-                    });
-                } else if (obj.event === 'edit') {
-                    layer.open({
-                        type: 2,
-                        title: '编辑公司',
-                        content: base + '/corp/' + obj.data.id,
-                        maxmin: true,
-                        area: ['550px', '550px'],
-                        btn: ['确定', '取消'],
-                        yes: function (index, layero) {
-                            var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                            submit.click();
-                        }
-                    });
+                    } else {
+                        layer.msg('无权限');
+                    }
                 }
             });
 

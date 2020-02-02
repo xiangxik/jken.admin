@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T21:44:55.229+08:00
+ * @LastModified: 2020-02-02T21:11:00.872+08:00
  */
 
 package jken.integration;
@@ -13,9 +13,9 @@ public class Authority {
 
     private String name;
     private String code;
-    private String pattern;
+    private String[] patterns;
     private PatternType patternType = PatternType.ANT;
-    private HttpMethod httpMethod;
+    private HttpMethod[] httpMethods;
 
     public String getName() {
         return name;
@@ -33,12 +33,12 @@ public class Authority {
         this.code = code;
     }
 
-    public String getPattern() {
-        return pattern;
+    public String[] getPatterns() {
+        return patterns;
     }
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public void setPatterns(String[] patterns) {
+        this.patterns = patterns;
     }
 
     public PatternType getPatternType() {
@@ -49,12 +49,12 @@ public class Authority {
         this.patternType = patternType;
     }
 
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
+    public HttpMethod[] getHttpMethods() {
+        return httpMethods;
     }
 
-    public void setHttpMethod(HttpMethod httpMethod) {
-        this.httpMethod = httpMethod;
+    public void setHttpMethods(HttpMethod[] httpMethods) {
+        this.httpMethods = httpMethods;
     }
 
     public enum PatternType {
