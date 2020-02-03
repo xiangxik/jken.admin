@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-02T21:11:00.886+08:00
+  ~ @LastModified: 2020-02-03T20:13:33.768+08:00
   -->
 
 <!DOCTYPE html>
@@ -188,6 +188,32 @@
                         content: base + '/role/' + obj.data.id,
                         maxmin: true,
                         area: ['550px', '550px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                            submit.click();
+                        }
+                    });
+                } else if (obj.event === 'viewUser') {
+                    layer.open({
+                        type: 2,
+                        title: '查看用户',
+                        content: base + '/role/' + obj.data.id + '/user',
+                        maxmin: true,
+                        area: ['550px', '550px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                            submit.click();
+                        }
+                    });
+                } else if (obj.event === 'updateAuthority') {
+                    layer.open({
+                        type: 2,
+                        title: '编辑权限',
+                        content: base + '/role/' + obj.data.id + '/authority',
+                        maxmin: true,
+                        area: ['800px', '600px'],
                         btn: ['确定', '取消'],
                         yes: function (index, layero) {
                             var submit = layero.find('iframe').contents().find("#jk-form-submit");

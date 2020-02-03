@@ -2,14 +2,13 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-02T21:11:00.877+08:00
+ * @LastModified: 2020-02-03T20:13:33.756+08:00
  */
 
 package jken.security;
 
 import jken.integration.Authority;
-import jken.integration.DomainAuthorities;
-import jken.integration.IntegrationServiceLoader;
+import jken.integration.IntegrationService;
 import jken.integration.ModuleMetadata;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -35,8 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         WebSecurity.IgnoredRequestConfigurer ignore = web.ignoring().antMatchers("/static/**", "/favicon.ico", "/h2/**");
-        List<ModuleMetadata> moduleMetadatas = IntegrationServiceLoader.getModuleMetadata();
-        for (ModuleMetadata metadata : moduleMetadatas) {
+        for (ModuleMetadata metadata : IntegrationService.getModuleMetadata()) {
             if (metadata.getIgnorePatterns() != null && metadata.getIgnorePatterns().length > 0) {
                 ignore.antMatchers(metadata.getIgnorePatterns());
             }
@@ -57,23 +54,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            }
 //        });
 
-        List<ModuleMetadata> moduleMetadatas = IntegrationServiceLoader.getModuleMetadata();
-        for (ModuleMetadata metadata : moduleMetadatas) {
-            for (DomainAuthorities domainAuthorities : metadata.getDomainAuthoritiesCollection()) {
-                for (Authority authority : domainAuthorities.getAuthorities()) {
-                    switch (authority.getPatternType()) {
-                        case REGEX:
-                            registerUrlAuthorization(authority, urlRegistry::regexMatchers, urlRegistry::regexMatchers);
-                            break;
-                        case MVC:
-                            registerUrlAuthorization(authority, urlRegistry::mvcMatchers, urlRegistry::mvcMatchers);
-                            break;
-                        case ANT:
-                        default:
-                            registerUrlAuthorization(authority, urlRegistry::antMatchers, urlRegistry::antMatchers);
-                            break;
-                    }
-                }
+        for (Authority authority : IntegrationService.getAuthorities()) {
+            switch (authority.getPatternType()) {
+                case REGEX:
+                    registerUrlAuthorization(authority, urlRegistry::regexMatchers, urlRegistry::regexMatchers);
+                    break;
+                case MVC:
+                    registerUrlAuthorization(authority, urlRegistry::mvcMatchers, urlRegistry::mvcMatchers);
+                    break;
+                case ANT:
+                default:
+                    registerUrlAuthorization(authority, urlRegistry::antMatchers, urlRegistry::antMatchers);
+                    break;
             }
         }
         urlRegistry.anyRequest().authenticated();

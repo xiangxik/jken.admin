@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.502+08:00
+  ~ @LastModified: 2020-02-03T20:13:33.765+08:00
   -->
 
 <!DOCTYPE html>
@@ -53,6 +53,14 @@
                 <div class="layui-input-inline">
                     <input autocomplete="off" class="layui-input" maxlength="20" minlength="4" placeholder="请输入图标样式"
                            th:field="*{iconCls}" type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限代号</label>
+                <div class="layui-input-inline">
+                    <textarea autocomplete="off" class="layui-textarea" style="width: 400px; height: 150px;"
+                              th:field="*{authorities}"></textarea>
+                    <div style="width: 400px; font-size: 12px;">该菜单下所拥有的权限(用,分隔), 仅用于权限分类</div>
                 </div>
             </div>
             <div class="layui-form-item">

@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.476+08:00
+ * @LastModified: 2020-02-03T20:13:33.759+08:00
  */
 
 package jken.module.core.entity;
@@ -39,6 +39,10 @@ public class MenuItem extends TreeEntity<MenuItem, User, Long> implements Corpab
     @Column(length = 31)
     private String iconCls;
 
+    @Size(max = 500)
+    @Column(length = 512)
+    private String authorities;
+
     private boolean locked = false;
 
     @Column(length = 100)
@@ -74,6 +78,14 @@ public class MenuItem extends TreeEntity<MenuItem, User, Long> implements Corpab
 
     public void setIconCls(String iconCls) {
         this.iconCls = iconCls;
+    }
+
+    public String getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
     }
 
     @Override

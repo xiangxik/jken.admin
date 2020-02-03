@@ -2,11 +2,12 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.450+08:00
+ * @LastModified: 2020-02-03T20:13:33.754+08:00
  */
 
 package jken.support.mvc;
 
+import org.apache.commons.lang3.builder.Builder;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -20,7 +21,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
@@ -33,7 +35,7 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         if (body == null) {
-            return Result.SUCCESS;
+            return ResultBuilder.SUCCESS;
         }
         MappingJacksonValue container = getOrCreateContainer(body);
         beforeBodyWriteInternal(container, selectedContentType, returnType, request, response);
@@ -49,73 +51,42 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
 
         if (value instanceof Page) {
             Page<?> page = (Page<?>) value;
-            bodyContainer.setValue(new LayuiPage(0, "", page));
+            bodyContainer.setValue(new ResultBuilder(0, "").layuiPage(page).build());
+        } else if (value instanceof DataWrap) {
+            bodyContainer.setValue(new ResultBuilder(0, "").data(((DataWrap) value).getData()).build());
         }
     }
 
-    static class Result {
+    static class ResultBuilder implements Builder<Map<String, Object>> {
 
-        public static final Result SUCCESS = new Result(0, "");
-        private Integer code;
-        private String msg;
+        private static final Map<String, Object> SUCCESS = new ResultBuilder(0, "").build();
 
-        public Result() {
+        private Map<String, Object> map = new HashMap<>();
+
+        public ResultBuilder(Integer code, String msg) {
+            put("code", code).put("msg", msg);
         }
 
-        public Result(Integer code, String msg) {
-            this.code = code;
-            this.msg = msg;
+        public ResultBuilder newResult(Integer code, String msg) {
+            return put("code", code).put("msg", msg);
         }
 
-        public static Result failure(String msg) {
-            return new Result(1, msg);
+        public ResultBuilder data(Object data) {
+            return put("data", data);
         }
 
-        public Integer getCode() {
-            return code;
+        public ResultBuilder put(String key, Object value) {
+            map.put(key, value);
+            return this;
         }
 
-        public void setCode(Integer code) {
-            this.code = code;
+        public ResultBuilder layuiPage(Page<?> page) {
+            return data(page.getContent()).put("count", page.getTotalElements());
         }
 
-        public String getMsg() {
-            return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
-        }
-    }
-
-    static class LayuiPage extends Result {
-        private Long count;
-        private List<?> data;
-
-        public LayuiPage() {
-        }
-
-        public LayuiPage(Integer code, String msg, Page<?> page) {
-            setCode(code);
-            setMsg(msg);
-            this.count = page.getTotalElements();
-            this.data = page.getContent();
-        }
-
-        public Long getCount() {
-            return count;
-        }
-
-        public void setCount(Long count) {
-            this.count = count;
-        }
-
-        public List<?> getData() {
-            return data;
-        }
-
-        public void setData(List<?> data) {
-            this.data = data;
+        @Override
+        public Map<String, Object> build() {
+            return map;
         }
     }
 }

@@ -2,38 +2,35 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-02T21:11:00.876+08:00
+ * @LastModified: 2020-02-03T20:13:33.752+08:00
  */
 
 package jken.integration;
 
-import org.apache.commons.lang3.builder.Builder;
 import org.springframework.http.HttpMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+public class ModuleMetadataDecorator {
 
-public class ModuleMetadataBuilder implements Builder<ModuleMetadata> {
+    private ModuleMetadata metadata;
 
-    private String moduleName;
+    public ModuleMetadataDecorator(ModuleMetadata metadata) {
+        this.metadata = metadata;
+    }
 
-    private String[] ignorePatterns;
-    private List<DomainAuthoritiesRegistry> domainAuthoritiesRegistries = new ArrayList<>();
-
-    public ModuleMetadataBuilder(String moduleName) {
-        this.moduleName = moduleName;
+    public ModuleMetadataDecorator name(String name) {
+        this.metadata.setName(name);
+        return this;
     }
 
     public DomainAuthoritiesRegistry domain(String domainName, String domainCode) {
         DomainAuthorities domainAuthorities = new DomainAuthorities(domainName, domainCode);
-        DomainAuthoritiesRegistry domainAuthoritiesRegistry = new DomainAuthoritiesRegistry(this, domainAuthorities);
-        domainAuthoritiesRegistries.add(domainAuthoritiesRegistry);
-        return domainAuthoritiesRegistry;
+        this.metadata.getDomainAuthoritiesCollection().add(domainAuthorities);
+
+        return new DomainAuthoritiesRegistry(this, domainAuthorities);
     }
 
-    public ModuleMetadataBuilder ignore(String... patterns) {
-        this.ignorePatterns = patterns;
+    public ModuleMetadataDecorator ignore(String... patterns) {
+        this.metadata.setIgnorePatterns(patterns);
         return this;
     }
 
@@ -47,27 +44,18 @@ public class ModuleMetadataBuilder implements Builder<ModuleMetadata> {
 
     }
 
-    @Override
-    public ModuleMetadata build() {
-        ModuleMetadata moduleMetadata = new ModuleMetadata();
-        moduleMetadata.setName(moduleName);
-        moduleMetadata.setIgnorePatterns(ignorePatterns);
-        moduleMetadata.setDomainAuthoritiesCollection(domainAuthoritiesRegistries.stream().map(registry -> registry.get()).collect(Collectors.toList()));
-        return moduleMetadata;
-    }
-
     public static class DomainAuthoritiesRegistry {
 
-        private ModuleMetadataBuilder metadataBuilder;
+        private ModuleMetadataDecorator metadataDecorator;
         private DomainAuthorities domainAuthorities;
 
-        public DomainAuthoritiesRegistry(ModuleMetadataBuilder metadataBuilder, DomainAuthorities domainAuthorities) {
-            this.metadataBuilder = metadataBuilder;
+        public DomainAuthoritiesRegistry(ModuleMetadataDecorator metadataDecorator, DomainAuthorities domainAuthorities) {
+            this.metadataDecorator = metadataDecorator;
             this.domainAuthorities = domainAuthorities;
         }
 
         public DomainAuthoritiesRegistry addAuthority(String name, String code, String... patterns) {
-            return addAuthority(name, code, patterns, null, null);
+            return addAuthority(name, code, patterns, Authority.PatternType.ANT, (HttpMethod[]) null);
         }
 
         public DomainAuthoritiesRegistry addAuthority(String name, String code, String[] patterns, Authority.PatternType patternType, HttpMethod... httpMethods) {
@@ -81,12 +69,8 @@ public class ModuleMetadataBuilder implements Builder<ModuleMetadata> {
             return this;
         }
 
-        public ModuleMetadataBuilder and() {
-            return metadataBuilder;
-        }
-
-        public DomainAuthorities get() {
-            return domainAuthorities;
+        public ModuleMetadataDecorator and() {
+            return metadataDecorator;
         }
 
     }

@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.477+08:00
+ * @LastModified: 2020-02-03T20:13:33.761+08:00
  */
 
 package jken.module.core.entity;
@@ -13,7 +13,6 @@ import jken.support.data.jpa.CorpableEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,9 +39,14 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_role_menu",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"))
+    private List<MenuItem> menuItems;
+
     @ElementCollection
     @CollectionTable(name = "tbl_role_authority")
-    private List<String> authorities = new ArrayList<String>();
+    private List<String> authorities;
 
     public String getName() {
         return name;
@@ -84,6 +88,14 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
 
     public void setUsers(Collection<User> users) {
         this.users = users;
+    }
+
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
     }
 
     public List<String> getAuthorities() {

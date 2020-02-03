@@ -2,12 +2,14 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-02T21:11:00.872+08:00
+ * @LastModified: 2020-02-03T20:13:33.747+08:00
  */
 
 package jken.integration;
 
 import org.springframework.http.HttpMethod;
+
+import java.util.Objects;
 
 public class Authority {
 
@@ -61,4 +63,16 @@ public class Authority {
         ANT, REGEX, MVC
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Authority authority = (Authority) o;
+        return code.equals(authority.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
 }
