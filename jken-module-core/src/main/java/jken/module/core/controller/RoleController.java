@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T20:13:33.757+08:00
+ * @LastModified: 2020-02-03T21:22:42.936+08:00
  */
 
 package jken.module.core.controller;
@@ -50,7 +50,6 @@ public class RoleController extends CrudController<Role, Long> {
     @GetMapping(value = "/{id}/user", produces = "text/html")
     public String showUsers(@PathVariable("id") Role entity, Model model) {
         model.addAttribute("entity", entity);
-
         return getViewDir() + "/user";
     }
 

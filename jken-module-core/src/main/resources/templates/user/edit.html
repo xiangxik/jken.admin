@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.509+08:00
+  ~ @LastModified: 2020-02-03T21:22:42.945+08:00
   -->
 
 <!DOCTYPE html>
@@ -56,6 +56,12 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-inline">
+            <div id="jk-select-role"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">锁定</label>
         <div class="layui-input-inline">
             <input lay-filter="locked" lay-skin="switch" lay-text="是|否" th:field="*{locked}" type="checkbox">
@@ -77,13 +83,25 @@
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-
 </script>
 <script>
         layui.config({
             base: base + '/static/layuiadmin/'
-        }).use(['form'], function () {
+        }).extend({
+            xmSelect: 'lib/extend/xm-select' //主入口模块
+        }).use(['form', 'xmSelect'], function () {
             var $ = layui.$, form = layui.form;
+            var xmSelect = layui.xmSelect;
+
+            xmSelect.render({
+                el: '#jk-select-role',
+                filterable: true,
+                name: "roles",
+                data: [
+
+                ]
+            })
+
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
                 $.ajax({
