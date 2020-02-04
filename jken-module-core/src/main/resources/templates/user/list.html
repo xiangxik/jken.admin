@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-04T15:00:37.503+08:00
+  ~ @LastModified: 2020-02-04T21:29:01.407+08:00
   -->
 
 <!DOCTYPE html>
@@ -74,7 +74,7 @@
             </script>
 
             <table class="layui-table"
-                   lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/user', id:'jk-table', toolbar: '#jk-toolbar'}"
+                   lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/user?_path_filter=*,*.id,*.username,*.name,*.age,*.mail,*.mobile,*.introduction', id:'jk-table', toolbar: '#jk-toolbar'}"
                    lay-filter="jk-table">
                 <thead>
                 <tr>

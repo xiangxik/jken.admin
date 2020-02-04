@@ -2,11 +2,14 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T20:13:33.754+08:00
+ * @LastModified: 2020-02-04T21:29:01.404+08:00
  */
 
 package jken.support.mvc;
 
+import com.google.common.base.Strings;
+import jken.support.json.pathfilter.Jackson2Helper;
+import jken.support.json.pathfilter.PathFilter;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
@@ -18,15 +21,18 @@ import org.springframework.http.converter.json.AbstractJackson2HttpMessageConver
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return AbstractJackson2HttpMessageConverter.class.isAssignableFrom(converterType);
@@ -48,6 +54,23 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
 
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType, ServerHttpRequest request, ServerHttpResponse response) {
         Object value = bodyContainer.getValue();
+
+        if (value != null) {
+            HttpServletRequest httpRequest = ((ServletServerHttpRequest) request).getServletRequest();
+            String filterString = httpRequest.getParameter("_path_filter");
+            String[] filters = Strings.isNullOrEmpty(filterString) ? null : filterString.split(",");
+            if (filters == null || filters.length == 0) {
+                if (returnType.hasMethodAnnotation(PathFilter.class)) {
+                    filters = returnType.getMethodAnnotation(PathFilter.class).value();
+                }
+            }
+
+            if (filters == null || filters.length == 0) {
+                filters = new String[]{"*", "*.*"};
+            }
+
+            bodyContainer.setFilters(Jackson2Helper.buildFilterProvider(filters));
+        }
 
         if (value instanceof Page) {
             Page<?> page = (Page<?>) value;
