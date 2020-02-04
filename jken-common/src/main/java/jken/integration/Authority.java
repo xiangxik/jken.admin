@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T20:13:33.747+08:00
+ * @LastModified: 2020-02-04T15:00:37.477+08:00
  */
 
 package jken.integration;
@@ -59,10 +59,6 @@ public class Authority {
         this.httpMethods = httpMethods;
     }
 
-    public enum PatternType {
-        ANT, REGEX, MVC
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,5 +70,9 @@ public class Authority {
     @Override
     public int hashCode() {
         return Objects.hash(code);
+    }
+
+    public enum PatternType {
+        ANT, REGEX, MVC
     }
 }

@@ -2,43 +2,45 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.504+08:00
+  ~ @LastModified: 2020-02-04T15:00:37.494+08:00
   -->
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-  <head>
-    <meta charset="utf-8">
-    <title>jken application</title>
-    <meta content="webkit" name="renderer">
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          name="viewport">
-    <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
-    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <title>jken application</title>
+        <meta content="webkit" name="renderer">
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+              name="viewport">
+        <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
+        <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+    </head>
 
-  <body>
-    <div class="layui-fluid">
-      <div class="layui-card">
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-card">
 
-        <div class="layui-card-body">
+                <div class="layui-card-body">
 
-          <button class="layui-btn" id="jk-create">新增</button>
+                    <button class="layui-btn" id="jk-create">新增</button>
 
-          <table class="layui-table layui-form" id="jk-treeTable"></table>
+                    <table class="layui-table layui-form" id="jk-treeTable"></table>
 
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <script src="https://www.layuicdn.com/layui/layui.js"></script>
-    <script th:inline="javascript" type="text/javascript">
+        <script src="https://www.layuicdn.com/layui/layui.js"></script>
+        <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
 
-    </script>
-    <script>
+
+
+        </script>
+        <script>
     layui.config({
       base: base + '/static/layuiadmin/'
     }).extend({
@@ -173,7 +175,9 @@
     });
 
 
-    </script>
-  </body>
+
+
+        </script>
+    </body>
 
 </html>

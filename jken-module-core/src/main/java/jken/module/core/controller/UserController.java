@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.473+08:00
+ * @LastModified: 2020-02-04T15:00:37.485+08:00
  */
 
 package jken.module.core.controller;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/user")
 public class UserController extends CrudController<User, Long> {
+
     @Override
     public Page<User> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return super.doInternalPage(predicate, pageable);

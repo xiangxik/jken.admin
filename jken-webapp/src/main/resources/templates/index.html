@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.529+08:00
+  ~ @LastModified: 2020-02-04T15:00:37.518+08:00
   -->
 
 <!DOCTYPE html>
@@ -74,7 +74,7 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>贤心</cite>
+                        <cite th:text="${currentUser.name}">贤心</cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -179,6 +179,7 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+
 </script>
 <script>
         layui.config({
@@ -186,6 +187,7 @@
         }).extend({
             index: 'lib/index' //主入口模块
         }).use('index');
+
 </script>
 </body>
 

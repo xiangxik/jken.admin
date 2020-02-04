@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T21:22:42.936+08:00
+ * @LastModified: 2020-02-04T15:00:37.483+08:00
  */
 
 package jken.module.core.controller;
@@ -45,6 +45,18 @@ public class RoleController extends CrudController<Role, Long> {
     @Override
     public Page<Role> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return super.doInternalPage(predicate, pageable);
+    }
+
+    /**
+     * 获取列表数据
+     *
+     * @param predicate
+     * @return
+     */
+    @GetMapping(produces = "application/json", params = "_list=true")
+    @ResponseBody
+    public Iterable<Role> list(@QuerydslPredicate(root = Role.class) Predicate predicate, Sort sort) {
+        return getService().findAll(predicate, sort);
     }
 
     @GetMapping(value = "/{id}/user", produces = "text/html")

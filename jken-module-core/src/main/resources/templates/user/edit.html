@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-03T21:22:42.945+08:00
+  ~ @LastModified: 2020-02-04T15:00:37.501+08:00
   -->
 
 <!DOCTYPE html>
@@ -83,6 +83,7 @@
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
+        var rolesSelected = /*[[${entity.roles}]]*/null;
 </script>
 <script>
         layui.config({
@@ -93,14 +94,36 @@
             var $ = layui.$, form = layui.form;
             var xmSelect = layui.xmSelect;
 
-            xmSelect.render({
+            var roleSelect = xmSelect.render({
                 el: '#jk-select-role',
                 filterable: true,
                 name: "roles",
-                data: [
-
-                ]
+                toolbar:{show: true},
+                initValue: rolesSelected,
+                data: []
             })
+
+            $.ajax({
+                url: base + '/role',
+                dataType: 'json',
+                data: {_list:true},
+                type: 'get',
+                success: function (resp) {
+                    var data = resp;
+                    roleSelect.update({
+                        data: $.map(data, function(item, i){
+                            var obj = {};
+                            obj.value = item.id;
+                            obj.name = item.name;
+                            return obj;
+                        }),
+                        autoRow: true
+                    });
+                },
+                error: function (resp) {
+                    layer.msg(resp.responseJSON.message);
+                }
+            });
 
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
@@ -125,6 +148,7 @@
                 return false;
             });
         })
+
 
 
 

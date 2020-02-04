@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.461+08:00
+ * @LastModified: 2020-02-04T15:00:37.481+08:00
  */
 
 package jken.support.web;
@@ -82,7 +82,7 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     //=====================================================
 
     /**
-     * 获取列表数据
+     * 获取列表数据(分页)
      *
      * @param predicate
      * @param pageable
@@ -115,7 +115,7 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     public void update(@ModelAttribute("id") @Valid T entity, BindingResult bindingResult) {
         onValidate(entity, bindingResult);
         if (bindingResult.hasErrors()) {
-            //
+            throw new RuntimeException("validate error");
         }
 
         onBeforeSave(entity);

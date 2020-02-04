@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-01T20:59:46.533+08:00
+  ~ @LastModified: 2020-02-04T15:00:37.521+08:00
   -->
 
 <!DOCTYPE html>
@@ -11,13 +11,13 @@
 <head>
     <meta charset="utf-8">
     <title>登录 - jken</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css" media="all">
-    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
-    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/login.css}" media="all">
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          name="viewport">
+    <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
+    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/login.css}">
 </head>
 
 <body>
@@ -96,6 +96,7 @@
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
 
+
 </script>
 <script>
         layui.use('form', function () {
@@ -103,6 +104,7 @@
 
             //各种基于事件的操作，下面会有进一步介绍
         });
+
 
 </script>
 </body>
