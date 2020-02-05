@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.486+08:00
+ * @LastModified: 2020-02-05T19:35:47.655+08:00
  */
 
 package jken.module.core.service;
@@ -13,7 +13,10 @@ import jken.security.AbstractUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class CorpUserDetailsService extends AbstractUserDetailsService<User, Long> {
 
     @Autowired

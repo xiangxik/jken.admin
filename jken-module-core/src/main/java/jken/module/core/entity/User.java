@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T20:13:33.762+08:00
+ * @LastModified: 2020-02-05T19:35:47.654+08:00
  */
 
 package jken.module.core.entity;
@@ -14,14 +14,13 @@ import jken.support.data.LogicDeleteable;
 import jken.support.data.jpa.CorpableEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tbl_user")
@@ -80,10 +79,20 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("corp-list", "corp-view", "corp-add", "corp-edit", "corp-delete",
-                "user-list", "user-view", "user-add", "user-edit", "user-delete",
-                "role-list", "role-view", "role-add", "role-edit", "role-delete", "role-view-user", "role-edit-user", "role-view-authority", "role-edit-authority",
-                "menu-list", "menu-view", "menu-add", "menu-edit", "menu-delete");
+        Set<Role> roles = getRoles();
+        if (roles == null) {
+            return AuthorityUtils.NO_AUTHORITIES;
+        }
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (Role role : roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
+            List<String> authorities = role.getAuthorities();
+            for (String authority : authorities) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(authority));
+            }
+        }
+        return grantedAuthorities;
     }
 
     @Override

@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-03T20:13:33.761+08:00
+ * @LastModified: 2020-02-05T19:35:47.652+08:00
  */
 
 package jken.module.core.entity;
@@ -44,7 +44,7 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"))
     private List<MenuItem> menuItems;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "tbl_role_authority")
     private List<String> authorities;
 

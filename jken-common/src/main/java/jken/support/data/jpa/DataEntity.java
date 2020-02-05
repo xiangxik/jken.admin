@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.417+08:00
+ * @LastModified: 2020-02-05T19:35:47.645+08:00
  */
 
 package jken.support.data.jpa;
@@ -18,4 +18,8 @@ import java.io.Serializable;
 @EntityListeners({AuditingEntityListener.class})
 public abstract class DataEntity<U, I extends Serializable> extends AbstractAuditable<U, I> implements Entity<I> {
 
+    @Override
+    public String toString() {
+        return ofString();
+    }
 }

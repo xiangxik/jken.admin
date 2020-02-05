@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-04T15:00:37.518+08:00
+  ~ @LastModified: 2020-02-05T19:35:47.661+08:00
   -->
 
 <!DOCTYPE html>
@@ -80,7 +80,7 @@
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
                         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <hr>
-                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                        <dd style="text-align: center;"><a th:href="@{/logout}">退出</a></dd>
                     </dl>
                 </li>
 
@@ -105,8 +105,13 @@
                 <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu" lay-shrink="all">
 
-                    <li class="layui-nav-item" th:classappend="${miStat.first?' layui-this':''}"
-                        th:data-name="${mi.code}" th:each="mi:${mis}">
+                    <li class="layui-nav-item  layui-this" data-name="home">
+                        <a href="javascript:;" lay-direction="2" lay-href="home" lay-tips="主页">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>主页</cite>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item" th:data-name="${mi.code}" th:each="mi:${mis}">
                         <a href="javascript:;" lay-direction="2" th:attrappend="lay-href=${mi.href}"
                            th:if="${mi.children==null||mi.children.size()==0}" th:lay-tips="${mi.name}">
                             <i th:class="'layui-icon '+${mi.iconCls}"></i>

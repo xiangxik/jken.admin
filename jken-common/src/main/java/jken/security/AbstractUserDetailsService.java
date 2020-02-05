@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-01T20:59:46.403+08:00
+ * @LastModified: 2020-02-05T19:35:47.647+08:00
  */
 
 package jken.security;
@@ -10,9 +10,11 @@ package jken.security;
 import com.google.common.base.Strings;
 import jken.support.data.Corpable;
 import jken.support.data.jpa.Entity;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,13 +27,21 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Optional;
 
-public abstract class AbstractUserDetailsService<U extends UserDetails, I extends Serializable> implements UserDetailsService, AuditorAware<U> {
+public abstract class AbstractUserDetailsService<U extends UserDetails, I extends Serializable> implements UserDetailsService, AuditorAware<U>, ApplicationContextAware {
 
     protected abstract U loadRepoUserDetails(I id);
 
     protected abstract U loadUserByUsernameAndCorpCode(String username, String corpCode);
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,8 +58,9 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
         if (user instanceof Entity) {
             id = ((Entity<I>) user).getId();
         }
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         return new CustomUserDetails<>(user instanceof Corpable ? ((Corpable) user).getCorpCode() : null, id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-                user.getAuthorities() == null ? AuthorityUtils.createAuthorityList("ROLE_USER") : user.getAuthorities());
+                authorities);
     }
 
     @Override

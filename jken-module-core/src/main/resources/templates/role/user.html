@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-04T15:00:37.499+08:00
+  ~ @LastModified: 2020-02-05T19:35:47.656+08:00
   -->
 
 <!DOCTYPE html>
@@ -43,43 +43,14 @@
     </div>
 
     <div class="layui-card-body">
-
-        <script id="jk-toolbar" type="text/html">
-            <div class="layui-btn-container">
-                <div class="layui-btn-group">
-                    <button type="button" class="layui-btn" lay-event="add">添加用户</button>
-                    <button type="button" class="layui-btn" lay-event="batchRemove">批量移除</button>
-                </div>
-            </div>
-        </script>
-
-        <table class="layui-table"
-               lay-data="{height: 'full-99', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/user', id:'jk-table', toolbar: '#jk-toolbar'}"
-               lay-filter="jk-table">
-            <thead>
-            <tr>
-                <th lay-data="{field:'id', checkbox:true}"></th>
-                <th lay-data="{field:'username', sort: true}">账号</th>
-                <th lay-data="{field:'name', sort: true}">姓名</th>
-                <th lay-data="{field:'mail', width:220, sort: true}">邮箱</th>
-                <th lay-data="{field:'mobile', width:120, sort: true}">手机号码</th>
-                <th lay-data="{width:80, toolbar: '#jk-tool', align: 'center'}">操作</th>
-            </tr>
-            </thead>
-        </table>
-
-        <script id="jk-tool" type="text/html">
-            <div class="layui-btn-group">
-                <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="remove">移除</button>
-            </div>
-        </script>
-
+        <table id="jk-table" lay-filter="jk-table"></table>
     </div>
 </div>
 
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+        var entityId = /*[[${entity.id}]]*/null;
 </script>
 <script>
         layui.config({
@@ -88,6 +59,24 @@
             var table = layui.table, form = layui.form;
             var $ = layui.$;
 
+            table.render({
+                height: 'full-99',
+                cellMinWidth: 80,
+                page: true,
+                limit:30,
+                autoSort: false,
+                url:'/role/'+entityId+'/user',
+                id:'jk-table',
+                elem: "#jk-table",
+                cols:  [ [
+                {field: 'id', checkbox: true},
+                {field:'username', sort: true},
+                {field:'name', sort: true},
+                {field:'mail', width:220, sort: true},
+                {field:'mobile', width:120, sort: true}
+              ] ]
+            });
+
             table.on('sort(jk-table)', function (obj) {
                 table.reload('jk-table', {
                     initSort: obj,
@@ -95,83 +84,6 @@
                         sort: obj.field + ',' + obj.type
                     }
                 });
-            });
-
-            table.on('toolbar(jk-table)', function (obj) {
-                var checkStatus = table.checkStatus(obj.config.id);
-                switch (obj.event) {
-                    case 'add':
-                        layer.open({
-                            type: 2,
-                            title: '添加用户',
-                            content: base + '/user/add',
-                            maxmin: true,
-                            area: ['550px', '550px'],
-                            btn: ['确定', '取消'],
-                            yes: function (index, layero) {
-                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                                submit.click();
-                            }
-                        });
-                        break;
-                    case 'batchRemove':
-                        var data = checkStatus.data;
-                        if (data.length > 0) {
-                            layer.confirm('真的移除么？', function (index) {
-                                var ids = $.map(data, function (n, i) {
-                                    return n.id
-                                });
-
-                                $.ajax({
-                                    url: base + '/user',
-                                    dataType: 'json',
-                                    data: { ids: ids },
-                                    type: 'delete',
-                                    success: function (resp) {
-                                        if (resp.code == 0) {
-                                            layer.close(index);
-                                            table.reload('jk-table');
-                                        } else {
-                                            layer.msg(resp.msg, { time: 2000 }, function () { });
-                                        }
-                                    },
-                                    error: function (resp) {
-                                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-                                    }
-                                });
-                            });
-
-                        } else {
-                            layer.msg('请至少选择一条记录', { time: 2000 }, function () { });
-                        }
-                        break;
-                };
-            });
-
-            //监听行工具事件
-            table.on('tool(jk-table)', function (obj) {
-                var data = obj.data;
-                if (obj.event === 'remove') {
-                    layer.confirm('真的移除么？', function (index) {
-                        $.ajax({
-                            url: base + '/user/' + obj.data.id,
-                            dataType: 'json',
-                            type: 'delete',
-                            success: function (resp) {
-                                if (resp.code == 0) {
-                                    obj.del();
-                                    layer.close(index);
-                                    table.reload('jk-table');
-                                } else {
-                                    layer.msg(resp.msg, { time: 2000 }, function () { });
-                                }
-                            },
-                            error: function (resp) {
-                                layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
-                            }
-                        });
-                    });
-                }
             });
 
             //监听搜索

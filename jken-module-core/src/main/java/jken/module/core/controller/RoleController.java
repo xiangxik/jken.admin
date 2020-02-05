@@ -2,7 +2,7 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-04T15:00:37.483+08:00
+ * @LastModified: 2020-02-05T19:35:47.649+08:00
  */
 
 package jken.module.core.controller;
@@ -10,13 +10,17 @@ package jken.module.core.controller;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import jken.integration.Authority;
 import jken.integration.AuthorityUtils;
 import jken.integration.IntegrationService;
 import jken.module.core.entity.MenuItem;
+import jken.module.core.entity.QUser;
 import jken.module.core.entity.Role;
+import jken.module.core.entity.User;
 import jken.module.core.service.MenuItemService;
+import jken.module.core.service.UserService;
 import jken.support.data.TreeHelper;
 import jken.support.mvc.DataWrap;
 import jken.support.web.CrudController;
@@ -42,6 +46,9 @@ public class RoleController extends CrudController<Role, Long> {
     @Autowired
     private MenuItemService menuItemService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public Page<Role> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return super.doInternalPage(predicate, pageable);
@@ -63,6 +70,18 @@ public class RoleController extends CrudController<Role, Long> {
     public String showUsers(@PathVariable("id") Role entity, Model model) {
         model.addAttribute("entity", entity);
         return getViewDir() + "/user";
+    }
+
+    @GetMapping(value = "/{id}/user", produces = "application/json")
+    @ResponseBody
+    public Page<User> getUsers(@PathVariable("id") Role entity, @QuerydslPredicate(root = User.class) Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, String keywords) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder(predicate);
+        booleanBuilder.and(QUser.user.roles.contains(entity));
+        if (!Strings.isNullOrEmpty(keywords)) {
+            QUser qUser = QUser.user;
+            booleanBuilder.and(qUser.name.contains(keywords).or(qUser.username.contains(keywords)).or(qUser.mobile.contains(keywords)).or(qUser.mail.contains(keywords)));
+        }
+        return userService.findAll(booleanBuilder, pageable);
     }
 
     @GetMapping(value = "/{id}/authority", produces = "text/html")
