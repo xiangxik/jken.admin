@@ -8,6 +8,7 @@
 package jken.module.core.service;
 
 import jken.module.core.entity.User;
+import jken.module.core.repo.RoleRepository;
 import jken.module.core.repo.UserRepository;
 import jken.security.AbstractUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CorpUserDetailsService extends AbstractUserDetailsService<User, Lon
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     protected User loadRepoUserDetails(Long id) {

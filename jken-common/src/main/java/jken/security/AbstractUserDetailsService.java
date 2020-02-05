@@ -13,17 +13,22 @@ import jken.support.data.jpa.Entity;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -32,11 +37,11 @@ import java.util.Optional;
 
 public abstract class AbstractUserDetailsService<U extends UserDetails, I extends Serializable> implements UserDetailsService, AuditorAware<U>, ApplicationContextAware {
 
+    private ApplicationContext applicationContext;
+
     protected abstract U loadRepoUserDetails(I id);
 
     protected abstract U loadUserByUsernameAndCorpCode(String username, String corpCode);
-
-    private ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
@@ -45,6 +50,11 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        EntityManagerFactory entityManagerFactory = applicationContext.getBean(EntityManagerFactory.class);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManagerHolder entityManagerHolder = new EntityManagerHolder(entityManager);
+        TransactionSynchronizationManager.bindResource(entityManagerFactory, entityManagerHolder);
 
         String corpCode = obtainCorpCode();
 
@@ -59,6 +69,10 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
             id = ((Entity<I>) user).getId();
         }
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+        TransactionSynchronizationManager.unbindResource(entityManagerFactory);
+        EntityManagerFactoryUtils.closeEntityManager(entityManager);
+
         return new CustomUserDetails<>(user instanceof Corpable ? ((Corpable) user).getCorpCode() : null, id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
                 authorities);
     }
