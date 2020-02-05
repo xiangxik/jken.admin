@@ -8,6 +8,7 @@
 package jken.module.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 import jken.support.data.Disabledable;
 import jken.support.data.Lockedable;
 import jken.support.data.LogicDeleteable;
@@ -64,6 +65,7 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
 
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
+    private boolean accountNonLocked = true;
 
     private boolean disabled = false;
     private boolean locked = false;
@@ -95,6 +97,18 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
         return grantedAuthorities;
     }
 
+    @JsonIgnore
+    public List<MenuItem> getMenuItems() {
+        Set<MenuItem> menuItems = new HashSet<>();
+        Set<Role> roles = getRoles();
+        if (roles != null) {
+            for (Role role : roles) {
+                menuItems.addAll(role.getMenuItems());
+            }
+        }
+        return Lists.newArrayList(menuItems);
+    }
+
     @Override
     public String getPassword() {
         return password;
@@ -124,7 +138,11 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
 
     @Override
     public boolean isAccountNonLocked() {
-        return !locked;
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
     @Override
