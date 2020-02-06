@@ -60,7 +60,7 @@
             </script>
 
                 <table class="layui-table"
-                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/role', id:'jk-table', toolbar: '#jk-toolbar'}"
+                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/role?_path_filter=*,*.id,*.name,*.code', id:'jk-table', toolbar: '#jk-toolbar'}"
                     lay-filter="jk-table">
                     <thead>
                         <tr>
@@ -258,8 +258,6 @@
                 });
             });
         });
-
-
     </script>
 </body>
 

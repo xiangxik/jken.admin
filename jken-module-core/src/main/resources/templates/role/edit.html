@@ -21,14 +21,14 @@
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
         <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
+            <label class="layui-form-label" jk:required>名称</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入名称"
                     th:field="*{name}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">代号</label>
+            <label class="layui-form-label" jk:required>代号</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入代号"
                     th:field="*{code}" type="text">

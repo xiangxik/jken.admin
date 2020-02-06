@@ -21,14 +21,28 @@
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
         <div class="layui-form-item">
-            <label class="layui-form-label">账号</label>
+            <label class="layui-form-label" jk:required>账号</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入账号"
                     th:field="*{username}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">姓名</label>
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-inline">
+                <input autocomplete="off" class="layui-input" th:attrappend="lay-verify=${entity.isNew()?'required':''}"
+                    name="newPassword" type="password">
+            </div>
+            <i th:if="${!entity.isNew()}">留空则不修改</i>
+        </div>
+        <div th:if="${!entity.isNew()}" class="layui-form-item">
+            <label class="layui-form-label">重复密码</label>
+            <div class="layui-input-inline">
+                <input autocomplete="off" class="layui-input" name="repeatPassword" type="password">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" jk:required>姓名</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入姓名"
                     th:field="*{name}" type="text">
@@ -64,7 +78,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">解锁</label>
             <div class="layui-input-inline">
-                <input lay-filter="locked" lay-skin="switch" lay-text="是|否" th:field="*{accountNonLocked}" type="checkbox">
+                <input lay-filter="locked" lay-skin="switch" lay-text="是|否" th:field="*{accountNonLocked}"
+                    type="checkbox">
             </div>
         </div>
         <div class="layui-form-item">

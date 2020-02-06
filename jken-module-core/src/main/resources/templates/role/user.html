@@ -67,13 +67,13 @@
                 url: '/role/' + entityId + '/user',
                 id: 'jk-table',
                 elem: "#jk-table",
-                cols: [[
+                cols: [ [
                     { field: 'id', checkbox: true },
-                    { field: 'username', sort: true },
-                    { field: 'name', sort: true },
-                    { field: 'mail', width: 220, sort: true },
-                    { field: 'mobile', width: 120, sort: true }
-                ]]
+                    { field: 'username', title: '用户名', sort: true },
+                    { field: 'name', title: '姓名', sort: true },
+                    { field: 'mail', title: '邮箱', width: 220, sort: true },
+                    { field: 'mobile', title: '手机号码', width: 120, sort: true }
+                ] ]
             });
 
             table.on('sort(jk-table)', function (obj) {
@@ -95,9 +95,6 @@
                 });
             });
         });
-
-
-
     </script>
 </body>
 
