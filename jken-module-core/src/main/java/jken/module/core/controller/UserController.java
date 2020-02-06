@@ -14,6 +14,7 @@ import jken.module.core.entity.Role;
 import jken.module.core.entity.User;
 import jken.support.web.CrudController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,8 +24,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,7 +34,46 @@ import java.util.stream.Collectors;
 public class UserController extends CrudController<User, Long> {
 
     @Autowired
+    private AuditorAware<User> auditorAware;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @GetMapping(value = "/info", produces = "text/html")
+    public String showInfo(Model model) {
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        model.addAttribute("entity", currentUser);
+        return getViewDir() + "/info";
+    }
+
+    @PutMapping(value = "/info")
+    @ResponseBody
+    public void saveInfo(@ModelAttribute @Valid User entity, BindingResult bindingResult) {
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        currentUser.setName(entity.getName());
+        currentUser.setAge(entity.getAge());
+        currentUser.setMail(entity.getMail());
+        currentUser.setMobile(entity.getMobile());
+        currentUser.setIntroduction(entity.getIntroduction());
+        getService().save(currentUser);
+    }
+
+    @GetMapping(value = "/password", produces = "text/html")
+    public String editPassword(Model model) {
+        return getViewDir() + "/password";
+    }
+
+    @PutMapping(value = "/password")
+    @ResponseBody
+    public void savePassword(String oldPassword, String newPassword) {
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            throw new RuntimeException("旧密码不正确");
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        getService().save(currentUser);
+    }
 
     @Override
     public Page<User> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -48,9 +89,9 @@ public class UserController extends CrudController<User, Long> {
     @Override
     protected void onValidate(User entity, BindingResult bindingResult) {
         super.onValidate(entity, bindingResult);
-        if(entity.isNew()) {
+        if (entity.isNew()) {
             String rawPassword = getRequest().getParameter("newPassword");
-            if(Strings.isNullOrEmpty(rawPassword)) {
+            if (Strings.isNullOrEmpty(rawPassword)) {
                 bindingResult.addError(new FieldError("entity", "password", "密码不能为空"));
             }
         }
@@ -61,7 +102,7 @@ public class UserController extends CrudController<User, Long> {
         super.onBeforeSave(entity);
 
         String rawPassword = getRequest().getParameter("newPassword");
-        if(!Strings.isNullOrEmpty(rawPassword)) {
+        if (!Strings.isNullOrEmpty(rawPassword)) {
             String encodedPassword = passwordEncoder.encode(rawPassword);
             entity.setPassword(encodedPassword);
         }

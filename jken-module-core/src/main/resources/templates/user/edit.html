@@ -33,12 +33,18 @@
                 <input autocomplete="off" class="layui-input" th:attrappend="lay-verify=${entity.isNew()?'required':''}"
                     name="newPassword" type="password">
             </div>
-            <i th:if="${!entity.isNew()}">留空则不修改</i>
+            <div th:if="${!entity.isNew()}" class="layui-form-mid layui-word-aux">留空则不修改</div>
         </div>
         <div th:if="${!entity.isNew()}" class="layui-form-item">
             <label class="layui-form-label">重复密码</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" name="repeatPassword" type="password">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-inline">
+                <div id="jk-select-role"></div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -69,10 +75,10 @@
                     th:field="*{mobile}" type="text">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色</label>
-            <div class="layui-input-inline">
-                <div id="jk-select-role"></div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">简介</label>
+            <div class="layui-input-block">
+                <textarea th:field="*{introduction}" placeholder="请输入内容" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
