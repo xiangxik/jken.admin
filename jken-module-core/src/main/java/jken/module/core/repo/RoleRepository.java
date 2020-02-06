@@ -18,6 +18,6 @@ public interface RoleRepository extends QuerydslEntityRepository<Role, Long>, Qu
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QRole qRole) {
-        querydslBindings.bind(qRole.name).first((StringExpression::contains));
+        querydslBindings.bind(qRole.name, qRole.code).first((StringExpression::contains));
     }
 }

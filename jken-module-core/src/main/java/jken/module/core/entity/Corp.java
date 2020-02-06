@@ -10,9 +10,7 @@ package jken.module.core.entity;
 import jken.support.data.Disabledable;
 import jken.support.data.jpa.DataEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -22,17 +20,24 @@ public class Corp extends DataEntity<User, Long> implements Disabledable {
     @NotNull
     @Column(length = 100, nullable = false)
     private String name;
+
     @NotNull
     @Column(unique = true, length = 100, nullable = false)
     private String code;
+
     @Column(length = 20)
+    @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(length = 200)
     private String logo;
+
     @Column(length = 200)
     private String website;
+
     @Column(length = 1000)
     private String introduction;
+
     private boolean disabled = false;
 
     public String getName() {
