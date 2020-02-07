@@ -41,7 +41,7 @@
         layui.config({
             base: base + '/static/layuiadmin/'
         }).extend({
-            authtree: 'lib/extend/authtree' //主入口模块
+            authtree: 'core/authtree' //主入口模块
         }).use(['form', 'authtree'], function () {
             var $ = layui.$, form = layui.form;
             var authtree = layui.authtree;
@@ -56,7 +56,7 @@
                             layfilter: 'lay-check-auth',
                             openall: true,
                             'theme': 'auth-skin-default',
-                            'themePath': base + '/static/layuiadmin/lib/extend/tree_themes/',
+                            'themePath': base + '/static/layuiadmin/core/tree_themes/',
                             autowidth: true
                         });
                     } else {

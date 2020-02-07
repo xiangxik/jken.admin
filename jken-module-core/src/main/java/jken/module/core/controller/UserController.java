@@ -107,4 +107,18 @@ public class UserController extends CrudController<User, Long> {
             entity.setPassword(encodedPassword);
         }
     }
+
+    @PostMapping(params = "!password")
+    @ResponseBody
+    @Override
+    public void create(@ModelAttribute @Valid User entity, BindingResult bindingResult) {
+        super.create(entity, bindingResult);
+    }
+
+    @PutMapping(value = "/{id}", params = "!password")
+    @ResponseBody
+    @Override
+    public void update(@ModelAttribute("id") @Valid User entity, BindingResult bindingResult) {
+        super.update(entity, bindingResult);
+    }
 }
