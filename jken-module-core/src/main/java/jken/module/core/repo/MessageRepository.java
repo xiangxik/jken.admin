@@ -18,6 +18,6 @@ public interface MessageRepository extends QuerydslEntityRepository<Message, Lon
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QMessage qMessage) {
-        querydslBindings.bind(qMessage.title).first((StringExpression::contains));
+        querydslBindings.bind(qMessage.title).first(StringExpression::contains);
     }
 }

@@ -29,5 +29,6 @@ public class CoreModuleIntegration extends AbstractModuleIntegration {
                 .addAuthority("修改权限", "role-edit-authority", new String[]{"/role/*/authority"}, Authority.PatternType.ANT, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE);
         decorator.domainCrud("菜单", "menu", "/menu");
         decorator.domainCrud("用户", "user", "/user");
+        decorator.domainCrud("字典", "dict", "/dict");
     }
 }

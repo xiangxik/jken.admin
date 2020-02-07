@@ -68,6 +68,7 @@ public class CorpService extends CrudService<Corp, Long> {
         menuItems.add(buildMenuItem("用户管理", "user", "user", null, "user-list,user-view,user-add,user-edit,user-delete", sortNo++, corpCode, orgSet));
         menuItems.add(buildMenuItem("角色管理", "role", "role", null, "role-list,role-view,role-add,role-edit,role-delete,role-view-user,role-edit-user,role-view-authority,role-edit-authority", sortNo++, corpCode, orgSet));
         menuItems.add(buildMenuItem("菜单管理", "menu", "menu", null, "menu-list,menu-view,menu-add,menu-edit,menu-delete", sortNo++, corpCode, orgSet));
+        menuItems.add(buildMenuItem("字典管理", "dict", "dict", null, "dict-list,dict-view,dict-add,dict-edit,dict-delete", sortNo++, corpCode, orgSet));
         return menuItems;
     }
 

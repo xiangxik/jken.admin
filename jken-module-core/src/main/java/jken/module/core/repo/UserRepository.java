@@ -20,7 +20,7 @@ public interface UserRepository extends QuerydslEntityRepository<User, Long>, Qu
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QUser qUser) {
-        querydslBindings.bind(qUser.name, qUser.mail, qUser.mobile, qUser.username).first((StringExpression::contains));
+        querydslBindings.bind(qUser.name, qUser.mail, qUser.mobile, qUser.username).first(StringExpression::contains);
         querydslBindings.excluding(qUser.password);
     }
 }

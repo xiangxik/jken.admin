@@ -119,7 +119,7 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
         }
 
         onBeforeSave(entity);
-        getService().save(entity);
+        onSave(entity);
         onAfterSave(entity);
     }
 
@@ -132,7 +132,7 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     @ResponseBody
     public void delete(@PathVariable("id") T entity) {
         if (onBeforeDelete(entity)) {
-            getService().delete(entity);
+            onDelete(entity);
         }
     }
 
@@ -145,7 +145,7 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     @ResponseBody
     public void batchDelete(@RequestParam(value = "ids[]") T[] entities) {
         if (entities != null) {
-            getService().deleteInBatch(Arrays.asList(entities));
+            onBatchDelete(entities);
         }
     }
 
@@ -165,11 +165,23 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     protected void onBeforeSave(T entity) {
     }
 
+    protected void onSave(T entity) {
+        getService().save(entity);
+    }
+
     protected void onAfterSave(T entity) {
     }
 
     protected boolean onBeforeDelete(T entity) {
         return true;
+    }
+
+    protected void onDelete(T entity) {
+        getService().delete(entity);
+    }
+
+    protected void onBatchDelete(T[] entities) {
+        getService().deleteInBatch(Arrays.asList(entities));
     }
 
     public CrudService<T, I> getService() {
