@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>jken application</title>
+    <title th:text="#{app.name}">title</title>
     <meta content="webkit" name="renderer">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -74,7 +74,7 @@
                     </li>
                     <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;">
-                            <cite th:text="${currentUser.name}">贤心</cite>
+                            <cite th:text="${currentUser.name}">user</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd><a th:lay-href="@{/user/info}">基本资料</a></dd>
@@ -99,7 +99,7 @@
             <div class="layui-side layui-side-menu">
                 <div class="layui-side-scroll">
                     <div class="layui-logo" lay-href="home">
-                        <span>jken system</span>
+                        <span th:text="#{app.name}">jken system</span>
                     </div>
 
                     <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
