@@ -106,9 +106,9 @@
                         lay-filter="layadmin-system-side-menu" lay-shrink="all">
 
                         <li class="layui-nav-item  layui-this" data-name="home">
-                            <a href="javascript:;" lay-direction="2" lay-href="home" lay-tips="主页">
-                                <i class="layui-icon layui-icon-home"></i>
-                                <cite>主页</cite>
+                            <a href="javascript:;" lay-direction="2" lay-href="home" lay-tips="我的工作台">
+                                <i class="layui-icon layui-icon-console"></i>
+                                <cite>我的工作台</cite>
                             </a>
                         </li>
                         <li class="layui-nav-item" th:data-name="${mi.code}" th:each="mi:${mis}">
@@ -140,6 +140,18 @@
                                 </th:block>
                             </dl>
                         </li>
+
+                        <li class="layui-nav-item" data-name="admin" th:if="${#authentication.principal.ownerCorp}">
+                            <a href="javascript:;" lay-direction="2" lay-tips="超级管理">
+                                <i class="layui-icon layui-icon-auz"></i>
+                                <cite>超级管理</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a lay-href="corp">公司管理</a>
+                                </dd>
+                            </dl>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -162,7 +174,9 @@
                 </div>
                 <div class="layui-tab" lay-allowClose="true" lay-filter="layadmin-layout-tabs" lay-unauto>
                     <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                        <li class="layui-this" lay-attr="home" lay-id="home"><i class="layui-icon layui-icon-home"></i>
+                        <li class="layui-this" lay-attr="home" lay-id="home"><i
+                                class="layui-icon layui-icon-console"></i>
+                            我的工作台
                         </li>
                     </ul>
                 </div>
@@ -184,7 +198,6 @@
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-
     </script>
     <script>
         layui.config({

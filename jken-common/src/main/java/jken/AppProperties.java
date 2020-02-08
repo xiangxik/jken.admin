@@ -18,6 +18,8 @@ public class AppProperties {
     private String name = "jken";
     private String version = "1.0";
 
+    private String ownerCorp = "wl000";
+
     private final Security security = new Security();
 
     public static class Security {
@@ -47,6 +49,14 @@ public class AppProperties {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getOwnerCorp() {
+        return ownerCorp;
+    }
+
+    public void setOwnerCorp(String ownerCorp) {
+        this.ownerCorp = ownerCorp;
     }
 
     public Security getSecurity() {

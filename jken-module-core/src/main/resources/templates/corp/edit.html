@@ -36,16 +36,15 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">公司网站</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input autocomplete="off" class="layui-input" lay-verify="url" maxlength="200" minlength="4"
                     placeholder="请输入公司网站" th:field="*{website}" type="text">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">公司简介</label>
-            <div class="layui-input-inline">
-                <textarea autocomplete="off" class="layui-textarea" style="width: 400px; height: 150px;"
-                    th:field="*{introduction}"></textarea>
+            <div class="layui-input-block">
+                <textarea autocomplete="off" class="layui-textarea" th:field="*{introduction}"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -74,8 +73,6 @@
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-        var addAble = /*[[${#authorization.expr("hasAuthority('corp-add')")}]]*/false;
-        var editAble = /*[[${#authorization.expr("hasAuthority('corp-edit')")}]]*/false;
     </script>
     <script>
         layui.config({
@@ -86,31 +83,27 @@
             var $ = layui.$, form = layui.form;
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
-                if (entityId && editAble || !entityId && addAble) {
-                    $.ajax({
-                        url: base + '/corp' + (entityId ? '/' + entityId : ''),
-                        data: data.field,
-                        dataType: 'json',
-                        type: entityId ? 'put' : 'post',
-                        success: function (resp) {
-                            if (resp.code == 0) {
-                                var index = parent.layer.getFrameIndex(window.name);
-                                parent.layui.table.reload('jk-table');
-                                parent.layer.close(index);
-                            } else {
-                                layer.msg(resp.msg, { time: 2000 }, function () { });
-                            }
-                        },
-                        error: function (resp) {
-                            layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                $.ajax({
+                    url: base + '/corp' + (entityId ? '/' + entityId : ''),
+                    data: data.field,
+                    dataType: 'json',
+                    type: entityId ? 'put' : 'post',
+                    success: function (resp) {
+                        if (resp.code == 0) {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layui.table.reload('jk-table');
+                            parent.layer.close(index);
+                        } else {
+                            layer.msg(resp.msg, { time: 2000 }, function () { });
                         }
-                    });
-                } else {
-                    layer.msg('无权限');
-                }
+                    },
+                    error: function (resp) {
+                        layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                    }
+                });
                 return false;
             });
-        })
+        });
     </script>
 </body>
 

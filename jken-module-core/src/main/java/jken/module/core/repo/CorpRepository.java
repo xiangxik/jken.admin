@@ -15,6 +15,9 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
 public interface CorpRepository extends QuerydslEntityRepository<Corp, Long>, QuerydslBinderCustomizer<QCorp> {
+
+    Corp findByCode(String code);
+
     @Override
     default void customize(QuerydslBindings querydslBindings, QCorp qCorp) {
         querydslBindings.bind(qCorp.name, qCorp.code).first((StringExpression::contains));

@@ -31,14 +31,14 @@
             <label class="layui-form-label">新密码</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" th:attrappend="lay-verify=${entity.isNew()?'required':''}"
-                    name="newPassword" type="password">
+                    name="newPassword" type="password" value="">
             </div>
             <div th:if="${!entity.isNew()}" class="layui-form-mid layui-word-aux">留空则不修改</div>
         </div>
         <div th:if="${!entity.isNew()}" class="layui-form-item">
             <label class="layui-form-label">重复密码</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" name="repeatPassword" type="password">
+                <input autocomplete="off" class="layui-input" name="repeatPassword" type="password" value="">
             </div>
         </div>
         <div class="layui-form-item">

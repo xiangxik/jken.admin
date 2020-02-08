@@ -8,8 +8,11 @@
 package jken.security;
 
 import com.google.common.base.Strings;
-import jken.support.data.Corpable;
+import com.google.common.collect.Lists;
+import jken.AppProperties;
+import jken.integration.Authority;
 import jken.support.data.jpa.Entity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.AuditorAware;
@@ -33,9 +36,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class AbstractUserDetailsService<U extends UserDetails, I extends Serializable> implements UserDetailsService, AuditorAware<U>, ApplicationContextAware {
+
+    @Autowired
+    private AppProperties properties;
 
     private ApplicationContext applicationContext;
 
@@ -68,12 +76,20 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
         if (user instanceof Entity) {
             id = ((Entity<I>) user).getId();
         }
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        Collection<? extends GrantedAuthority> authorityCollection = user.getAuthorities();
+        List<GrantedAuthority> authorities = Lists.newArrayList(authorityCollection);
 
         TransactionSynchronizationManager.unbindResource(entityManagerFactory);
         EntityManagerFactoryUtils.closeEntityManager(entityManager);
 
-        return new CustomUserDetails<>(user instanceof Corpable ? ((Corpable) user).getCorpCode() : null, id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+        boolean isOwnerCorp = Objects.equals(properties.getOwnerCorp(), corpCode);
+        if (isOwnerCorp) {
+            if (authorities.stream().anyMatch(authority -> Objects.equals(authority.getAuthority(), Authority.ROLE_ADMIN))) {
+                authorities.add(Authority.SUPER_ADMIN);
+            }
+        }
+
+        return new CustomUserDetails<>(corpCode, isOwnerCorp, id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
                 authorities);
     }
 

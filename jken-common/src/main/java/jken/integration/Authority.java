@@ -8,10 +8,16 @@
 package jken.integration;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Objects;
 
 public class Authority {
+
+    public static final String AUTHORITY_SUPER_ADMIN = "SUPER_ADMIN";
+    public static final String AUTHORITY_ADMIN = "ADMIN";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final SimpleGrantedAuthority SUPER_ADMIN = new SimpleGrantedAuthority(AUTHORITY_SUPER_ADMIN);
 
     private String name;
     private String code;

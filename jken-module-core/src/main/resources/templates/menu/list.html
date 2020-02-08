@@ -47,56 +47,59 @@
       var treeTable = layui.treeTable;
       var $ = layui.$;
 
-      treeTable.reload = function () {
-        treeTable.render({
-          id: "jk-treeTable",
-          elem: '#jk-treeTable',
-          url: base + '/menu?tree=',
-          icon_key: 'name',
-          is_checkbox: false,
-          cols: [
-            {
-              key: 'name',
-              title: '名称',
-              width: '200px',
-              align: 'left'
-            },
-            {
-              key: 'code',
-              title: '代号',
-              width: '100px',
-              align: 'left'
-            },
-            {
-              key: 'iconCls',
-              title: '图标样式',
-              width: '100px',
-              align: 'center'
-            },
-            {
-              key: 'href',
-              title: '访问地址',
-              align: 'left'
-            },
-            {
-              key: 'sortNo',
-              title: '排序号',
-              width: '60px',
-              align: 'right'
-            },
-            {
-              title: '操作',
-              align: 'center',
-              width: '140px',
-              template: function (item) {
-                var btn_add = addAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='add' data-item='" + item.id + "'>添加下级</button>" : "";
-                var btn_edit = viewAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='edit' data-item='" + item.id + "'>编辑</button>" : "";
-                var btn_delete = deleteAble ? "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger tool' data-action='delete' data-item='" + item.id + "'>删除</button>" : "";
+      var menuTable = treeTable.render({
+        id: "jk-treeTable",
+        elem: '#jk-treeTable',
+        url: base + '/menu?tree=',
+        icon_key: 'name',
+        is_checkbox: false,
+        cols: [
+          {
+            key: 'name',
+            title: '名称',
+            width: '200px',
+            align: 'left'
+          },
+          {
+            key: 'code',
+            title: '代号',
+            width: '100px',
+            align: 'left'
+          },
+          {
+            key: 'iconCls',
+            title: '图标样式',
+            width: '100px',
+            align: 'center'
+          },
+          {
+            key: 'href',
+            title: '访问地址',
+            align: 'left'
+          },
+          {
+            key: 'sortNo',
+            title: '排序号',
+            width: '60px',
+            align: 'right'
+          },
+          {
+            title: '操作',
+            align: 'center',
+            width: '140px',
+            template: function (item) {
+              var btn_add = addAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='add' data-item='" + item.id + "'>添加下级</button>" : "";
+              var btn_edit = viewAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='edit' data-item='" + item.id + "'>编辑</button>" : "";
+              var btn_delete = deleteAble ? "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger tool' data-action='delete' data-item='" + item.id + "'>删除</button>" : "";
 
-                return "<div class='layui-btn-group'>" + btn_add + btn_edit + btn_delete + "</div>";
-              }
-            }]
-        });
+              return "<div class='layui-btn-group'>" + btn_add + btn_edit + btn_delete + "</div>";
+            }
+          }]
+      });
+      treeTable.openAll(menuTable);
+
+      treeTable.reload = function () {
+        treeTable.render(menuTable);
       };
       if (addAble) {
         $("#jk-create").on("click", function () {
@@ -114,8 +117,6 @@
           });
         });
       }
-
-      treeTable.reload();
 
       $("#jk-treeTable").delegate(".tool", "click", function () {
         var $this = $(this);

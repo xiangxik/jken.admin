@@ -30,45 +30,46 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-header">修改密码</div>
+                    <div class="layui-card-header">设置我的资料</div>
                     <div class="layui-card-body" pad15>
-
-                        <div class="layui-form" id="jk-form" lay-filter="jk-form">
+                        <div class="layui-form" id="jk-form" lay-filter="jk-form" th:object="${entity}">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">当前密码</label>
+                                <label class="layui-form-label" jk:required>公司名称</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" name="oldPassword" lay-verify="required" lay-verType="tips"
-                                        class="layui-input" value="">
+                                    <div class="layui-form-mid" th:text="*{name}"></div>
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label">新密码</label>
+                                <label class="layui-form-label" jk:required>公司代号</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" name="newPassword" lay-verify="required" lay-verType="tips"
-                                        autocomplete="off" class="layui-input" id="jk-newPassword" value="">
+                                    <div class="layui-form-mid" th:text="*{code}"></div>
                                 </div>
-                                <div class="layui-form-mid layui-word-aux">6到16个字符</div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label">确认新密码</label>
-                                <div class="layui-input-inline">
-                                    <input type="password" name="rePassword" lay-verify="required|repass"
-                                        lay-verType="tips" autocomplete="off" class="layui-input" value="">
+                                <label class="layui-form-label">公司网站</label>
+                                <div class="layui-input-block">
+                                    <input autocomplete="off" class="layui-input" lay-verify="url" maxlength="200"
+                                        minlength="4" placeholder="请输入公司网站" th:field="*{website}" type="text">
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">公司简介</label>
+                                <div class="layui-input-block">
+                                    <textarea autocomplete="off" class="layui-textarea" th:field="*{introduction}"></textarea>
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-input-block">
                                     <button class="layui-btn" lay-submit lay-filter="jk-form-submit">确认修改</button>
+                                    <!--<button type="reset" class="layui-btn layui-btn-primary">重新填写</button>-->
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
@@ -81,17 +82,10 @@
         }).use(['edit'], function () {
             var $ = layui.$, form = layui.form;
 
-            form.verify({
-                repass: function (t) {
-                    if (t !== $("#jk-newPassword").val())
-                        return "两次密码输入不一致"
-                }
-            })
-
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
                 $.ajax({
-                    url: base + '/user/password',
+                    url: base + '/corp/info',
                     data: data.field,
                     dataType: 'json',
                     type: 'put',

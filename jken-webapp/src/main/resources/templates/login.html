@@ -31,8 +31,14 @@
             </div>
             <form class="layadmin-user-login-box layadmin-user-login-body layui-form" method="post"
                 th:action="@{/login}">
-                <input name="corpCode" type="hidden" value="wl000">
                 <p style="text-align: center; color: red;" th:text="${errorMsg}"></p>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-home"
+                        for="LAY-user-login-corp" style="z-index: 99999"></label>
+                    <select class="layui-input" lay-verify="required" name="corpCode" id="LAY-user-login-corp">
+                        <option th:each="corp:${corps}" th:value="${corp.code}" th:text="${corp.name}"></option>
+                    </select>
+                </div>
                 <div class="layui-form-item">
                     <label class="layadmin-user-login-icon layui-icon layui-icon-username"
                         for="LAY-user-login-username"></label>
@@ -92,6 +98,15 @@
     </div>
 
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
+
+    <script th:inline="javascript" type="text/javascript">
+        var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
+    </script>
+    <script>
+        layui.config({
+            base: base + '/static/layuiadmin/'
+        }).use(['form']);
+    </script>
 </body>
 
 </html>

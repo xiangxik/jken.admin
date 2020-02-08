@@ -14,6 +14,7 @@ import jken.module.core.entity.Corp;
 import jken.module.core.entity.MenuItem;
 import jken.module.core.entity.Role;
 import jken.module.core.entity.User;
+import jken.module.core.repo.CorpRepository;
 import jken.support.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +39,13 @@ public class CorpService extends CrudService<Corp, Long> {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CorpRepository corpRepository;
+
+    public Corp findByCode(String code) {
+        return corpRepository.findByCode(code);
+    }
+
     public Corp createNewCorp(String name, String code, String adminUsername, String adminPassword) {
         Corp corp = buildCorp(name, code);
         List<MenuItem> menuItems = buildMenuItems(code);
@@ -58,17 +66,21 @@ public class CorpService extends CrudService<Corp, Long> {
         List<MenuItem> menuItems = new ArrayList<>();
         int sortNo = 0;
 
-        MenuItem set = buildMenuItem("设置", "set", "javascript:;", "layui-icon-set", null, sortNo++, corpCode, null);
-        menuItems.add(set);
+        MenuItem manage = buildMenuItem("系统管理", "manage", "javascript:;", "layui-icon-set", null, sortNo++, corpCode, null);
+        menuItems.add(manage);
 
-        MenuItem orgSet = buildMenuItem("组织架构", "org", "javascript:;", null, null, sortNo++, corpCode, set);
+        MenuItem manageSet = buildMenuItem("基础设置", "set", "javascript:;", null, null, sortNo++, corpCode, manage);
+        menuItems.add(manageSet);
+        menuItems.add(buildMenuItem("公司信息", "corp_info", "corp/info", null, "corp-view-info,corp-edit-info", sortNo++, corpCode, manageSet));
+        menuItems.add(buildMenuItem("菜单管理", "menu", "menu", null, "menu-list,menu-view,menu-add,menu-edit,menu-delete", sortNo++, corpCode, manageSet));
+        menuItems.add(buildMenuItem("字典管理", "dict", "dict", null, "dict-list,dict-view,dict-add,dict-edit,dict-delete", sortNo++, corpCode, manageSet));
+
+        MenuItem orgSet = buildMenuItem("人员管理", "org", "javascript:;", null, null, sortNo++, corpCode, manage);
         menuItems.add(orgSet);
-
-        menuItems.add(buildMenuItem("公司管理", "corp", "corp", null, "corp-list,corp-view,corp-add,corp-edit,corp-delete", sortNo++, corpCode, orgSet));
         menuItems.add(buildMenuItem("用户管理", "user", "user", null, "user-list,user-view,user-add,user-edit,user-delete", sortNo++, corpCode, orgSet));
         menuItems.add(buildMenuItem("角色管理", "role", "role", null, "role-list,role-view,role-add,role-edit,role-delete,role-view-user,role-edit-user,role-view-authority,role-edit-authority", sortNo++, corpCode, orgSet));
-        menuItems.add(buildMenuItem("菜单管理", "menu", "menu", null, "menu-list,menu-view,menu-add,menu-edit,menu-delete", sortNo++, corpCode, orgSet));
-        menuItems.add(buildMenuItem("字典管理", "dict", "dict", null, "dict-list,dict-view,dict-add,dict-edit,dict-delete", sortNo++, corpCode, orgSet));
+
+
         return menuItems;
     }
 
@@ -76,7 +88,7 @@ public class CorpService extends CrudService<Corp, Long> {
         Role role = roleService.createNew();
         role.setLocked(true);
         role.setName("管理员");
-        role.setCode("admin");
+        role.setCode(Authority.AUTHORITY_ADMIN);
         role.setMenuItems(menuItems);
         role.setAuthorities(IntegrationService.getAuthorities().stream().map(Authority::getCode).collect(Collectors.toList()));
         role.setCorpCode(corpCode);

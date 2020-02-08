@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     break;
             }
         }
-        urlRegistry.anyRequest().authenticated();
+        urlRegistry.antMatchers("/corp", "/corp/*").hasAuthority(Authority.AUTHORITY_SUPER_ADMIN).anyRequest().authenticated();
     }
 
     private void registerUrlAuthorization(Authority authority, Function<String[], ExpressionUrlAuthorizationConfigurer.AuthorizedUrl> function, BiFunction<HttpMethod, String[], ExpressionUrlAuthorizationConfigurer.AuthorizedUrl> function2) {
