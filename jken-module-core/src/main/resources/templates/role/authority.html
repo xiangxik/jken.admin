@@ -41,8 +41,9 @@
         layui.config({
             base: base + '/static/layuiadmin/'
         }).extend({
+            edit: 'core/edit',
             authtree: 'core/authtree' //主入口模块
-        }).use(['form', 'authtree'], function () {
+        }).use(['edit', 'authtree'], function () {
             var $ = layui.$, form = layui.form;
             var authtree = layui.authtree;
             $.ajax({

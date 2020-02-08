@@ -7,9 +7,12 @@
 
 package jken.security;
 
+import com.google.common.collect.Iterables;
+import jken.AppProperties;
 import jken.integration.Authority;
 import jken.integration.IntegrationService;
 import jken.integration.ModuleMetadata;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,13 +29,21 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@EnableConfigurationProperties(AppProperties.class)
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final AppProperties properties;
+
+    public SecurityConfig(AppProperties properties) {
+        this.properties = properties;
+    }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        WebSecurity.IgnoredRequestConfigurer ignore = web.ignoring().antMatchers("/static/**", "/favicon.ico", "/h2/**");
+        WebSecurity.IgnoredRequestConfigurer ignore = web.ignoring().antMatchers(Iterables.toArray(properties.getSecurity().getIgnorePatterns(), String.class));
+
         for (ModuleMetadata metadata : IntegrationService.getModuleMetadata()) {
             if (metadata.getIgnorePatterns() != null && metadata.getIgnorePatterns().length > 0) {
                 ignore.antMatchers(metadata.getIgnorePatterns());

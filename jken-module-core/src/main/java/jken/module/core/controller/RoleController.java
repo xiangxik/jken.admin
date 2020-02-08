@@ -33,7 +33,6 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -102,12 +101,12 @@ public class RoleController extends CrudController<Role, Long> {
 
     @PostMapping(value = "/{id}/authority")
     @ResponseBody
-    public void updateAuthorities(@PathVariable("id") Role entity, @RequestBody(required = false) MultiValueMap<String, String> items) {
-        if (items == null || items.size() == 0) {
+    public void updateAuthorities(@PathVariable("id") Role entity, @RequestParam(value = "items[]") String[] items) {
+        if (items == null || items.length == 0) {
             entity.setMenuItems(null);
             entity.setAuthorities(null);
         } else {
-            Set<String> set = Sets.newHashSet(items.toSingleValueMap().values());
+            Set<String> set = Sets.newHashSet(items);
 
             Set<Long> menuIds = Sets.filter(set, item -> StringUtils.startsWith(item, "menu-")).stream().map(item -> Long.valueOf(StringUtils.removeStart(item, "menu-"))).collect(Collectors.toSet());
             entity.setMenuItems(menuItemService.findAllById(menuIds));

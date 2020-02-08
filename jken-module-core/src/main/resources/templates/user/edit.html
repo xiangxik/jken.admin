@@ -112,8 +112,9 @@
         layui.config({
             base: base + '/static/layuiadmin/'
         }).extend({
+            edit: 'core/edit',
             xmSelect: 'core/xm-select' //主入口模块
-        }).use(['form', 'xmSelect'], function () {
+        }).use(['edit', 'xmSelect'], function () {
             var $ = layui.$, form = layui.form;
             var xmSelect = layui.xmSelect;
 

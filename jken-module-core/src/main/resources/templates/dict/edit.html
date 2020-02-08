@@ -86,6 +86,30 @@
                             </button>
                         </div>
                     </div>
+                    <div class="layui-form-item" th:each="item:*{items}">
+                        <input type="hidden" name="id" th:value="${item.id}">
+                        <input type="hidden" name="sortNo" th:value="${item.sortNo}">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span class="num"></span>. 显示</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" th:value="${item.name}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">值</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="value" th:value="${item.value}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-btn-group">
+                            <button type="button" class="layui-btn layui-btn-xs item-add">
+                                <i class="layui-icon">&#xe654;</i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-xs layui-btn-danger item-delete">
+                                <i class="layui-icon">&#xe67e;</i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </fieldset>
@@ -105,7 +129,9 @@
     <script>
         layui.config({
             base: base + '/static/layuiadmin/'
-        }).use(['form'], function () {
+        }).extend({
+            edit: 'core/edit'
+        }).use(['edit'], function () {
             var $ = layui.$, form = layui.form;
 
             var $listItem = $("#list-item");

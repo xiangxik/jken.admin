@@ -39,12 +39,12 @@ public class Dict extends CorpableEntity<User, Long> implements Lockedable {
     @Column(length = 1023)
     private String remark;
 
-    @OneToMany(mappedBy = "dict", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "dict", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sortNo asc")
     @JsonManagedReference
     private List<DictItem> items;
 
-    private boolean locked = true;
+    private boolean locked = false;
 
     public String getName() {
         return name;

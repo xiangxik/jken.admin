@@ -50,7 +50,9 @@
     <script>
         layui.config({
             base: base + '/static/layuiadmin/'
-        }).use(['form'], function () {
+        }).extend({
+            edit: 'core/edit'
+        }).use(['edit'], function () {
             var $ = layui.$, form = layui.form;
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
