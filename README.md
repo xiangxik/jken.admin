@@ -3,7 +3,7 @@ jken.site是中小型项目通用后台管理平台，支持多租户模式，�
 > 本人承诺该平台完全开源，完全免费，后续不会有任何收费计划。
 
 # 特性
-- 基于最新JDK (当前为JDK13)
+- 基于JDK8
 - 基于最新SpringBoot (当前为2.2.4.RELEASE)
 - 基于SpringSecurity的角色权限
 - 基于SpringData-JPA的持久层

@@ -27,7 +27,7 @@ public class IndexEndpoint {
 
     @GetMapping({"", "/"})
     public String indexPage(Model model) {
-        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow(RuntimeException::new);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("mis", TreeHelper.toTree(currentUser.getMenuItems()));
         return "/index";

@@ -41,7 +41,7 @@ public class UserController extends CrudController<User, Long> {
 
     @GetMapping(value = "/info", produces = "text/html")
     public String showInfo(Model model) {
-        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow(RuntimeException::new);
         model.addAttribute("entity", currentUser);
         return getViewDir() + "/info";
     }
@@ -49,7 +49,7 @@ public class UserController extends CrudController<User, Long> {
     @PutMapping(value = "/info")
     @ResponseBody
     public void saveInfo(@ModelAttribute @Valid User entity, BindingResult bindingResult) {
-        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow(RuntimeException::new);
         currentUser.setName(entity.getName());
         currentUser.setAge(entity.getAge());
         currentUser.setMail(entity.getMail());
@@ -66,7 +66,7 @@ public class UserController extends CrudController<User, Long> {
     @PutMapping(value = "/password")
     @ResponseBody
     public void savePassword(String oldPassword, String newPassword) {
-        User currentUser = auditorAware.getCurrentAuditor().orElseThrow();
+        User currentUser = auditorAware.getCurrentAuditor().orElseThrow(RuntimeException::new);
         if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
             throw new RuntimeException("旧密码不正确");
         }
