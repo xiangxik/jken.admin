@@ -47,6 +47,7 @@ layui.define(['form'], function (exports) {
           field[item.name].push(item.value);
         } else {
           field[item.name] = [field[item.name]];
+          field[item.name].push(item.value);
         }
       } else {
         field[item.name] = item.value;

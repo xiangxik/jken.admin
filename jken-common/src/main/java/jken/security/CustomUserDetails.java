@@ -22,15 +22,15 @@ public class CustomUserDetails<I extends Serializable> extends User {
 
     private final String corpCode;
 
-    private final boolean ownerCorp;
+    private final boolean superAdmin;
 
-    public CustomUserDetails(String corpCode, boolean ownerCorp, I id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
+    public CustomUserDetails(String corpCode, boolean superAdmin, I id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
                              Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 
         this.id = id;
         this.corpCode = corpCode;
-        this.ownerCorp = ownerCorp;
+        this.superAdmin = superAdmin;
     }
 
     public I getId() {
@@ -41,7 +41,7 @@ public class CustomUserDetails<I extends Serializable> extends User {
         return corpCode;
     }
 
-    public boolean isOwnerCorp() {
-        return ownerCorp;
+    public boolean isSuperAdmin() {
+        return superAdmin;
     }
 }

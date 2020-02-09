@@ -47,13 +47,18 @@
       var treeTable = layui.treeTable;
       var $ = layui.$;
 
-      var menuTable = treeTable.render({
-        id: "jk-treeTable",
-        elem: '#jk-treeTable',
-        url: base + '/menu?tree=',
-        icon_key: 'name',
-        is_checkbox: false,
-        cols: [
+      var opWidth = 0;
+      if(addAble) {
+        opWidth += 60;
+      }
+      if(viewAble) {
+        opWidth += 40;
+      }
+      if(deleteAble) {
+        opWidth += 40;
+      }
+
+      var cols = [
           {
             key: 'name',
             title: '名称',
@@ -82,19 +87,32 @@
             title: '排序号',
             width: '60px',
             align: 'right'
-          },
-          {
+          }
+          ];
+      if(opWidth > 0) {
+
+      cols.push({
             title: '操作',
             align: 'center',
-            width: '140px',
+            width: opWidth + 'px',
             template: function (item) {
               var btn_add = addAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='add' data-item='" + item.id + "'>添加下级</button>" : "";
-              var btn_edit = viewAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='edit' data-item='" + item.id + "'>编辑</button>" : "";
+              var btn_edit = viewAble ? "<button type='button' class='layui-btn layui-btn-xs tool' data-action='edit' data-item='" + item.id + "'>" + (editAble?"编辑":"查看")+ "</button>" : "";
               var btn_delete = deleteAble ? "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger tool' data-action='delete' data-item='" + item.id + "'>删除</button>" : "";
 
               return "<div class='layui-btn-group'>" + btn_add + btn_edit + btn_delete + "</div>";
             }
-          }]
+          });
+
+      }
+
+      var menuTable = treeTable.render({
+        id: "jk-treeTable",
+        elem: '#jk-treeTable',
+        url: base + '/menu?tree=',
+        icon_key: 'name',
+        is_checkbox: false,
+        cols: cols
       });
       treeTable.openAll(menuTable);
 
@@ -149,11 +167,11 @@
                 content: base + '/menu/' + id,
                 maxmin: true,
                 area: ['800px', '800px'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-                  var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                  submit.click();
-                }
+                btn: editAble ? ['确定', '取消'] : ['关闭'],
+                            yes: editAble ? function (index, layero) {
+                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                                submit.click();
+                            } : null
               });
             } else {
               layer.msg('无权限');

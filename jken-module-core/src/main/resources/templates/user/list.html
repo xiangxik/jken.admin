@@ -84,14 +84,14 @@
                             <th lay-data="{field:'age', width:80, sort: true}">年龄</th>
                             <th lay-data="{field:'mail', sort: true}">邮箱</th>
                             <th lay-data="{field:'mobile', sort: true}">手机号码</th>
-                            <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}">操作</th>
+                            <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}" sec:authorize="hasAuthority('user-view')||hasAuthority('user-delete')">操作</th>
                         </tr>
                     </thead>
                 </table>
 
                 <script id="jk-tool" type="text/html">
                 <div class="layui-btn-group">
-                    <button sec:authorize="hasAuthority('user-view')" type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+                    <button sec:authorize="hasAuthority('user-view')" type="button" class="layui-btn layui-btn-xs" lay-event="edit" th:text="${#authorization.expr('hasAuthority(''user-edit'')')?'编辑':'查看'}">编辑</button>
                     <button sec:authorize="hasAuthority('user-delete')" type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</button>
                 </div>
             </script>
@@ -103,11 +103,11 @@
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-        var listAble = /*[[${#authorization.expr("hasAuthority('role-list')")}]]*/false;
-        var viewAble = /*[[${#authorization.expr("hasAuthority('role-view')")}]]*/false;
-        var addAble = /*[[${#authorization.expr("hasAuthority('role-add')")}]]*/false;
-        var editAble = /*[[${#authorization.expr("hasAuthority('role-edit')")}]]*/false;
-        var deleteAble = /*[[${#authorization.expr("hasAuthority('role-delete')")}]]*/false;
+        var listAble = /*[[${#authorization.expr("hasAuthority('user-list')")}]]*/false;
+        var viewAble = /*[[${#authorization.expr("hasAuthority('user-view')")}]]*/false;
+        var addAble = /*[[${#authorization.expr("hasAuthority('user-add')")}]]*/false;
+        var editAble = /*[[${#authorization.expr("hasAuthority('user-edit')")}]]*/false;
+        var deleteAble = /*[[${#authorization.expr("hasAuthority('user-delete')")}]]*/false;
     </script>
     <script>
         layui.config({
@@ -218,11 +218,11 @@
                             content: base + '/user/' + obj.data.id,
                             maxmin: true,
                             area: ['800px', '800px'],
-                            btn: ['确定', '取消'],
-                            yes: function (index, layero) {
+                            btn: editAble ? ['确定', '取消'] : ['关闭'],
+                            yes: editAble ? function (index, layero) {
                                 var submit = layero.find('iframe').contents().find("#jk-form-submit");
                                 submit.click();
-                            }
+                            } : null
                         });
                     } else {
                         layer.msg('无权限');

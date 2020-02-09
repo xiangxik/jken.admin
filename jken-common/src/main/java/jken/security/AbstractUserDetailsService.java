@@ -82,14 +82,13 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
         TransactionSynchronizationManager.unbindResource(entityManagerFactory);
         EntityManagerFactoryUtils.closeEntityManager(entityManager);
 
-        boolean isOwnerCorp = Objects.equals(properties.getOwnerCorp(), corpCode);
-        if (isOwnerCorp) {
+        if (Objects.equals(properties.getOwnerCorp(), corpCode)) {
             if (authorities.stream().anyMatch(authority -> Objects.equals(authority.getAuthority(), Authority.ROLE_ADMIN))) {
                 authorities.add(Authority.SUPER_ADMIN);
             }
         }
 
-        return new CustomUserDetails<>(corpCode, isOwnerCorp, id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+        return new CustomUserDetails<>(corpCode, authorities.contains(Authority.SUPER_ADMIN), id, user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(),
                 authorities);
     }
 

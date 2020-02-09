@@ -86,7 +86,6 @@ public class RoleController extends CrudController<Role, Long> {
     @GetMapping(value = "/{id}/authority", produces = "text/html")
     public String showAuthorities(@PathVariable("id") Role entity, Model model) {
         model.addAttribute("entity", entity);
-
         return getViewDir() + "/authority";
     }
 
@@ -108,11 +107,14 @@ public class RoleController extends CrudController<Role, Long> {
         } else {
             Set<String> set = Sets.newHashSet(items);
 
+            List<String> authorities = Sets.filter(set, item -> StringUtils.startsWith(item, "authority-")).stream().map(item -> StringUtils.removeStart(item, "authority-")).collect(Collectors.toList());
+            if(authorities.contains(Authority.SUPER_ADMIN)) {
+                throw new RuntimeException("cannot contains super admin authority.");
+            }
+            entity.setAuthorities(authorities);
+
             Set<Long> menuIds = Sets.filter(set, item -> StringUtils.startsWith(item, "menu-")).stream().map(item -> Long.valueOf(StringUtils.removeStart(item, "menu-"))).collect(Collectors.toSet());
             entity.setMenuItems(menuItemService.findAllById(menuIds));
-
-            List<String> authorities = Sets.filter(set, item -> StringUtils.startsWith(item, "authority-")).stream().map(item -> StringUtils.removeStart(item, "authority-")).collect(Collectors.toList());
-            entity.setAuthorities(authorities);
         }
         getService().save(entity);
     }

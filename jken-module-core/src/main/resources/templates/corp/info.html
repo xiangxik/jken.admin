@@ -6,7 +6,7 @@
   -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -30,7 +30,7 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-header">设置我的资料</div>
+                    <div class="layui-card-header">设置公司资料</div>
                     <div class="layui-card-body" pad15>
                         <div class="layui-form" id="jk-form" lay-filter="jk-form" th:object="${entity}">
                             <div class="layui-form-item">
@@ -58,7 +58,7 @@
                                     <textarea autocomplete="off" class="layui-textarea" th:field="*{introduction}"></textarea>
                                 </div>
                             </div>
-                            <div class="layui-form-item">
+                            <div class="layui-form-item" sec:authorize="hasAuthority('corp-edit-info')">
                                 <div class="layui-input-block">
                                     <button class="layui-btn" lay-submit lay-filter="jk-form-submit">确认修改</button>
                                     <!--<button type="reset" class="layui-btn layui-btn-primary">重新填写</button>-->

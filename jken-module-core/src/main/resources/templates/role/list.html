@@ -67,14 +67,14 @@
                             <th lay-data="{field:'id', checkbox:true}"></th>
                             <th lay-data="{field:'name', sort: true}">名称</th>
                             <th lay-data="{field:'code', width:200, sort: true}">代号</th>
-                            <th lay-data="{width:180, toolbar: '#jk-tool', align: 'center'}">操作</th>
+                            <th lay-data="{width:180, toolbar: '#jk-tool', align: 'center'}" sec:authorize="hasAuthority('role-view')||hasAuthority('role-delete')||hasAuthority('role-view-user')||hasAuthority('role-view-authority')">操作</th>
                         </tr>
                     </thead>
                 </table>
 
                 <script id="jk-tool" type="text/html">
                 <div class="layui-btn-group">
-                    <button sec:authorize="hasAuthority('role-view')" type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+                    <button sec:authorize="hasAuthority('role-view')" type="button" class="layui-btn layui-btn-xs" lay-event="edit" th:text="${#authorization.expr('hasAuthority(''role-edit'')')?'编辑':'查看'}">编辑</button>
                     <button sec:authorize="hasAuthority('role-delete')" type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</button>
 
                     <button sec:authorize="hasAuthority('role-view-user')" type="button" class="layui-btn layui-btn-xs" lay-event="viewUser">用户</button>
@@ -206,11 +206,11 @@
                             content: base + '/role/' + obj.data.id,
                             maxmin: true,
                             area: ['550px', '550px'],
-                            btn: ['确定', '取消'],
-                            yes: function (index, layero) {
+                            btn: editAble ? ['确定', '取消'] : ['关闭'],
+                            yes: editAble ? function (index, layero) {
                                 var submit = layero.find('iframe').contents().find("#jk-form-submit");
                                 submit.click();
-                            }
+                            } : null
                         });
                     } else {
                         layer.msg('无权限');
@@ -236,11 +236,11 @@
                             content: base + '/role/' + obj.data.id + '/authority',
                             maxmin: true,
                             area: ['800px', '600px'],
-                            btn: ['确定', '取消'],
-                            yes: function (index, layero) {
+                            btn: editAble ? ['确定', '取消'] : ['关闭'],
+                            yes: editAble ? function (index, layero) {
                                 var submit = layero.find('iframe').contents().find("#jk-form-submit");
                                 submit.click();
-                            }
+                            } : null
                         });
                     } else {
                         layer.msg('无权限');
