@@ -11,7 +11,6 @@ import com.google.common.collect.Iterables;
 import jken.AppProperties;
 import jken.integration.Authority;
 import jken.integration.IntegrationService;
-import jken.integration.ModuleMetadata;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,10 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         WebSecurity.IgnoredRequestConfigurer ignore = web.ignoring().antMatchers(Iterables.toArray(properties.getSecurity().getIgnorePatterns(), String.class));
 
-        for (ModuleMetadata metadata : IntegrationService.getModuleMetadata()) {
-            if (metadata.getIgnorePatterns() != null && metadata.getIgnorePatterns().length > 0) {
-                ignore.antMatchers(metadata.getIgnorePatterns());
-            }
+        String[] ignorePatterns = Iterables.toArray(IntegrationService.getIgnorePatterns(), String.class);
+        if (ignorePatterns != null && ignorePatterns.length > 0) {
+            ignore.antMatchers(ignorePatterns);
         }
     }
 
@@ -56,17 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().headers().frameOptions().disable().and().formLogin().loginPage("/login").successHandler(authenticationSuccessHandler()).permitAll().and().rememberMe().and().logout().permitAll();
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry = http.authorizeRequests();
-//        urlRegistry.withObjectPostProcessor(new ObjectPostProcessor<Object>() {
-//            public <T> T postProcess(T object) {
-//                if (object instanceof FilterSecurityInterceptor) {
-//                    ((FilterSecurityInterceptor) object).setRunAsManager(new RunAsManagerImpl());
-//                }
-//                return object;
-//            }
-//        });
 
         for (Authority authority : IntegrationService.getAuthorities()) {
-            switch (authority.getPatternType()) {
+            Authority.PatternType patternType = authority.getPatternType();
+            if (patternType == null) {
+                patternType = Authority.PatternType.ANT;
+            }
+            switch (patternType) {
                 case REGEX:
                     registerUrlAuthorization(authority, urlRegistry::regexMatchers, urlRegistry::regexMatchers);
                     break;

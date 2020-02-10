@@ -9,6 +9,8 @@ package jken.integration;
 
 public interface ModuleIntegration {
 
-    void integrate(ModuleMetadata metadata);
+    String getName();
+
+    void integrate(JkenModule module);
 
 }

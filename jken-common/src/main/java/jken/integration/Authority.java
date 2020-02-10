@@ -23,7 +23,7 @@ public class Authority {
     private String code;
     private String[] patterns;
     private PatternType patternType = PatternType.ANT;
-    private HttpMethod[] httpMethods;
+    private HttpMethod[] httpMethods = new HttpMethod[]{HttpMethod.GET};
 
     public String getName() {
         return name;
