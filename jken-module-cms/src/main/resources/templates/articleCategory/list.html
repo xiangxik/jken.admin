@@ -23,7 +23,7 @@
   <div class="layui-fluid">
     <div class="layui-card">
       <div class="layui-card-body">
-        <button sec:authorize="hasAuthority('menu-add')" class="layui-btn" id="jk-create">新增</button>
+        <button sec:authorize="hasAuthority('articleCategory-add')" class="layui-btn" id="jk-create">新增</button>
         <table class="layui-table layui-form" id="jk-treeTable"></table>
       </div>
     </div>
@@ -32,11 +32,11 @@
   <script src="https://www.layuicdn.com/layui/layui.js"></script>
   <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-    var listAble = /*[[${#authorization.expr("hasAuthority('menu-list')")}]]*/false;
-    var viewAble = /*[[${#authorization.expr("hasAuthority('menu-view')")}]]*/false;
-    var addAble = /*[[${#authorization.expr("hasAuthority('menu-add')")}]]*/false;
-    var editAble = /*[[${#authorization.expr("hasAuthority('menu-edit')")}]]*/false;
-    var deleteAble = /*[[${#authorization.expr("hasAuthority('menu-delete')")}]]*/false;
+    var listAble = /*[[${#authorization.expr("hasAuthority('articleCategory-list')")}]]*/false;
+    var viewAble = /*[[${#authorization.expr("hasAuthority('articleCategory-view')")}]]*/false;
+    var addAble = /*[[${#authorization.expr("hasAuthority('articleCategory-add')")}]]*/false;
+    var editAble = /*[[${#authorization.expr("hasAuthority('articleCategory-edit')")}]]*/false;
+    var deleteAble = /*[[${#authorization.expr("hasAuthority('articleCategory-delete')")}]]*/false;
   </script>
   <script>
     layui.config({
@@ -66,23 +66,6 @@
           align: 'left'
         },
         {
-          key: 'code',
-          title: '代号',
-          width: '100px',
-          align: 'left'
-        },
-        {
-          key: 'iconCls',
-          title: '图标样式',
-          width: '100px',
-          align: 'center'
-        },
-        {
-          key: 'href',
-          title: '访问地址',
-          align: 'left'
-        },
-        {
           key: 'sortNo',
           title: '排序号',
           width: '60px',
@@ -106,25 +89,25 @@
 
       }
 
-      var menuTable = treeTable.render({
+      var articleCategoryTable = treeTable.render({
         id: "jk-treeTable",
         elem: '#jk-treeTable',
-        url: base + '/menu?tree=',
+        url: base + '/articleCategory?tree=',
         icon_key: 'name',
         is_checkbox: false,
         cols: cols
       });
-      treeTable.openAll(menuTable);
+      treeTable.openAll(articleCategoryTable);
 
       treeTable.reload = function () {
-        treeTable.render(menuTable);
+        treeTable.render(articleCategoryTable);
       };
       if (addAble) {
         $("#jk-create").on("click", function () {
           layer.open({
             type: 2,
-            title: '添加菜单',
-            content: base + '/menu/add',
+            title: '添加文章分类',
+            content: base + '/articleCategory/add',
             maxmin: true,
             area: ['800px', '800px'],
             btn: ['确定', '取消'],
@@ -145,8 +128,8 @@
             if (addAble) {
               layer.open({
                 type: 2,
-                title: '添加菜单',
-                content: base + '/menu/add?parent=' + id,
+                title: '添加文章分类',
+                content: base + '/articleCategory/add?parent=' + id,
                 maxmin: true,
                 area: ['800px', '800px'],
                 btn: ['确定', '取消'],
@@ -163,8 +146,8 @@
             if (viewAble) {
               layer.open({
                 type: 2,
-                title: '编辑菜单',
-                content: base + '/menu/' + id,
+                title: '编辑文章分类',
+                content: base + '/articleCategory/' + id,
                 maxmin: true,
                 area: ['800px', '800px'],
                 btn: editAble ? ['确定', '取消'] : ['关闭'],
@@ -181,7 +164,7 @@
             if (deleteAble) {
               layer.confirm('真的删除么？', function (index) {
                 $.ajax({
-                  url: base + '/menu/' + id,
+                  url: base + '/articleCategory/' + id,
                   dataType: 'json',
                   type: 'delete',
                   success: function (resp) {

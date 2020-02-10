@@ -2,7 +2,7 @@
   ~ Copyright (c) 2020.
   ~ @Link: http://jken.site
   ~ @Author: ken kong
-  ~ @LastModified: 2020-02-05T19:35:47.659+08:00
+  ~ @LastModified: 2020-02-04T15:00:37.490+08:00
   -->
 
 <!DOCTYPE html>
@@ -21,77 +21,52 @@
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
         <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>账号</label>
+            <label class="layui-form-label">上级文章分类</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入账号"
-                    th:field="*{username}" type="text">
+                <div id="jk-parent"></div>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">新密码</label>
+            <label class="layui-form-label" jk:required>名称</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" th:attrappend="lay-verify=${entity.isNew()?'required':''}"
-                    name="newPassword" type="password" value="">
-            </div>
-            <div th:if="${!entity.isNew()}" class="layui-form-mid layui-word-aux">留空则不修改</div>
-        </div>
-        <div th:if="${!entity.isNew()}" class="layui-form-item">
-            <label class="layui-form-label">重复密码</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" name="repeatPassword" type="password" value="">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色</label>
-            <div class="layui-input-inline">
-                <div id="jk-select-role"></div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>姓名</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入姓名"
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入文章分类名称"
                     th:field="*{name}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">年龄</label>
+            <label class="layui-form-label" jk:required>代号</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入年龄" th:field="*{age}"
-                    type="text">
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入文章分类代号"
+                    th:field="*{code}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">邮箱</label>
+            <label class="layui-form-label">跳转链接</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="email" placeholder="请输入邮箱" th:field="*{mail}"
-                    type="text">
+                <input autocomplete="off" class="layui-input" maxlength="200" minlength="4" placeholder="请输入跳转链接"
+                    th:field="*{href}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">手机号码</label>
+            <label class="layui-form-label">图标样式</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="phone" placeholder="请输入手机号码"
-                    th:field="*{mobile}" type="text">
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">简介</label>
-            <div class="layui-input-block">
-                <textarea th:field="*{introduction}" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <input autocomplete="off" class="layui-input" maxlength="20" minlength="4" placeholder="请输入图标样式"
+                    th:field="*{iconCls}" type="text">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">解锁</label>
+            <label class="layui-form-label">权限代号</label>
             <div class="layui-input-inline">
-                <input lay-filter="locked" lay-skin="switch" lay-text="是|否" th:field="*{accountNonLocked}"
-                    type="checkbox">
+                <textarea autocomplete="off" class="layui-textarea" style="width: 400px; height: 150px;"
+                    th:field="*{authorities}"></textarea>
+                <div style="width: 400px; font-size: 12px;">该文章分类下所拥有的权限(用,分隔), 仅用于权限分类</div>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">停用</label>
+            <label class="layui-form-label">排序号</label>
             <div class="layui-input-inline">
-                <input lay-filter="disabled" lay-skin="switch" lay-text="是|否" th:field="*{disabled}" type="checkbox">
+                <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
+                    th:field="*{sortNo}" type="text">
             </div>
         </div>
         <div class="layui-form-item layui-hide">
@@ -104,9 +79,9 @@
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-        var rolesSelected = /*[[${entityRoleIds}]]*/null;
-        var addAble = /*[[${#authorization.expr("hasAuthority('user-add')")}]]*/false;
-        var editAble = /*[[${#authorization.expr("hasAuthority('user-edit')")}]]*/false;
+        var parentId = /*[[${entity.parent==null?null:entity.parent.id}]]*/null;
+        var addAble = /*[[${#authorization.expr("hasAuthority('articleCategory-add')")}]]*/false;
+        var editAble = /*[[${#authorization.expr("hasAuthority('articleCategory-edit')")}]]*/false;
     </script>
     <script>
         layui.config({
@@ -118,34 +93,43 @@
             var $ = layui.$, form = layui.form;
             var xmSelect = layui.xmSelect;
 
-            var roleSelect = xmSelect.render({
-                el: '#jk-select-role',
+            var parentSelect = xmSelect.render({
+                el: '#jk-parent',
+                name: "parent",
+                model: { label: { type: 'text' } },
+                radio: true,
+                clickClose: true,
                 filterable: true,
-                name: "roles",
-                toolbar: { show: true },
-                initValue: rolesSelected,
+                tree: {
+                    show: true,
+                    strict: false,
+                    expandedKeys: true
+                },
+                toolbar: {
+                    show: true,
+                    list: ['CLEAR']
+                },
+                height: 'auto',
                 data: []
             })
 
             $.ajax({
-                url: base + '/role',
+                url: base + '/articleCategory/select',
                 dataType: 'json',
-                data: { _list: true },
+                data: {
+                    selected: parentId == null ? null : [parentId],
+                    disabled: entityId == null ? null : [entityId]
+                },
                 type: 'get',
                 success: function (resp) {
                     var data = resp;
-                    roleSelect.update({
-                        data: $.map(data, function (item, i) {
-                            var obj = {};
-                            obj.value = item.id;
-                            obj.name = item.name;
-                            return obj;
-                        }),
+                    parentSelect.update({
+                        data: data,
                         autoRow: true
                     });
                 },
                 error: function (resp) {
-                    layer.msg(resp.responseJSON.message);
+                    layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
                 }
             });
 
@@ -153,14 +137,14 @@
             form.on('submit(jk-form-submit)', function (data) {
                 if (entityId && editAble || !entityId && addAble) {
                     $.ajax({
-                        url: base + '/user' + (entityId ? '/' + entityId : ''),
+                        url: base + '/articleCategory' + (entityId ? '/' + entityId : ''),
                         data: data.field,
                         dataType: 'json',
                         type: entityId ? 'put' : 'post',
                         success: function (resp) {
                             if (resp.code == 0) {
                                 var index = parent.layer.getFrameIndex(window.name);
-                                parent.layui.table.reload('jk-table');
+                                parent.layui.treeTable.reload();
                                 parent.layer.close(index);
                             } else {
                                 layer.msg(resp.msg, { time: 2000 }, function () { });
