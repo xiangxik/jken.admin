@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 import jken.module.core.entity.Role;
 import jken.module.core.entity.User;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-public class UserController extends CrudController<User, Long> {
+public class UserController extends EntityController<User, Long> {
 
     @Autowired
     private AuditorAware<User> auditorAware;

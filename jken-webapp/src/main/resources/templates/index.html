@@ -135,7 +135,7 @@
                                     </dd>
 
                                     <dd th:if="${child.children==null||child.children.size()==0}">
-                                        <a th:lay-href="child.href" th:text="${child.name}">menu2</a>
+                                        <a th:lay-href="${child.href}" th:text="${child.name}">menu2</a>
                                     </dd>
                                 </th:block>
                             </dl>

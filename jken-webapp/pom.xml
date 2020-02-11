@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>jken</groupId>
-            <artifactId>jken-module-core</artifactId>
+            <artifactId>jken-module-cms</artifactId>
             <version>1.0</version>
         </dependency>
         <!--        <dependency>-->

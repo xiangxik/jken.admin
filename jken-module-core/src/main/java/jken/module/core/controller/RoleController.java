@@ -23,7 +23,7 @@ import jken.module.core.service.MenuItemService;
 import jken.module.core.service.UserService;
 import jken.support.data.TreeHelper;
 import jken.support.mvc.DataWrap;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/role")
-public class RoleController extends CrudController<Role, Long> {
+public class RoleController extends EntityController<Role, Long> {
 
     @Autowired
     private MenuItemService menuItemService;

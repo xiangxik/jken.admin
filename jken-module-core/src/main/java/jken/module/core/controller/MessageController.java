@@ -9,7 +9,7 @@ package jken.module.core.controller;
 
 import com.querydsl.core.types.Predicate;
 import jken.module.core.entity.Message;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/message")
-public class MessageController extends CrudController<Message, Long> {
+public class MessageController extends EntityController<Message, Long> {
 
     @Override
     public Page<Message> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {

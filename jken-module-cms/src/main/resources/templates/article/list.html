@@ -54,16 +54,33 @@
             </script>
 
                 <table class="layui-table"
-                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/article?_path_filter=*,*.id,*.name', id:'jk-table', toolbar: '#jk-toolbar'}"
+                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/article?_path_filter=*,*.id,*.title,*.author,*.hits,*.top,*.published', id:'jk-table', toolbar: '#jk-toolbar'}"
                     lay-filter="jk-table">
                     <thead>
                         <tr>
                             <th lay-data="{field:'id', checkbox:true}"></th>
-                            <th lay-data="{field:'title', sort: true}">标题</th>
+                            <th lay-data="{field:'title', sort: true, templet:'#titleTpl'}">标题</th>
+                            <th lay-data="{field:'author', width:120, sort: true}">作者</th>
+                            <th lay-data="{field:'hits', width:100, sort: true}">点击数</th>
+                            <th lay-data="{field:'published', width:100, sort: true, templet:'#publishedTpl'}">状态</th>
                             <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}" sec:authorize="hasAuthority('article-view')||hasAuthority('article-delete')">操作</th>
                         </tr>
                     </thead>
                 </table>
+
+                <script type="text/html" id="titleTpl">
+                    {{#  if(d.top){ }}
+                    <span style="color: red;">[置顶]</span>
+                    {{#  } }}{{d.title}}
+                </script>
+
+                <script type="text/html" id="publishedTpl">
+                    {{#  if(d.published){ }}
+                    <button class="layui-btn layui-btn-xs">已发布</button>
+                    {{#  } else { }}
+                    <button class="layui-btn layui-btn-primary layui-btn-xs">待修改</button>
+                    {{#  } }}
+                </script>
 
                 <script id="jk-tool" type="text/html">
                 <div class="layui-btn-group">

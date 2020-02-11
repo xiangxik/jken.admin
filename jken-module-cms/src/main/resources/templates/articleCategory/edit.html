@@ -20,55 +20,59 @@
 
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
-        <div class="layui-form-item">
-            <label class="layui-form-label">上级文章分类</label>
-            <div class="layui-input-inline">
-                <div id="jk-parent"></div>
+        <fieldset class="layui-elem-field">
+            <legend>基本信息</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级分类</label>
+                    <div class="layui-input-inline">
+                        <div id="jk-parent"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" jk:required>名称</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入文章分类名称"
+                            th:field="*{name}" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序号</label>
+                    <div class="layui-input-inline">
+                        <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
+                               th:field="*{sortNo}" type="text">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>名称</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入文章分类名称"
-                    th:field="*{name}" type="text">
+        </fieldset>
+
+        <fieldset class="layui-elem-field">
+            <legend>SEO</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">页面标题</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入页面标题"
+                               th:field="*{seoTitle}" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">页面关键字</label>
+                    <div class="layui-input-block">
+                        <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入页面关键字"
+                               th:field="*{seoKeywords}" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">页面描述</label>
+                    <div class="layui-input-block">
+                        <textarea autocomplete="off" class="layui-textarea" th:field="*{seoDescription}"></textarea>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>代号</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入文章分类代号"
-                    th:field="*{code}" type="text">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">跳转链接</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" maxlength="200" minlength="4" placeholder="请输入跳转链接"
-                    th:field="*{href}" type="text">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">图标样式</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" maxlength="20" minlength="4" placeholder="请输入图标样式"
-                    th:field="*{iconCls}" type="text">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">权限代号</label>
-            <div class="layui-input-inline">
-                <textarea autocomplete="off" class="layui-textarea" style="width: 400px; height: 150px;"
-                    th:field="*{authorities}"></textarea>
-                <div style="width: 400px; font-size: 12px;">该文章分类下所拥有的权限(用,分隔), 仅用于权限分类</div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">排序号</label>
-            <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
-                    th:field="*{sortNo}" type="text">
-            </div>
-        </div>
+        </fieldset>
+
+
         <div class="layui-form-item layui-hide">
             <input id="jk-form-submit" lay-filter="jk-form-submit" lay-submit type="button" value="确认添加">
             <input id="jk-form-edit" lay-filter="jk-form-edit" lay-submit type="button" value="确认编辑">
@@ -98,6 +102,7 @@
                 name: "parent",
                 model: { label: { type: 'text' } },
                 radio: true,
+                initValue: parentId?[parentId]:null,
                 clickClose: true,
                 filterable: true,
                 tree: {
@@ -114,15 +119,12 @@
             })
 
             $.ajax({
-                url: base + '/articleCategory/select',
+                url: base + '/articleCategory?_s=tree',
                 dataType: 'json',
-                data: {
-                    selected: parentId == null ? null : [parentId],
-                    disabled: entityId == null ? null : [entityId]
-                },
                 type: 'get',
                 success: function (resp) {
-                    var data = resp;
+                    var data = resp.data;
+                    if(!data) data = [];
                     parentSelect.update({
                         data: data,
                         autoRow: true

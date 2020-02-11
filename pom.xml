@@ -17,8 +17,8 @@
     <modules>
         <module>jken-common</module>
         <module>jken-module-core</module>
-        <module>jken-webapp</module>
         <module>jken-module-cms</module>
+        <module>jken-webapp</module>
     </modules>
     <packaging>pom</packaging>
 

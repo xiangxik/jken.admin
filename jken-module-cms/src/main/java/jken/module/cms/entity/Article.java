@@ -83,7 +83,7 @@ public class Article extends CorpableEntity<User, Long> {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    private ArticleCategory articleCategory;
+    private ArticleCategory category;
 
     /**
      * 标签
@@ -166,12 +166,12 @@ public class Article extends CorpableEntity<User, Long> {
         this.hits = hits;
     }
 
-    public ArticleCategory getArticleCategory() {
-        return articleCategory;
+    public ArticleCategory getCategory() {
+        return category;
     }
 
-    public void setArticleCategory(ArticleCategory articleCategory) {
-        this.articleCategory = articleCategory;
+    public void setCategory(ArticleCategory category) {
+        this.category = category;
     }
 
     public Set<ArticleTag> getArticleTags() {

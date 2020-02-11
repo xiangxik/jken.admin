@@ -9,7 +9,7 @@ package jken.module.cms.controller;
 
 import com.querydsl.core.types.Predicate;
 import jken.module.cms.entity.ArticleTag;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/articleTag")
-public class ArticleTagController extends CrudController<ArticleTag, Long> {
+public class ArticleTagController extends EntityController<ArticleTag, Long> {
     @Override
     public Page<ArticleTag> list(Predicate predicate, Pageable pageable) {
         return super.doInternalPage(predicate, pageable);

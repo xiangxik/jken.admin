@@ -98,6 +98,7 @@
                 name: "parent",
                 model: { label: { type: 'text' } },
                 radio: true,
+                initValue: parentId?[parentId]:null,
                 clickClose: true,
                 filterable: true,
                 tree: {
@@ -114,15 +115,12 @@
             })
 
             $.ajax({
-                url: base + '/menu/select',
+                url: base + '/menu?_s=tree',
                 dataType: 'json',
-                data: {
-                    selected: parentId == null ? null : [parentId],
-                    disabled: entityId == null ? null : [entityId]
-                },
                 type: 'get',
                 success: function (resp) {
-                    var data = resp;
+                    var data = resp.data;
+                    if(!data) data = [];
                     parentSelect.update({
                         data: data,
                         autoRow: true

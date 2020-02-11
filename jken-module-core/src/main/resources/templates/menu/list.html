@@ -74,13 +74,16 @@
         {
           key: 'iconCls',
           title: '图标样式',
-          width: '100px',
+          width: '160px',
           align: 'center'
         },
         {
           key: 'href',
           title: '访问地址',
-          align: 'left'
+          align: 'left',
+          template: function (item) {
+            if(item.href)return item.href;else return "";
+          }
         },
         {
           key: 'sortNo',
@@ -109,12 +112,11 @@
       var menuTable = treeTable.render({
         id: "jk-treeTable",
         elem: '#jk-treeTable',
-        url: base + '/menu?tree=',
+        url: base + '/menu',
         icon_key: 'name',
         is_checkbox: false,
         cols: cols
       });
-      treeTable.openAll(menuTable);
 
       treeTable.reload = function () {
         treeTable.render(menuTable);

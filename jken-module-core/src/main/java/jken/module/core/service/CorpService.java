@@ -10,6 +10,7 @@ package jken.module.core.service;
 import com.google.common.collect.Sets;
 import jken.integration.Authority;
 import jken.integration.IntegrationService;
+import jken.integration.JkenModule;
 import jken.module.core.entity.Corp;
 import jken.module.core.entity.MenuItem;
 import jken.module.core.entity.Role;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +48,7 @@ public class CorpService extends CrudService<Corp, Long> {
         return corpRepository.findByCode(code);
     }
 
+    @Transactional
     public Corp createNewCorp(String name, String code, String adminUsername, String adminPassword) {
         Corp corp = buildCorp(name, code);
         List<MenuItem> menuItems = buildMenuItems(code);
@@ -63,25 +66,21 @@ public class CorpService extends CrudService<Corp, Long> {
     }
 
     protected List<MenuItem> buildMenuItems(String corpCode) {
-        List<MenuItem> menuItems = new ArrayList<>();
-        int sortNo = 0;
-
-        MenuItem manage = buildMenuItem("系统管理", "manage", "javascript:;", "layui-icon-set", null, sortNo++, corpCode, null);
-        menuItems.add(manage);
-
-        MenuItem manageSet = buildMenuItem("基础设置", "set", "javascript:;", null, null, sortNo++, corpCode, manage);
-        menuItems.add(manageSet);
-        menuItems.add(buildMenuItem("公司信息", "corp_info", "corp/info", null, "corp-view-info,corp-edit-info", sortNo++, corpCode, manageSet));
-        menuItems.add(buildMenuItem("菜单管理", "menu", "menu", null, "menu-list,menu-view,menu-add,menu-edit,menu-delete", sortNo++, corpCode, manageSet));
-        menuItems.add(buildMenuItem("字典管理", "dict", "dict", null, "dict-list,dict-view,dict-add,dict-edit,dict-delete", sortNo++, corpCode, manageSet));
-
-        MenuItem orgSet = buildMenuItem("人员管理", "member", "javascript:;", null, null, sortNo++, corpCode, manage);
-        menuItems.add(orgSet);
-        menuItems.add(buildMenuItem("用户管理", "user", "user", null, "user-list,user-view,user-add,user-edit,user-delete", sortNo++, corpCode, orgSet));
-        menuItems.add(buildMenuItem("角色管理", "role", "role", null, "role-list,role-view,role-add,role-edit,role-delete,role-view-user,role-edit-user,role-view-authority,role-edit-authority", sortNo++, corpCode, orgSet));
-
-
+        final List<MenuItem> menuItems = new ArrayList<>();
+        IntegrationService.getModules().forEach(module -> buildMenus(menuItems, module.getMenus(), null, corpCode));
         return menuItems;
+    }
+
+    private void buildMenus(final List<MenuItem> result, List<JkenModule.Mi> mis, MenuItem parent, String corpCode) {
+        Integer sortNo = 1;
+        for (JkenModule.Mi mi : mis) {
+            sortNo++;
+            MenuItem menuItem = buildMenuItem(mi.getName(), mi.getCode(), mi.getHref(), mi.getIconCls(), mi.getAuthorities(), sortNo, corpCode, parent);
+            result.add(menuItem);
+            if (mi.getChildren() != null) {
+                buildMenus(result, mi.getChildren(), menuItem, corpCode);
+            }
+        }
     }
 
     protected Role buildAdminRole(String corpCode, List<MenuItem> menuItems) {

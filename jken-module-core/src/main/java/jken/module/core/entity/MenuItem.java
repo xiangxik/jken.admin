@@ -35,8 +35,8 @@ public class MenuItem extends TreeEntity<MenuItem, User, Long> implements Corpab
     @Column(length = 255)
     private String href;
 
-    @Size(max = 20)
-    @Column(length = 31)
+    @Size(max = 60)
+    @Column(length = 64)
     private String iconCls;
 
     @Size(max = 500)

@@ -9,36 +9,35 @@ package jken.module.cms.controller;
 
 import com.querydsl.core.types.Predicate;
 import jken.module.cms.entity.ArticleCategory;
-import jken.support.web.CrudController;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import jken.support.web.TreeController;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/articleCategory")
-public class ArticleCategoryController extends CrudController<ArticleCategory, Long> {
+public class ArticleCategoryController extends TreeController<ArticleCategory, Long> {
     @Override
-    public Page<ArticleCategory> list(Predicate predicate, Pageable pageable) {
-        throw new UnsupportedOperationException();
+    public List<Object> list(@QuerydslPredicate(root = ArticleCategory.class) Predicate predicate, Sort sort) {
+        return super.doList(predicate, sort);
     }
 
-    @GetMapping(produces = "application/json", params = "tree")
-    @ResponseBody
-    public Page<Map<String, Object>> tree(@QuerydslPredicate(root = ArticleCategory.class) Predicate predicate, Pageable pageable) {
-        Page<ArticleCategory> page = super.doInternalPage(predicate, pageable);
-        return page.map(this::convertToTreeData);
+    @Override
+    public List<Object> tree(@QuerydslPredicate(root = ArticleCategory.class) Predicate predicate, Sort sort) {
+        return super.doTree(predicate, sort);
     }
 
-    private Map<String, Object> convertToTreeData(ArticleCategory mi) {
-        Map<String, Object> data = new HashMap<>();
+    @Override
+    protected void extraListConvert(Map<String, Object> data, ArticleCategory entity) {
+        data.put("name", entity.getName());
+    }
 
-        return data;
+    @Override
+    protected String treeNodeDisplay(ArticleCategory entity) {
+        return entity.getName();
     }
 }

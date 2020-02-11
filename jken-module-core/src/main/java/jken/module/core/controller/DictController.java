@@ -9,7 +9,7 @@ package jken.module.core.controller;
 
 import com.querydsl.core.types.Predicate;
 import jken.module.core.entity.Dict;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/dict")
-public class DictController extends CrudController<Dict, Long> {
+public class DictController extends EntityController<Dict, Long> {
 
     @Override
     public Page<Dict> list(Predicate predicate, Pageable pageable) {

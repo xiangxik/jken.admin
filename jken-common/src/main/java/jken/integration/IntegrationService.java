@@ -86,10 +86,7 @@ public class IntegrationService {
                 module.setName(name);
                 modules.add(module);
             }
-
             integration.integrate(module);
-
-
         }
 
         for (JkenModule module : modules) {

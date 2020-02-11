@@ -27,6 +27,13 @@
                     th:field="*{name}" type="text">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-inline">
+                <input autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入排序号"
+                       th:field="*{sortNo}" type="text">
+            </div>
+        </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
@@ -43,7 +50,6 @@
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-        var rolesSelected = /*[[${entityRoleIds}]]*/null;
         var addAble = /*[[${#authorization.expr("hasAuthority('articleTag-add')")}]]*/false;
         var editAble = /*[[${#authorization.expr("hasAuthority('articleTag-edit')")}]]*/false;
     </script>

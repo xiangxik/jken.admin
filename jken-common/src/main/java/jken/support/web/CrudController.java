@@ -2,18 +2,15 @@
  * Copyright (c) 2020.
  * @Link: http://jken.site
  * @Author: ken kong
- * @LastModified: 2020-02-04T15:00:37.481+08:00
+ * @LastModified: 2020-02-11T13:49:16.347+08:00
  */
 
 package jken.support.web;
 
-import com.querydsl.core.types.Predicate;
 import jken.support.data.jpa.Entity;
 import jken.support.service.CrudService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +19,7 @@ import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public abstract class CrudController<T extends Entity<I>, I extends Serializable> extends BaseController implements InitializingBean {
+public class CrudController<T extends Entity<I>, I extends Serializable> extends BaseController implements InitializingBean {
 
     @Autowired
     private CrudService<T, I> service;
@@ -82,17 +79,6 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
     //=====================================================
 
     /**
-     * 获取列表数据(分页)
-     *
-     * @param predicate
-     * @param pageable
-     * @return
-     */
-    @GetMapping(produces = "application/json")
-    @ResponseBody
-    public abstract Page<T> list(Predicate predicate, Pageable pageable);
-
-    /**
      * 添加实体
      *
      * @param entity
@@ -147,10 +133,6 @@ public abstract class CrudController<T extends Entity<I>, I extends Serializable
         if (entities != null) {
             onBatchDelete(entities);
         }
-    }
-
-    protected Page<T> doInternalPage(Predicate predicate, Pageable pageable) {
-        return getService().findAll(predicate, pageable);
     }
 
     protected void onShowList(Model model) {

@@ -11,7 +11,7 @@ import com.querydsl.core.types.Predicate;
 import jken.module.core.entity.Corp;
 import jken.module.core.service.CorpService;
 import jken.security.CorpCodeHolder;
-import jken.support.web.CrudController;
+import jken.support.web.EntityController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/corp")
-public class CorpController extends CrudController<Corp, Long> {
+public class CorpController extends EntityController<Corp, Long> {
 
     @Autowired
     private CorpService corpService;

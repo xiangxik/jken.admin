@@ -54,12 +54,13 @@
             </script>
 
                 <table class="layui-table"
-                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/articleTag?_path_filter=*,*.id,*.name', id:'jk-table', toolbar: '#jk-toolbar'}"
+                    lay-data="{height: 'full-128', cellMinWidth: 80, page: true, limit:30, autoSort: false, url:'/articleTag?_path_filter=*,*.id,*.name,*.sortNo', id:'jk-table', toolbar: '#jk-toolbar'}"
                     lay-filter="jk-table">
                     <thead>
                         <tr>
                             <th lay-data="{field:'id', checkbox:true}"></th>
                             <th lay-data="{field:'name', sort: true}">名称</th>
+                            <th lay-data="{field:'sortNo', width: 100, sort: true}">排序号</th>
                             <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}" sec:authorize="hasAuthority('articleTag-view')||hasAuthority('articleTag-delete')">操作</th>
                         </tr>
                     </thead>

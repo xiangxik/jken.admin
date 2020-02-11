@@ -77,6 +77,8 @@ public class JacksonResponseCustomizer implements ResponseBodyAdvice<Object> {
             bodyContainer.setValue(new ResultBuilder(0, "").layuiPage(page).build());
         } else if (value instanceof DataWrap) {
             bodyContainer.setValue(new ResultBuilder(0, "").data(((DataWrap) value).getData()).build());
+        } else {
+            bodyContainer.setValue(new ResultBuilder(0, "").data(value).build());
         }
     }
 
