@@ -18,6 +18,6 @@ public interface ArticleRepository extends QuerydslEntityRepository<Article, Lon
 
     @Override
     default void customize(QuerydslBindings querydslBindings, QArticle qArticle) {
-        querydslBindings.bind(qArticle.title).first(StringExpression::contains);
+        querydslBindings.bind(qArticle.title, qArticle.author).first(StringExpression::contains);
     }
 }
