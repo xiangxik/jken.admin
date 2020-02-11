@@ -10,7 +10,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>jken.site</artifactId>
+        <artifactId>jken.admin</artifactId>
         <groupId>jken</groupId>
         <version>1.0</version>
     </parent>
@@ -18,6 +18,7 @@
 
     <packaging>jar</packaging>
     <artifactId>jken-webapp</artifactId>
+    <name>Jken Webapp</name>
 
     <dependencies>
         <dependency>

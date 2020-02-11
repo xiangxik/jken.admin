@@ -12,17 +12,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>jken</groupId>
-    <artifactId>jken.site</artifactId>
+    <artifactId>jken.admin</artifactId>
     <version>1.0</version>
     <modules>
         <module>jken-common</module>
         <module>jken-module-core</module>
         <module>jken-module-cms</module>
         <module>jken-webapp</module>
+        <module>jken-schedule</module>
     </modules>
     <packaging>pom</packaging>
 
-    <name>jken site</name>
+    <name>Jken Admin</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
