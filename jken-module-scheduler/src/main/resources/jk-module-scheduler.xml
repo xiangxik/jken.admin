@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020.
+  ~ @Link: http://jken.site
+  ~ @Author: ken kong
+  ~ @LastModified: 2020-02-09T21:17:25.389+08:00
+  -->
+
+<module name="scheduler">
+    <domains>
+        <domain name="作业" code="job" crud="true"/>
+        <domain name="触发器" code="trigger" crud="true"/>
+    </domains>
+    <menus>
+        <mi name="调度管理" code="cms" iconCls="layui-icon-date">
+            <mi name="作业管理" code="job" href="job"
+                authorities="job-list,job-view,job-add,job-edit,job-delete"/>
+            <mi name="触发器管理" code="trigger" href="trigger"
+                authorities="trigger-list,trigger-view,trigger-add,trigger-edit,trigger-delete"/>
+        </mi>
+    </menus>
+</module>

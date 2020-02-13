@@ -1,5 +1,7 @@
 package jken.module.scheduler.service;
 
+import com.google.common.base.Strings;
+import jken.module.scheduler.model.JobModel;
 import jken.security.CorpCodeHolder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -29,6 +31,17 @@ public class SchedulerService {
                 throw new RuntimeException(e);
             }
         }).collect(Collectors.toList());
+    }
+
+    public JobDetail findByJobKey(String name, String group) throws SchedulerException {
+        return scheduler.getJobDetail(JobKey.jobKey(name, group));
+    }
+
+    public void save(JobModel jobModel) throws SchedulerException {
+        if (Strings.isNullOrEmpty(jobModel.getGroup())) {
+            jobModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
+        }
+        scheduler.addJob(jobModel.toJobDetail(), false);
     }
 
 }

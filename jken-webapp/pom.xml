@@ -28,22 +28,7 @@
         </dependency>
         <dependency>
             <groupId>jken</groupId>
-            <artifactId>jken-module-schedule</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jken</groupId>
-            <artifactId>jken-module-workflow</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jken</groupId>
-            <artifactId>jken-module-wechat</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jken</groupId>
-            <artifactId>jken-module-payment</artifactId>
+            <artifactId>jken-module-scheduler</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!--        <dependency>-->
