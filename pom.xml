@@ -18,7 +18,7 @@
         <module>jken-common</module>
         <module>jken-module-core</module>
         <module>jken-module-cms</module>
-        <module>jken-module-schedule</module>
+        <module>jken-module-scheduler</module>
         <module>jken-module-workflow</module>
         <module>jken-module-wechat</module>
         <module>jken-module-payment</module>
