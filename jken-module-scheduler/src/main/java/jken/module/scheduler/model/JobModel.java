@@ -1,6 +1,6 @@
 package jken.module.scheduler.model;
 
-import com.google.common.base.MoreObjects;
+import jken.module.scheduler.support.BooleanMap;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -19,7 +19,9 @@ public class JobModel {
     @NotNull
     private Class<? extends Job> jobClass;
 
-    private Map<String, Object> jobDataMap;
+    private final Map<String, Object> objectMap = new HashMap<>();
+    private final BooleanMap booleanMap = new BooleanMap();
+
     private String description;
 
     public String getGroup() {
@@ -46,13 +48,14 @@ public class JobModel {
         this.jobClass = jobClass;
     }
 
-    public Map<String, Object> getJobDataMap() {
-        return jobDataMap;
+    public Map<String, Object> getObjectMap() {
+        return objectMap;
     }
 
-    public void setJobDataMap(Map<String, Object> jobDataMap) {
-        this.jobDataMap = jobDataMap;
+    public Map<String, Boolean> getBooleanMap() {
+        return booleanMap;
     }
+
 
     public String getDescription() {
         return description;
@@ -67,7 +70,17 @@ public class JobModel {
         model.setName(jobDetail.getKey().getName());
         model.setGroup(jobDetail.getKey().getGroup());
         model.setJobClass(jobDetail.getJobClass());
-        model.setJobDataMap(jobDetail.getJobDataMap());
+
+        for (Map.Entry<String, Object> entry : jobDetail.getJobDataMap().entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value instanceof Boolean) {
+                model.getBooleanMap().put(key, (Boolean) value);
+            } else {
+                model.getObjectMap().put(key, value);
+            }
+        }
+
         model.setDescription(jobDetail.getDescription());
         return model;
     }
@@ -77,7 +90,12 @@ public class JobModel {
         jobDetail.setName(this.name);
         jobDetail.setGroup(this.group);
         jobDetail.setJobClass(this.jobClass);
-        jobDetail.setJobDataMap(new JobDataMap(MoreObjects.firstNonNull(this.jobDataMap, new HashMap<>())));
+
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.putAll(this.objectMap);
+        jobDataMap.putAll(this.booleanMap);
+        jobDetail.setJobDataMap(jobDataMap);
+
         jobDetail.setDescription(this.description);
         jobDetail.setDurability(true);
         return jobDetail;

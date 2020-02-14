@@ -22,7 +22,7 @@
     <dicts>
         <dict name="作业类型" code="job_class">
             <item value="org.quartz.jobs.ee.mail.SendMailJob" name="发送邮件"/>
-            <item value="org.quartz.jobs.NativeJob" name="服务器命令"/>
+            <item value="org.quartz.jobs.NativeJob" name="执行本地命令"/>
         </dict>
     </dicts>
 </module>

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import jken.module.scheduler.model.JobModel;
 import jken.module.scheduler.service.SchedulerService;
 import jken.support.web.BaseController;
+import org.quartz.Job;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,10 +53,11 @@ public class JobController extends BaseController {
      * @return
      */
     @GetMapping(value = "/add", produces = "text/html")
-    public String showDetailAdd(JobModel entity, Model model) {
+    public String showDetailAdd(JobModel entity, @RequestParam("job_class") Class<? extends Job> jobClass, Model model) {
         if (entity == null) {
             entity = new JobModel();
         }
+        entity.setJobClass(jobClass);
         return showDetailEdit(entity, model);
     }
 
@@ -70,7 +72,7 @@ public class JobController extends BaseController {
     @GetMapping(value = "/{id}", produces = "text/html")
     public String showDetailEdit(@PathVariable("id") JobModel entity, Model model) {
         model.addAttribute("entity", entity);
-        return "/job/edit";
+        return "/job/edit_" + entity.getJobClass().getName();
     }
 
     /**
@@ -125,6 +127,18 @@ public class JobController extends BaseController {
         if (jobModels != null) {
             schedulerService.batchDelete(Lists.newArrayList(jobModels));
         }
+    }
+
+    /**
+     * 执行
+     *
+     * @param entity
+     * @throws SchedulerException
+     */
+    @PutMapping("/{id}/exec")
+    @ResponseBody
+    public void exec(@PathVariable("id") JobModel entity) throws SchedulerException {
+        schedulerService.exec(entity);
     }
 
 }

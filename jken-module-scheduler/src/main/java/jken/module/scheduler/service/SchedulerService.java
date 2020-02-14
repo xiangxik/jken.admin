@@ -41,7 +41,7 @@ public class SchedulerService {
         if (Strings.isNullOrEmpty(jobModel.getGroup())) {
             jobModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
         }
-        scheduler.addJob(jobModel.toJobDetail(), false);
+        scheduler.addJob(jobModel.toJobDetail(), true);
     }
 
     public void delete(JobModel jobModel) throws SchedulerException {
@@ -50,6 +50,10 @@ public class SchedulerService {
 
     public void batchDelete(List<JobModel> jobModels) throws SchedulerException {
         scheduler.deleteJobs(jobModels.stream().map(jobModel -> JobKey.jobKey(jobModel.getName(), jobModel.getGroup())).collect(Collectors.toList()));
+    }
+
+    public void exec(JobModel jobModel) throws SchedulerException {
+        scheduler.triggerJob(JobKey.jobKey(jobModel.getName(), jobModel.getGroup()));
     }
 
 }

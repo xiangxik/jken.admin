@@ -20,6 +20,7 @@
 
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
+        <input type="hidden" name="jobClass" value="org.quartz.jobs.NativeJob">
         <div class="layui-form-item">
             <label class="layui-form-label" jk:required>作业名称</label>
             <div class="layui-input-inline">
@@ -28,13 +29,38 @@
             </div>
             <div class="layui-form-mid layui-word-aux">必须唯一</div>
         </div>
+
+
         <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>作业类型</label>
+            <label class="layui-form-label" jk:required>命令</label>
             <div class="layui-input-block">
-                <input autocomplete="off" class="layui-input" maxlength="200" placeholder="请输入作业类型"
-                    th:field="*{jobClass}" type="text">
+                <input autocomplete="off" class="layui-input" maxlength="200" placeholder="请输入命令"
+                       th:field="*{objectMap['command']}" type="text">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" class="layui-input" maxlength="200" placeholder="请输入参数"
+                       th:field="*{objectMap['parameters']}" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">等待处理</label>
+            <div class="layui-input-inline">
+                <input lay-filter="waitForProcess" lay-skin="switch" lay-text="是|否" th:field="*{booleanMap['waitForProcess']}"
+                       type="checkbox">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">消费输出</label>
+            <div class="layui-input-inline">
+                <input lay-filter="waitForProcess" lay-skin="switch" lay-text="是|否" th:field="*{booleanMap['consumeStreams']}"
+                       type="checkbox">
+            </div>
+        </div>
+
+
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">作业简介</label>
