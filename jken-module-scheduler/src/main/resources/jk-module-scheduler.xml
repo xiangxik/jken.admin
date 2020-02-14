@@ -6,7 +6,7 @@
   ~ @LastModified: 2020-02-09T21:17:25.389+08:00
   -->
 
-<module name="scheduler">
+<module name="scheduler" sortNo="-200">
     <domains>
         <domain name="作业" code="job" crud="true"/>
         <domain name="触发器" code="trigger" crud="true"/>
@@ -19,4 +19,10 @@
                 authorities="trigger-list,trigger-view,trigger-add,trigger-edit,trigger-delete"/>
         </mi>
     </menus>
+    <dicts>
+        <dict name="作业类型" code="job_class">
+            <item value="org.quartz.jobs.ee.mail.SendMailJob" name="发送邮件"/>
+            <item value="org.quartz.jobs.NativeJob" name="服务器命令"/>
+        </dict>
+    </dicts>
 </module>

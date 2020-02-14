@@ -25,13 +25,13 @@ public class DictItem extends TreeEntity<DictItem, User, Long> {
     private Dict dict;
 
     @NotNull
-    @Size(max = 20)
-    @Column(length = 31)
+    @Size(max = 60)
+    @Column(length = 64)
     private String name;
 
     @NotNull
-    @Size(max = 20)
-    @Column(length = 31)
+    @Size(max = 60)
+    @Column(length = 64)
     private String value;
 
     public Dict.ItemType getType() {

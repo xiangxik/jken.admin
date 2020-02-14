@@ -46,32 +46,4 @@ public class MenuController extends TreeController<MenuItem, Long> {
     protected String treeNodeDisplay(MenuItem entity) {
         return entity.getName();
     }
-
-//    @GetMapping(value = "/select", produces = "application/json")
-//    @ResponseBody
-//    public Iterable<Map<String, Object>> list(@RequestParam(value = "selected[]", required = false) MenuItem[] selected, @RequestParam(value = "disabled[]", required = false) MenuItem[] disabled, @QuerydslPredicate(root = MenuItem.class) Predicate predicate) {
-//        Iterable<MenuItem> roots = menuItemService.findAll(predicate);
-//        List<MenuItem> entities = TreeHelper.toTree(Lists.newArrayList(roots));
-//
-//        return convertToSelect(entities, selected, disabled);
-//    }
-//
-//    private Iterable<Map<String, Object>> convertToSelect(List<MenuItem> entities, MenuItem[] selected, MenuItem[] disabled) {
-//        if (entities == null || entities.size() == 0) {
-//            return null;
-//        }
-//        return entities.stream().map(entity -> {
-//            Map<String, Object> data = new HashMap<>();
-//            data.put("value", entity.getId());
-//            data.put("name", entity.getName());
-//            if (selected != null && ArrayUtils.contains(selected, entity)) {
-//                data.put("selected", true);
-//            }
-//            if (disabled != null && ArrayUtils.contains(disabled, entity)) {
-//                data.put("disabled", true);
-//            }
-//            data.put("children", convertToSelect(entity.getChildren(), selected, disabled));
-//            return data;
-//        }).collect(Collectors.toList());
-//    }
 }

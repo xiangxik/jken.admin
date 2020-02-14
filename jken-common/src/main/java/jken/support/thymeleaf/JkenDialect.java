@@ -7,6 +7,7 @@
 
 package jken.support.thymeleaf;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.dialect.AbstractProcessorDialect;
 import org.thymeleaf.dialect.IExpressionObjectDialect;
@@ -23,10 +24,11 @@ public class JkenDialect extends AbstractProcessorDialect implements IExpression
     private static final String DIALECT_NAME = "Jken Dialect";
     private static final String DIALECT_PREFIX = "jk";
 
-    private static final IExpressionObjectFactory EXPRESSION_OBJECT_FACTORY = new JkenExpressionObjectFactory();
+    private final IExpressionObjectFactory EXPRESSION_OBJECT_FACTORY;
 
-    public JkenDialect() {
+    public JkenDialect(ApplicationContext context) {
         super(DIALECT_NAME, DIALECT_PREFIX, StandardDialect.PROCESSOR_PRECEDENCE);
+        EXPRESSION_OBJECT_FACTORY = new ModuleExpressionObjectFactory(context);
     }
 
     @Override

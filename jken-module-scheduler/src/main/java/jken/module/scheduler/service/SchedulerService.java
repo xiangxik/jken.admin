@@ -44,4 +44,12 @@ public class SchedulerService {
         scheduler.addJob(jobModel.toJobDetail(), false);
     }
 
+    public void delete(JobModel jobModel) throws SchedulerException {
+        scheduler.deleteJob(JobKey.jobKey(jobModel.getName(), jobModel.getGroup()));
+    }
+
+    public void batchDelete(List<JobModel> jobModels) throws SchedulerException {
+        scheduler.deleteJobs(jobModels.stream().map(jobModel -> JobKey.jobKey(jobModel.getName(), jobModel.getGroup())).collect(Collectors.toList()));
+    }
+
 }

@@ -11,10 +11,7 @@ import com.google.common.collect.Sets;
 import jken.integration.Authority;
 import jken.integration.IntegrationService;
 import jken.integration.JkenModule;
-import jken.module.core.entity.Corp;
-import jken.module.core.entity.MenuItem;
-import jken.module.core.entity.Role;
-import jken.module.core.entity.User;
+import jken.module.core.entity.*;
 import jken.module.core.repo.CorpRepository;
 import jken.support.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,9 @@ public class CorpService extends CrudService<Corp, Long> {
     private UserService userService;
 
     @Autowired
+    private DictService dictService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -54,6 +54,7 @@ public class CorpService extends CrudService<Corp, Long> {
         List<MenuItem> menuItems = buildMenuItems(code);
         Role role = buildAdminRole(code, menuItems);
         buildAdmin(code, role, adminUsername, adminPassword);
+        buildDicts(code);
         return corp;
     }
 
@@ -67,18 +68,26 @@ public class CorpService extends CrudService<Corp, Long> {
 
     protected List<MenuItem> buildMenuItems(String corpCode) {
         final List<MenuItem> menuItems = new ArrayList<>();
-        IntegrationService.getModules().forEach(module -> buildMenus(menuItems, module.getMenus(), null, corpCode));
+        Integer sortNo = 1;
+        for (JkenModule module : IntegrationService.getModules()) {
+            List<JkenModule.Mi> mis = module.getMenus();
+            if (mis != null) {
+                buildMenus(menuItems, mis, null, corpCode, sortNo);
+                sortNo++;
+            }
+        }
         return menuItems;
     }
 
-    private void buildMenus(final List<MenuItem> result, List<JkenModule.Mi> mis, MenuItem parent, String corpCode) {
-        Integer sortNo = 1;
+    private void buildMenus(final List<MenuItem> result, List<JkenModule.Mi> mis, MenuItem parent, String corpCode, Integer sortNo) {
         for (JkenModule.Mi mi : mis) {
-            sortNo++;
             MenuItem menuItem = buildMenuItem(mi.getName(), mi.getCode(), mi.getHref(), mi.getIconCls(), mi.getAuthorities(), sortNo, corpCode, parent);
+            sortNo++;
             result.add(menuItem);
             if (mi.getChildren() != null) {
-                buildMenus(result, mi.getChildren(), menuItem, corpCode);
+                int subSort = 1;
+                buildMenus(result, mi.getChildren(), menuItem, corpCode, subSort);
+                subSort++;
             }
         }
     }
@@ -118,6 +127,27 @@ public class CorpService extends CrudService<Corp, Long> {
         mi.setParent(parent);
         menuItemService.save(mi);
         return mi;
+    }
+
+    private void buildDicts(String corpCode) {
+        IntegrationService.getModules().forEach(module -> {
+            if (module.getDicts() != null) {
+                module.getDicts().forEach(dict -> {
+                    Dict dictEntity = dictService.createNew();
+                    dictEntity.setName(dict.getName());
+                    dictEntity.setCode(dict.getCode());
+                    dictEntity.setLocked(true);
+                    dictEntity.setCorpCode(corpCode);
+                    dictEntity.setItems(dict.getItems().stream().map(item -> {
+                        DictItem dictItem = new DictItem();
+                        dictItem.setName(item.getName());
+                        dictItem.setValue(item.getValue());
+                        return dictItem;
+                    }).collect(Collectors.toList()));
+                    dictService.save(dictEntity);
+                });
+            }
+        });
     }
 
 }

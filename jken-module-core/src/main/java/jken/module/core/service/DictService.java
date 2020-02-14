@@ -9,6 +9,7 @@ package jken.module.core.service;
 
 import jken.module.core.entity.Dict;
 import jken.module.core.entity.DictItem;
+import jken.module.core.entity.QDict;
 import jken.support.service.CrudService;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,20 @@ import java.util.List;
 
 @Service
 public class DictService extends CrudService<Dict, Long> {
+
     @Override
     public <S extends Dict> S save(S entity) {
         List<DictItem> items = entity.getItems();
         items.forEach(item -> item.setDict(entity));
         return super.save(entity);
+    }
+
+    public Dict findByCode(String code) {
+        return getRepository().findOne(QDict.dict.code.eq(code)).orElseThrow(RuntimeException::new);
+    }
+
+    public List<DictItem> getItemsByCode(String code) {
+        Dict dict = findByCode(code);
+        return dict.getItems();
     }
 }

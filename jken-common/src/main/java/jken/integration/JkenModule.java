@@ -7,16 +7,20 @@
 
 package jken.integration;
 
+import org.springframework.core.Ordered;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class JkenModule {
+public class JkenModule implements Ordered {
 
     private String name;
     private String[] ignorePatterns;
+    private Integer sortNo;
 
     private final List<Domain> domains = new ArrayList<>();
     private final List<Mi> menus = new ArrayList<>();
+    private final List<Dict> dicts = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -40,6 +44,71 @@ public class JkenModule {
 
     public List<Mi> getMenus() {
         return menus;
+    }
+
+    public List<Dict> getDicts() {
+        return dicts;
+    }
+
+    public Integer getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(Integer sortNo) {
+        this.sortNo = sortNo;
+    }
+
+    @Override
+    public int getOrder() {
+        return sortNo;
+    }
+
+    public static class Dict {
+        private String name;
+        private String code;
+
+        private final List<Item> items = new ArrayList<>();
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<Item> getItems() {
+            return items;
+        }
+
+        public static class Item {
+            private String name;
+            private String value;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+        }
     }
 
     public static class Domain {

@@ -1,5 +1,6 @@
 package jken.module.scheduler.controller;
 
+import com.google.common.collect.Lists;
 import jken.module.scheduler.model.JobModel;
 import jken.module.scheduler.service.SchedulerService;
 import jken.support.web.BaseController;
@@ -98,6 +99,32 @@ public class JobController extends BaseController {
         }
 
         schedulerService.save(entity);
+    }
+
+    /**
+     * 删除实体
+     *
+     * @param entity
+     * @throws SchedulerException
+     */
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public void delete(@PathVariable("id") JobModel entity) throws SchedulerException {
+        schedulerService.delete(entity);
+    }
+
+    /**
+     * 批量删除实体
+     *
+     * @param jobModels
+     * @throws SchedulerException
+     */
+    @DeleteMapping
+    @ResponseBody
+    public void batchDelete(@RequestParam(value = "ids[]") JobModel[] jobModels) throws SchedulerException {
+        if (jobModels != null) {
+            schedulerService.batchDelete(Lists.newArrayList(jobModels));
+        }
     }
 
 }

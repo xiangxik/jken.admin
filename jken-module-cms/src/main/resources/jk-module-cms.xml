@@ -6,7 +6,7 @@
   ~ @LastModified: 2020-02-09T21:17:25.389+08:00
   -->
 
-<module name="cms">
+<module name="cms" sortNo="-1000">
     <domains>
         <domain name="文章" code="article" crud="true"/>
         <domain name="文章分类" code="articleCategory" crud="true"/>

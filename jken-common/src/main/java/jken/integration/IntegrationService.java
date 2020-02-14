@@ -32,6 +32,7 @@ public class IntegrationService {
         xStream.useAttributeFor(JkenModule.class, "name");
         xStream.useAttributeFor(JkenModule.class, "ignorePatterns");
         xStream.registerLocalConverter(JkenModule.class, "ignorePatterns", new StringToArrayConverter<>(String.class, i -> i));
+        xStream.useAttributeFor(JkenModule.class, "sortNo");
 
         xStream.alias("domain", JkenModule.Domain.class);
         xStream.useAttributeFor(JkenModule.Domain.class, "name");
@@ -56,6 +57,15 @@ public class IntegrationService {
         xStream.useAttributeFor(JkenModule.Mi.class, "iconCls");
         xStream.useAttributeFor(JkenModule.Mi.class, "authorities");
         xStream.addImplicitCollection(JkenModule.Mi.class, "children", JkenModule.Mi.class);
+
+        xStream.alias("dict", JkenModule.Dict.class);
+        xStream.useAttributeFor(JkenModule.Dict.class, "name");
+        xStream.useAttributeFor(JkenModule.Dict.class, "code");
+        xStream.addImplicitCollection(JkenModule.Dict.class, "items", JkenModule.Dict.Item.class);
+
+        xStream.alias("item", JkenModule.Dict.Item.class);
+        xStream.useAttributeFor(JkenModule.Dict.Item.class, "name");
+        xStream.useAttributeFor(JkenModule.Dict.Item.class, "value");
 
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         try {
