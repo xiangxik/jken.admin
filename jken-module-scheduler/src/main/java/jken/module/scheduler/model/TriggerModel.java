@@ -1,5 +1,6 @@
 package jken.module.scheduler.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jken.module.scheduler.support.BooleanMap;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -51,11 +52,14 @@ public class TriggerModel {
 
     public boolean mayFireAgain;
 
-    @DateTimeFormat(pattern = "YYYY-MM-DD HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date startTime;
 
-    @DateTimeFormat(pattern = "YYYY-MM-DD HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date endTime;
+
     public Date nextFireTime;
     public Date previousFireTime;
     public Date finalFireTime;
