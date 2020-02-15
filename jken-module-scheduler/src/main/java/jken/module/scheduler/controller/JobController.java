@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/job")
@@ -42,7 +41,7 @@ public class JobController extends BaseController {
     @GetMapping(produces = "application/json")
     @ResponseBody
     public List<JobModel> list() throws SchedulerException {
-        return schedulerService.findAllJobs().stream().map(JobModel::from).collect(Collectors.toList());
+        return schedulerService.findAllJobs();
     }
 
     /**
@@ -84,6 +83,9 @@ public class JobController extends BaseController {
     @PostMapping
     @ResponseBody
     public void create(@ModelAttribute @Valid JobModel entity, BindingResult bindingResult) throws SchedulerException {
+        if (schedulerService.existsJob(entity.getName())) {
+            throw new RuntimeException("job name exists");
+        }
         update(entity, bindingResult);
     }
 
@@ -100,7 +102,7 @@ public class JobController extends BaseController {
             throw new RuntimeException("validate error");
         }
 
-        schedulerService.save(entity);
+        schedulerService.saveJob(entity);
     }
 
     /**
@@ -112,7 +114,7 @@ public class JobController extends BaseController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable("id") JobModel entity) throws SchedulerException {
-        schedulerService.delete(entity);
+        schedulerService.deleteJob(entity);
     }
 
     /**
@@ -125,7 +127,7 @@ public class JobController extends BaseController {
     @ResponseBody
     public void batchDelete(@RequestParam(value = "ids[]") JobModel[] jobModels) throws SchedulerException {
         if (jobModels != null) {
-            schedulerService.batchDelete(Lists.newArrayList(jobModels));
+            schedulerService.batchDeleteJobs(Lists.newArrayList(jobModels));
         }
     }
 
@@ -138,7 +140,7 @@ public class JobController extends BaseController {
     @PutMapping("/{id}/exec")
     @ResponseBody
     public void exec(@PathVariable("id") JobModel entity) throws SchedulerException {
-        schedulerService.exec(entity);
+        schedulerService.execJob(entity);
     }
 
 }

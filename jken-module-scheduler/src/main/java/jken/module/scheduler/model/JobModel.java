@@ -24,6 +24,12 @@ public class JobModel {
 
     private String description;
 
+    private boolean persistJobDataAfterExecution;
+    private boolean concurrentExecutionDisallowed;
+    private boolean shouldRecover;
+
+    private boolean executing;
+
     public String getGroup() {
         return group;
     }
@@ -56,7 +62,6 @@ public class JobModel {
         return booleanMap;
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -65,11 +70,46 @@ public class JobModel {
         this.description = description;
     }
 
+    public boolean isPersistJobDataAfterExecution() {
+        return persistJobDataAfterExecution;
+    }
+
+    public void setPersistJobDataAfterExecution(boolean persistJobDataAfterExecution) {
+        this.persistJobDataAfterExecution = persistJobDataAfterExecution;
+    }
+
+    public boolean isConcurrentExecutionDisallowed() {
+        return concurrentExecutionDisallowed;
+    }
+
+    public void setConcurrentExecutionDisallowed(boolean concurrentExecutionDisallowed) {
+        this.concurrentExecutionDisallowed = concurrentExecutionDisallowed;
+    }
+
+    public boolean isShouldRecover() {
+        return shouldRecover;
+    }
+
+    public void setShouldRecover(boolean shouldRecover) {
+        this.shouldRecover = shouldRecover;
+    }
+
+    public boolean isExecuting() {
+        return executing;
+    }
+
+    public void setExecuting(boolean executing) {
+        this.executing = executing;
+    }
+
     public static JobModel from(JobDetail jobDetail) {
         JobModel model = new JobModel();
         model.setName(jobDetail.getKey().getName());
         model.setGroup(jobDetail.getKey().getGroup());
         model.setJobClass(jobDetail.getJobClass());
+        model.setShouldRecover(jobDetail.requestsRecovery());
+        model.setConcurrentExecutionDisallowed(jobDetail.isConcurrentExectionDisallowed());
+        model.setPersistJobDataAfterExecution(jobDetail.isPersistJobDataAfterExecution());
 
         for (Map.Entry<String, Object> entry : jobDetail.getJobDataMap().entrySet()) {
             String key = entry.getKey();
@@ -98,6 +138,7 @@ public class JobModel {
 
         jobDetail.setDescription(this.description);
         jobDetail.setDurability(true);
+        jobDetail.setRequestsRecovery(this.shouldRecover);
         return jobDetail;
     }
 }

@@ -54,13 +54,16 @@
             </script>
 
                 <table class="layui-table"
-                    lay-data="{height: 'full-128', cellMinWidth: 80, page: false, autoSort: false, url:'/job?_path_filter=*,*.name,*.group,*.description', id:'jk-table', toolbar: '#jk-toolbar'}"
+                    lay-data="{height: 'full-128', cellMinWidth: 80, page: false, autoSort: false, url:'/job?_path_filter=*,*.name,*.group,*.description,*.shouldRecover,*.executing,*.persistJobDataAfterExecution,*.concurrentExecutionDisallowed', id:'jk-table', toolbar: '#jk-toolbar'}"
                     lay-filter="jk-table">
                     <thead>
                         <tr>
                             <th lay-data="{checkbox:true}"></th>
                             <th lay-data="{field:'name', sort: true}">作业名称</th>
-                            <th lay-data="{field:'jobClass', width:300, sort: true}">作业类型</th>
+                            <th lay-data="{field:'jobClass', width:300}">作业类型</th>
+                            <th lay-data="{field:'executing', width:80}">执行中</th>
+                            <th lay-data="{field:'persistJobDataAfterExecution', width:100}">执行后保存</th>
+                            <th lay-data="{field:'concurrentExecutionDisallowed', width:120}">禁止并发执行</th>
                             <th lay-data="{width:180, toolbar: '#jk-tool', align: 'center'}">操作</th>
                         </tr>
                     </thead>

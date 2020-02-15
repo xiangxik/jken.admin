@@ -21,6 +21,8 @@
 <body>
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
         <input type="hidden" name="jobClass" value="org.quartz.jobs.ee.mail.SendMailJob">
+        <input type="hidden" name="objectMap['mail.smtp.auth']" value="true">
+        <!--<input type="hidden" name="objectMap['mail.smtp.starttls.enable']" value="true">-->
         <div class="layui-form-item">
             <label class="layui-form-label" jk:required>作业名称</label>
             <div class="layui-input-inline">
