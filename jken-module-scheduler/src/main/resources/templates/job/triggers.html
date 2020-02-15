@@ -25,6 +25,7 @@
             <script id="jk-toolbar" type="text/html">
                 <div class="layui-btn-container">
                     <div class="layui-btn-group">
+                        <button type="button" class="layui-btn" lay-event="create" data-type="Simple">添加简单触发器</button>
                         <button type="button" class="layui-btn" lay-event="create" data-type="Cron">添加Cron触发器</button>
                     </div>
                 </div>
@@ -52,14 +53,14 @@
             parent.layer.title('查看作业【' + entityName + '】的触发器', index);
 
             var cols = [
-                { field: 'id', checkbox: true },
-                { field: 'name', title: '触发器名称' },
-                { field: 'type', title: '触发器类型', width: 100 },
-                { field: 'jobName', title: '作业名称' },
-                { field: 'startTime', title: '开始时间', width: 100 },
-                { field: 'endTime', title: '结束时间', width: 100 },
-                { field: 'nextFireTime', title: '下一次执行', width: 120 },
-                { field: 'previousFireTime', title: '上一次执行', width: 120 }
+                { field: 'id', checkbox: true, fixed: 'left' },
+                { field: 'name', title: '触发器名称', width: 200, fixed: 'left' },
+                { field: 'type', title: '触发器类型', width: 100, fixed: 'left' },
+                { field: 'jobName', title: '作业名称', width: 200, fixed: 'left' },
+                { field: 'startTime', title: '开始时间', width: 210 },
+                { field: 'endTime', title: '结束时间', width: 210 },
+                { field: 'nextFireTime', title: '下一次执行', width: 210 },
+                { field: 'previousFireTime', title: '上一次执行', width: 210 }
             ];
             table.render({
                 height: 'full-99',

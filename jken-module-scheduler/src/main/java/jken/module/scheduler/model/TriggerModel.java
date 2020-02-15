@@ -298,7 +298,6 @@ public class TriggerModel {
         SimpleTriggerImpl trigger = new SimpleTriggerImpl();
         trigger.setRepeatInterval(model.getRepeatInterval());
         trigger.setRepeatCount(model.getRepeatCount());
-        trigger.setTimesTriggered(model.getTimesTriggered());
 
         trigger.setStartTime(model.getStartTime());
         trigger.setEndTime(model.getEndTime());
