@@ -4,6 +4,7 @@ import jken.module.scheduler.support.BooleanMap;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.impl.JobDetailImpl;
 
 import javax.validation.constraints.NotNull;
@@ -11,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JobModel {
-    private String group;
-
     @NotNull
     private String name;
+
+    private String group;
 
     @NotNull
     private Class<? extends Job> jobClass;
@@ -100,6 +101,10 @@ public class JobModel {
 
     public void setExecuting(boolean executing) {
         this.executing = executing;
+    }
+
+    public JobKey jobKey() {
+        return JobKey.jobKey(this.name, this.group);
     }
 
     public static JobModel from(JobDetail jobDetail) {

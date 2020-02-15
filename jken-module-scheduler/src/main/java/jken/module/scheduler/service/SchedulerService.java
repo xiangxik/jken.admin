@@ -2,6 +2,7 @@ package jken.module.scheduler.service;
 
 import com.google.common.base.Strings;
 import jken.module.scheduler.model.JobModel;
+import jken.module.scheduler.model.TriggerModel;
 import jken.security.CorpCodeHolder;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -46,26 +47,73 @@ public class SchedulerService {
     }
 
     public void saveJob(JobModel jobModel) throws SchedulerException {
-        String corpCode = CorpCodeHolder.getCurrentCorpCode();
         if (Strings.isNullOrEmpty(jobModel.getGroup())) {
-            jobModel.setGroup(corpCode);
+            jobModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
         }
-        if (!Objects.equals(jobModel.getGroup(), corpCode)) {
-            throw new RuntimeException("could not change group");
-        }
+        assertGroup(jobModel.getGroup());
         scheduler.addJob(jobModel.toJobDetail(), true);
     }
 
     public void deleteJob(JobModel jobModel) throws SchedulerException {
-        scheduler.deleteJob(JobKey.jobKey(jobModel.getName(), jobModel.getGroup()));
+        assertGroup(jobModel.getGroup());
+        scheduler.deleteJob(jobModel.jobKey());
     }
 
     public void batchDeleteJobs(List<JobModel> jobModels) throws SchedulerException {
-        scheduler.deleteJobs(jobModels.stream().map(jobModel -> JobKey.jobKey(jobModel.getName(), jobModel.getGroup())).collect(Collectors.toList()));
+        scheduler.deleteJobs(jobModels.stream().map(jobModel -> {
+            assertGroup(jobModel.getGroup());
+            return jobModel.jobKey();
+        }).collect(Collectors.toList()));
     }
 
     public void execJob(JobModel jobModel) throws SchedulerException {
-        scheduler.triggerJob(JobKey.jobKey(jobModel.getName(), jobModel.getGroup()));
+        assertGroup(jobModel.getGroup());
+        scheduler.triggerJob(jobModel.jobKey());
+    }
+
+    public List<TriggerModel> findJobTriggers(String name) throws SchedulerException {
+        List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(name, CorpCodeHolder.getCurrentCorpCode()));
+        return triggers.stream().map(TriggerModel::from).collect(Collectors.toList());
+    }
+
+    public List<TriggerModel> findAllTriggers() throws SchedulerException {
+        Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(CorpCodeHolder.getCurrentCorpCode()));
+        return triggerKeys.stream().map(triggerKey -> {
+            try {
+                Trigger trigger = scheduler.getTrigger(triggerKey);
+                return TriggerModel.from(trigger);
+            } catch (SchedulerException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+    }
+
+    public void saveTrigger(TriggerModel triggerModel) throws SchedulerException {
+        if (Strings.isNullOrEmpty(triggerModel.getGroup())) {
+            triggerModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
+        }
+        assertGroup(triggerModel.getGroup());
+
+        scheduler.scheduleJob(triggerModel.toTrigger());
+    }
+
+    public void deleteTrigger(TriggerModel triggerModel) throws SchedulerException {
+        assertGroup(triggerModel.getGroup());
+        scheduler.unscheduleJob(triggerModel.triggerKey());
+    }
+
+    public void batchDeleteTriggers(List<TriggerModel> triggerModels) throws SchedulerException {
+        scheduler.unscheduleJobs(triggerModels.stream().map(triggerModel -> {
+            assertGroup(triggerModel.getGroup());
+            return triggerModel.triggerKey();
+        }).collect(Collectors.toList()));
+    }
+
+    protected void assertGroup(String group) {
+        String corpCode = CorpCodeHolder.getCurrentCorpCode();
+        if (!Objects.equals(group, corpCode)) {
+            throw new RuntimeException("could not change group");
+        }
     }
 
 }
