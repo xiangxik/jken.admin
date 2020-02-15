@@ -16,12 +16,19 @@
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
         name="viewport">
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
+    <style>
+        .layui-form-label {
+            width: 120px;
+        }
+        .layui-input-block {
+            margin-left: 150px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
+    <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px" th:object="${entity}">
         <input type="hidden" name="type" value="Cron">
-
         <div class="layui-form-item">
             <label class="layui-form-label" jk:required>所属作业</label>
             <div class="layui-input-inline">
@@ -41,13 +48,21 @@
         <div class="layui-form-item">
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input datetime" th:field="*{startTime}">
+                <input type="text" class="layui-input" id="jk-datetime-startTime" th:field="*{startTime}">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input datetime" th:field="*{endTime}">
+                <input type="text" class="layui-input" id="jk-datetime-endTime" th:field="*{endTime}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" jk:required>Cron表达式</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入Cron表达式"
+                       th:field="*{cronExpression}" type="text">
             </div>
         </div>
 
@@ -78,14 +93,18 @@
             var $ = layui.$, form = layui.form, laydate = layui.laydate;
 
             laydate.render({
-                elem: '.datetime', 
+                elem: '#jk-datetime-startTime',
+                type: 'datetime'
+            });
+            laydate.render({
+                elem: '#jk-datetime-endTime',
                 type: 'datetime'
             });
 
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
                 $.ajax({
-                    url: base + '/job' + (entityName ? '/' + (entityName + '-' + entityGroup) : ''),
+                    url: base + '/trigger' + (entityName ? '/' + (entityName + '-' + entityGroup) : ''),
                     data: data.field,
                     dataType: 'json',
                     type: entityName ? 'put' : 'post',

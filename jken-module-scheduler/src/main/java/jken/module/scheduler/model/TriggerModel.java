@@ -1,11 +1,13 @@
 package jken.module.scheduler.model;
 
 import jken.module.scheduler.support.BooleanMap;
-import org.quartz.JobKey;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
+import org.quartz.*;
+import org.quartz.impl.triggers.CronTriggerImpl;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,11 +39,22 @@ public class TriggerModel {
     private final Map<String, Object> objectMap = new HashMap<>();
     private final BooleanMap booleanMap = new BooleanMap();
 
-    private int priority;
+    // Cron
+    private String cronExpression;
+
+    // Simple
+    private int repeatCount = 0;
+    private long repeatInterval = 0;
+    private int timesTriggered = 0;
+
+    private int priority = 0;
 
     public boolean mayFireAgain;
 
+    @DateTimeFormat(pattern = "YYYY-MM-DD HH:mm:ss")
     public Date startTime;
+
+    @DateTimeFormat(pattern = "YYYY-MM-DD HH:mm:ss")
     public Date endTime;
     public Date nextFireTime;
     public Date previousFireTime;
@@ -177,6 +190,38 @@ public class TriggerModel {
         this.misfireInstruction = misfireInstruction;
     }
 
+    public String getCronExpression() {
+        return cronExpression;
+    }
+
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
+    }
+
+    public int getRepeatCount() {
+        return repeatCount;
+    }
+
+    public void setRepeatCount(int repeatCount) {
+        this.repeatCount = repeatCount;
+    }
+
+    public long getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    public void setRepeatInterval(long repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
+
+    public int getTimesTriggered() {
+        return timesTriggered;
+    }
+
+    public void setTimesTriggered(int timesTriggered) {
+        this.timesTriggered = timesTriggered;
+    }
+
     public Type getType() {
         return type;
     }
@@ -186,10 +231,89 @@ public class TriggerModel {
     }
 
     public static TriggerModel from(Trigger trigger) {
-        return null;
+        TriggerModel model = new TriggerModel();
+        model.setName(trigger.getKey().getName());
+        model.setGroup(trigger.getKey().getGroup());
+        model.setJobName(trigger.getJobKey().getName());
+        model.setJobGroup(trigger.getJobKey().getGroup());
+        model.setDescription(trigger.getDescription());
+        model.setStartTime(trigger.getStartTime());
+        model.setEndTime(trigger.getEndTime());
+        model.setFinalFireTime(trigger.getFinalFireTime());
+        model.setMayFireAgain(trigger.mayFireAgain());
+        model.setNextFireTime(trigger.getNextFireTime());
+        model.setPreviousFireTime(trigger.getPreviousFireTime());
+        model.setMisfireInstruction(trigger.getMisfireInstruction());
+        model.setPriority(trigger.getPriority());
+        model.setCalendarName(trigger.getCalendarName());
+
+        if (trigger instanceof CronTrigger) {
+            model.setType(Type.Cron);
+            model.setCronExpression(((CronTrigger) trigger).getCronExpression());
+        } else if (trigger instanceof SimpleTrigger) {
+            model.setType(Type.Simple);
+            model.setRepeatCount(((SimpleTrigger) trigger).getRepeatCount());
+            model.setRepeatInterval(((SimpleTrigger) trigger).getRepeatInterval());
+            model.setTimesTriggered(((SimpleTrigger) trigger).getTimesTriggered());
+        }
+
+        return model;
     }
 
     public Trigger toTrigger() {
-        return null;
+        switch (type) {
+            case Cron:
+                return buildCronTrigger(this);
+            default:
+                return buildSimpleTrigger(this);
+        }
+
+    }
+
+    public static Trigger buildCronTrigger(TriggerModel model) {
+        CronTriggerImpl trigger = new CronTriggerImpl();
+        try {
+            trigger.setCronExpression(model.getCronExpression());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        trigger.setStartTime(model.getStartTime());
+        trigger.setEndTime(model.getEndTime());
+        trigger.setName(model.getName());
+        trigger.setGroup(model.getGroup());
+        trigger.setJobName(model.getJobName());
+        trigger.setJobGroup(model.getJobGroup());
+        trigger.setDescription(model.getDescription());
+        trigger.setPriority(model.getPriority());
+
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.putAll(model.getObjectMap());
+        jobDataMap.putAll(model.getBooleanMap());
+        trigger.setJobDataMap(jobDataMap);
+
+        return trigger;
+    }
+
+    public static Trigger buildSimpleTrigger(TriggerModel model) {
+        SimpleTriggerImpl trigger = new SimpleTriggerImpl();
+        trigger.setRepeatInterval(model.getRepeatInterval());
+        trigger.setRepeatCount(model.getRepeatCount());
+        trigger.setTimesTriggered(model.getTimesTriggered());
+
+        trigger.setStartTime(model.getStartTime());
+        trigger.setEndTime(model.getEndTime());
+        trigger.setName(model.getName());
+        trigger.setGroup(model.getGroup());
+        trigger.setJobName(model.getJobName());
+        trigger.setJobGroup(model.getJobGroup());
+        trigger.setDescription(model.getDescription());
+        trigger.setPriority(model.getPriority());
+
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.putAll(model.getObjectMap());
+        jobDataMap.putAll(model.getBooleanMap());
+        trigger.setJobDataMap(jobDataMap);
+
+        return trigger;
     }
 }

@@ -48,6 +48,9 @@
 
             var entityId = (entityName + '-' + entityGroup);
 
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.title('查看作业【' + entityName + '】的触发器', index);
+
             var cols = [
                 { field: 'id', checkbox: true },
                 { field: 'name', title: '触发器名称' },
@@ -75,18 +78,9 @@
                 switch (obj.event) {
                     case 'create':
                         var type = $(this).data("type");
-                        layer.open({
-                            type: 2,
-                            title: '添加作业',
-                            content: base + '/trigger/add?type=' + type + '&job=' + entityId,
-                            maxmin: true,
-                            area: ['800px', '800px'],
-                            btn: ['确定', '取消'],
-                            yes: function (index, layero) {
-                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
-                                submit.click();
-                            }
-                        });
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.title('新建作业【' + entityName + '】的触发器', index);
+                        window.location = base + '/trigger/add?type=' + type + '&job=' + entityId;
                         break;
                 };
             });

@@ -93,6 +93,10 @@ public class SchedulerService {
             triggerModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
         }
         assertGroup(triggerModel.getGroup());
+        if (Strings.isNullOrEmpty(triggerModel.getJobGroup())) {
+            triggerModel.setJobGroup(CorpCodeHolder.getCurrentCorpCode());
+        }
+        assertGroup(triggerModel.getJobGroup());
 
         scheduler.scheduleJob(triggerModel.toTrigger());
     }

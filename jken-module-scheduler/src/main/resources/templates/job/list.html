@@ -215,8 +215,16 @@
                         title: '查看作业【' + obj.data.name + '】的触发器',
                         content: base + '/job/' + id + '/triggers',
                         maxmin: true,
-                        area: ['1200px', '1000px'],
-                        btn: ['关闭']
+                        area: ['1000px', '800px'],
+                         btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                                if(submit) {
+                                    submit.click();
+                                } else {
+                                    layer.close(index);
+                                }
+                            }
                     });
                 }
             });
