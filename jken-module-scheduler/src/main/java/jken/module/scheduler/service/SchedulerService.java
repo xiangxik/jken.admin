@@ -88,6 +88,10 @@ public class SchedulerService {
         }).collect(Collectors.toList());
     }
 
+    public boolean existsTrigger(String name) throws SchedulerException {
+        return scheduler.checkExists(TriggerKey.triggerKey(name, CorpCodeHolder.getCurrentCorpCode()));
+    }
+
     public void saveTrigger(TriggerModel triggerModel) throws SchedulerException {
         if (Strings.isNullOrEmpty(triggerModel.getGroup())) {
             triggerModel.setGroup(CorpCodeHolder.getCurrentCorpCode());
@@ -98,7 +102,12 @@ public class SchedulerService {
         }
         assertGroup(triggerModel.getJobGroup());
 
-        scheduler.scheduleJob(triggerModel.toTrigger());
+        Trigger trigger = triggerModel.toTrigger();
+        if (scheduler.checkExists(trigger.getKey())) {
+            scheduler.rescheduleJob(trigger.getKey(), trigger);
+        } else {
+            scheduler.scheduleJob(trigger);
+        }
     }
 
     public void deleteTrigger(TriggerModel triggerModel) throws SchedulerException {

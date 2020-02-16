@@ -22,34 +22,16 @@
 <body>
     <div class="layui-fluid">
         <div class="layui-card">
-            <div class="layui-card-header layuiadmin-card-header-auto">
-
-                <div class="layui-form">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">名称</label>
-                            <div class="layui-input-inline">
-                                <input autocomplete="off" class="layui-input" name="name" placeholder="请输入" type="text">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <button class="layui-btn layuiadmin-btn-list" lay-filter="jk-search" lay-submit>
-                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
             <div class="layui-card-body">
-
                 <script id="jk-toolbar" type="text/html">
                     <div class="layui-btn-container">
                         <div class="layui-btn-group">
                             <button type="button" class="layui-btn" lay-event="create" th:each="jobClass:${#dict.items('job_class')}" th:job="${jobClass.value}" th:title="${jobClass.name}" th:text="${jobClass.name}">新增</button>
                             <button type="button" class="layui-btn" lay-event="batchDelete">批量删除</button>
                         </div>
+                        <button class="layui-btn" lay-event="refresh" style="margin-left: 20px;">
+                            <i class="layui-icon layui-icon-refresh-3"></i>
+                        </button>
                     </div>
                 </script>
 
@@ -61,9 +43,9 @@
                             <th lay-data="{checkbox:true}"></th>
                             <th lay-data="{field:'name', sort: true}">作业名称</th>
                             <th lay-data="{field:'jobClass', width:300}">作业类型</th>
-                            <th lay-data="{field:'persistJobDataAfterExecution', width:100}">执行后保存</th>
-                            <th lay-data="{field:'concurrentExecutionDisallowed', width:120}">禁止并发执行</th>
-                            <th lay-data="{field:'executing', width:80, fixed: 'right'}">执行中</th>
+                            <th lay-data="{field:'persistJobDataAfterExecution', width:100, templet: function(d){return d.persistJobDataAfterExecution?'是':'否'}}">执行后保存</th>
+                            <th lay-data="{field:'concurrentExecutionDisallowed', width:120, templet: function(d){return d.concurrentExecutionDisallowed?'是':'否'}}">禁止并发执行</th>
+                            <th lay-data="{field:'executing', width:80, fixed: 'right', templet: function(d){return d.executing?'是':'否'}}">执行中</th>
                             <th lay-data="{width:180, toolbar: '#jk-tool', fixed: 'right', align: 'center'}">操作</th>
                         </tr>
                     </thead>
@@ -150,6 +132,9 @@
                             layer.msg('请至少选择一条记录', { time: 2000 }, function () { });
                         }
                         break;
+                    case 'refresh':
+                        table.reload('jk-table');
+                        break;
                 };
             });
 
@@ -215,7 +200,7 @@
                         title: '查看作业【' + obj.data.name + '】的触发器',
                         content: base + '/job/' + id + '/triggers',
                         maxmin: true,
-                        area: ['1200px', '800px'],
+                        area: ['1200px', '1000px'],
                          btn: ['确定', '取消'],
                             yes: function (index, layero) {
                                 var submit = layero.find('iframe').contents().find("#jk-form-submit");
@@ -227,16 +212,6 @@
                             }
                     });
                 }
-            });
-
-            //监听搜索
-            form.on('submit(jk-search)', function (data) {
-                var field = data.field;
-
-                //执行重载
-                table.reload('jk-table', {
-                    where: field
-                });
             });
         });
     </script>

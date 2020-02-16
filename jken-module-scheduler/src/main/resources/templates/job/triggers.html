@@ -28,9 +28,18 @@
                         <button type="button" class="layui-btn" lay-event="create" data-type="Simple">添加简单触发器</button>
                         <button type="button" class="layui-btn" lay-event="create" data-type="Cron">添加Cron触发器</button>
                     </div>
+                    <button class="layui-btn" lay-event="refresh" style="margin-left: 20px;">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </button>
                 </div>
             </script>
             <table id="jk-table" lay-filter="jk-table"></table>
+            <script id="jk-tool" type="text/html">
+                <div class="layui-btn-group">
+                    <button type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+                    <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">移除</button>
+                </div>
+            </script>
         </div>
     </div>
 
@@ -56,19 +65,21 @@
                 { field: 'id', checkbox: true, fixed: 'left' },
                 { field: 'name', title: '触发器名称', width: 200, fixed: 'left' },
                 { field: 'type', title: '触发器类型', width: 100, fixed: 'left' },
-                { field: 'jobName', title: '作业名称', width: 200, fixed: 'left' },
-                { field: 'startTime', title: '开始时间', width: 210 },
-                { field: 'endTime', title: '结束时间', width: 210 },
-                { field: 'nextFireTime', title: '下一次执行', width: 210 },
-                { field: 'previousFireTime', title: '上一次执行', width: 210 }
+                { field: 'startTime', title: '开始时间', width: 160 },
+                { field: 'endTime', title: '结束时间', width: 160 },
+                { field: 'previousFireTime', title: '上一次执行', width: 160 },
+                { field: 'nextFireTime', title: '下一次执行', width: 160 },
+                { field: 'mayFireAgain', title: '再次触发', width: 90, templet: function(d){return d.executing?'是':'否'}},
+                { field: 'timesTriggered', title: '已触发次数', width: 100},
+                { width: 100, title:'操作', toolbar: '#jk-tool', align: 'center', fixed: 'right'}
             ];
             table.render({
-                height: 'full-99',
-                cellMinWidth: 80,
+                height: 'full-20',
+                cellMinWidth: 120,
                 page: false,
                 toolbar: '#jk-toolbar',
                 autoSort: false,
-                url: base + '/job/' + entityId + '/triggers?_path_filter=*,*.name,*.group,*.jobName,*.jobGroup,*.type,*.description,*.priority,*.mayFireAgain,*.startTime,*.endTime,*.nextFireTime,*.previousFireTime,*.finalFireTime,*.misfireInstruction',
+                url: base + '/job/' + entityId + '/triggers?_path_filter=*,*.name,*.group,*.jobName,*.jobGroup,*.type,*.description,*.priority,*.mayFireAgain,*.startTime,*.endTime,*.timesTriggered,*.nextFireTime,*.previousFireTime,*.finalFireTime,*.misfireInstruction',
                 id: 'jk-table',
                 elem: "#jk-table",
                 cols: [cols]
@@ -79,11 +90,63 @@
                 switch (obj.event) {
                     case 'create':
                         var type = $(this).data("type");
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.title('新建作业【' + entityName + '】的触发器', index);
-                        window.location = base + '/trigger/add?type=' + type + '&job=' + entityId;
+                        layer.open({
+                            type: 2,
+                            title: '新建作业【' + entityName + '】的触发器',
+                            content: base + '/trigger/add?type=' + type + '&job=' + entityId,
+                            maxmin: true,
+                            area: ['800px', '800px'],
+                            btn: ['确定', '取消'],
+                            yes: function (index, layero) {
+                                var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                                submit.click();
+                            }
+                        });
+                        break;
+                    case 'refresh':
+                        table.reload('jk-table');
                         break;
                 };
+            });
+
+            //监听行工具事件
+            table.on('tool(jk-table)', function (obj) {
+                var data = obj.data;
+                var id = obj.data.name + '-' + obj.data.group;
+                if (obj.event === 'del') {
+                    layer.confirm('真的删除么？', function (index) {
+                        $.ajax({
+                            url: base + '/trigger/' + id,
+                            dataType: 'json',
+                            type: 'delete',
+                            success: function (resp) {
+                                if (resp.code == 0) {
+                                    obj.del();
+                                    layer.close(index);
+                                    table.reload('jk-table');
+                                } else {
+                                    layer.msg(resp.msg, { time: 2000 }, function () { });
+                                }
+                            },
+                            error: function (resp) {
+                                layer.msg(resp.responseJSON.message, { time: 2000 }, function () { });
+                            }
+                        });
+                    });
+                } else if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        title: '编辑作业',
+                        content: base + '/trigger/' + id,
+                        maxmin: true,
+                        area: ['800px', '800px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var submit = layero.find('iframe').contents().find("#jk-form-submit");
+                            submit.click();
+                        }
+                    });
+                }
             });
         });
     </script>

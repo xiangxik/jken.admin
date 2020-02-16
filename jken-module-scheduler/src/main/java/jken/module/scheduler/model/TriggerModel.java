@@ -44,13 +44,13 @@ public class TriggerModel {
     private String cronExpression;
 
     // Simple
-    private int repeatCount = 0;
-    private long repeatInterval = 0;
-    private int timesTriggered = 0;
+    private Integer repeatCount;
+    private Long repeatInterval;
+    private Integer timesTriggered;
 
-    private int priority = 0;
+    private Integer priority;
 
-    public boolean mayFireAgain;
+    public Boolean mayFireAgain;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -60,11 +60,16 @@ public class TriggerModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date endTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date nextFireTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date previousFireTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date finalFireTime;
 
-    public int misfireInstruction;
+    public Integer misfireInstruction;
 
     public TriggerKey triggerKey() {
         return TriggerKey.triggerKey(name, group);
@@ -122,6 +127,14 @@ public class TriggerModel {
         this.calendarName = calendarName;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public Map<String, Object> getObjectMap() {
         return objectMap;
     }
@@ -130,19 +143,51 @@ public class TriggerModel {
         return booleanMap;
     }
 
-    public int getPriority() {
+    public String getCronExpression() {
+        return cronExpression;
+    }
+
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
+    }
+
+    public Integer getRepeatCount() {
+        return repeatCount;
+    }
+
+    public void setRepeatCount(Integer repeatCount) {
+        this.repeatCount = repeatCount;
+    }
+
+    public Long getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    public void setRepeatInterval(Long repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
+
+    public Integer getTimesTriggered() {
+        return timesTriggered;
+    }
+
+    public void setTimesTriggered(Integer timesTriggered) {
+        this.timesTriggered = timesTriggered;
+    }
+
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
-    public boolean isMayFireAgain() {
+    public Boolean getMayFireAgain() {
         return mayFireAgain;
     }
 
-    public void setMayFireAgain(boolean mayFireAgain) {
+    public void setMayFireAgain(Boolean mayFireAgain) {
         this.mayFireAgain = mayFireAgain;
     }
 
@@ -186,52 +231,12 @@ public class TriggerModel {
         this.finalFireTime = finalFireTime;
     }
 
-    public int getMisfireInstruction() {
+    public Integer getMisfireInstruction() {
         return misfireInstruction;
     }
 
-    public void setMisfireInstruction(int misfireInstruction) {
+    public void setMisfireInstruction(Integer misfireInstruction) {
         this.misfireInstruction = misfireInstruction;
-    }
-
-    public String getCronExpression() {
-        return cronExpression;
-    }
-
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression;
-    }
-
-    public int getRepeatCount() {
-        return repeatCount;
-    }
-
-    public void setRepeatCount(int repeatCount) {
-        this.repeatCount = repeatCount;
-    }
-
-    public long getRepeatInterval() {
-        return repeatInterval;
-    }
-
-    public void setRepeatInterval(long repeatInterval) {
-        this.repeatInterval = repeatInterval;
-    }
-
-    public int getTimesTriggered() {
-        return timesTriggered;
-    }
-
-    public void setTimesTriggered(int timesTriggered) {
-        this.timesTriggered = timesTriggered;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public static TriggerModel from(Trigger trigger) {
@@ -265,13 +270,38 @@ public class TriggerModel {
     }
 
     public Trigger toTrigger() {
-        switch (type) {
-            case Cron:
-                return buildCronTrigger(this);
-            default:
-                return buildSimpleTrigger(this);
+        TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger().withIdentity(triggerKey()).forJob(jobKey()).withDescription(description);
+        if (startTime != null) {
+            triggerBuilder.startAt(startTime);
+        }
+        if (endTime != null) {
+            triggerBuilder.endAt(endTime);
         }
 
+        switch (type) {
+            case Cron:
+                triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cronExpression));
+                break;
+            case Simple:
+                SimpleScheduleBuilder simpleScheduleBuilder = SimpleScheduleBuilder.simpleSchedule();
+                if (repeatCount != null) {
+                    simpleScheduleBuilder.withRepeatCount(repeatCount);
+                }
+                if (repeatInterval != null) {
+                    simpleScheduleBuilder.withIntervalInMilliseconds(repeatInterval);
+                }
+                triggerBuilder.withSchedule(simpleScheduleBuilder);
+                break;
+            case DailyTimeInterval:
+                DailyTimeIntervalScheduleBuilder dailyTimeIntervalScheduleBuilder = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule();
+                triggerBuilder.withSchedule(dailyTimeIntervalScheduleBuilder);
+                break;
+            case CalendarInterval:
+                CalendarIntervalScheduleBuilder calendarIntervalScheduleBuilder = CalendarIntervalScheduleBuilder.calendarIntervalSchedule();
+                triggerBuilder.withSchedule(calendarIntervalScheduleBuilder);
+        }
+
+        return triggerBuilder.build();
     }
 
     public static Trigger buildCronTrigger(TriggerModel model) {

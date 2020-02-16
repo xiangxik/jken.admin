@@ -1,11 +1,7 @@
 package jken.module.scheduler.model;
 
 import jken.module.scheduler.support.BooleanMap;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.impl.JobDetailImpl;
+import org.quartz.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -131,19 +127,9 @@ public class JobModel {
     }
 
     public JobDetail toJobDetail() {
-        JobDetailImpl jobDetail = new JobDetailImpl();
-        jobDetail.setName(this.name);
-        jobDetail.setGroup(this.group);
-        jobDetail.setJobClass(this.jobClass);
-
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.putAll(this.objectMap);
         jobDataMap.putAll(this.booleanMap);
-        jobDetail.setJobDataMap(jobDataMap);
-
-        jobDetail.setDescription(this.description);
-        jobDetail.setDurability(true);
-        jobDetail.setRequestsRecovery(this.shouldRecover);
-        return jobDetail;
+        return JobBuilder.newJob(this.jobClass).withIdentity(jobKey()).requestRecovery(this.shouldRecover).storeDurably(true).withDescription(this.description).setJobData(jobDataMap).build();
     }
 }

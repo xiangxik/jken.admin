@@ -33,8 +33,7 @@
             <label class="layui-form-label" jk:required>所属作业</label>
             <div class="layui-input-inline">
                 <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入作业名称"
-                    th:field="*{jobName}" type="text"
-                    th:attrappend="readyonly=${entity.jobName==null?'':'readonly'}">
+                    th:field="*{jobName}" type="text" readonly>
             </div>
         </div>
         <div class="layui-form-item">
