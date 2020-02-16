@@ -7,6 +7,7 @@
 
 package jken.module.core.controller;
 
+import com.google.common.base.Strings;
 import com.querydsl.core.types.Predicate;
 import jken.module.core.entity.Corp;
 import jken.module.core.service.CorpService;
@@ -20,6 +21,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +37,31 @@ public class CorpController extends EntityController<Corp, Long> {
     public Page<Corp> list(Predicate predicate, @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return super.doInternalPage(predicate, pageable);
     }
+
+    @Override
+    public String showDetailAdd(Corp entity, Model model) {
+        if (entity == null) {
+            entity = getService().createNew();
+        }
+        model.addAttribute("entity", entity);
+        return "/corp/add";
+    }
+
+    @Override
+    public void create(@Valid Corp entity, BindingResult bindingResult) {
+        String adminUsername = getParameter("adminUsername");
+        String adminPassword = getParameter("adminPassword");
+
+        if(Strings.isNullOrEmpty(adminUsername) || Strings.isNullOrEmpty(adminPassword)) {
+            bindingResult.addError(new ObjectError("entity", "admin should not be null"));
+        }
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException("validate error");
+        }
+
+        corpService.createNewCorp(entity.getName(), entity.getCode(), adminUsername, adminPassword);
+    }
+
 
     @GetMapping(value = "/info", produces = "text/html")
     public String showInfo(Model model) {

@@ -5,9 +5,9 @@
  * @LastModified: 2020-02-10T21:00:11.077+08:00
  */
 
-package jken.module.cms.service;
+package jken.module.blog.service;
 
-import jken.module.cms.entity.Article;
+import jken.module.blog.entity.Article;
 import jken.support.service.CrudService;
 import org.springframework.stereotype.Service;
 

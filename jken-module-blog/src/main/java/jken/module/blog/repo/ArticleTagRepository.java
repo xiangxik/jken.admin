@@ -5,11 +5,11 @@
  * @LastModified: 2020-02-10T20:56:15.043+08:00
  */
 
-package jken.module.cms.repo;
+package jken.module.blog.repo;
 
+import jken.module.blog.entity.ArticleTag;
 import com.querydsl.core.types.dsl.StringExpression;
-import jken.module.cms.entity.ArticleTag;
-import jken.module.cms.entity.QArticleTag;
+import jken.module.blog.entity.QArticleTag;
 import jken.support.data.jpa.QuerydslEntityRepository;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;

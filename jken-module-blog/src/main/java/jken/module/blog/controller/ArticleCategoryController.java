@@ -5,10 +5,10 @@
  * @LastModified: 2020-02-10T21:03:20.238+08:00
  */
 
-package jken.module.cms.controller;
+package jken.module.blog.controller;
 
+import jken.module.blog.entity.ArticleCategory;
 import com.querydsl.core.types.Predicate;
-import jken.module.cms.entity.ArticleCategory;
 import jken.support.web.TreeController;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;

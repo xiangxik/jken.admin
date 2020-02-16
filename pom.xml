@@ -17,6 +17,7 @@
     <modules>
         <module>jken-common</module>
         <module>jken-module-core</module>
+        <module>jken-module-blog</module>
         <module>jken-module-cms</module>
         <module>jken-module-scheduler</module>
         <module>jken-webapp</module>

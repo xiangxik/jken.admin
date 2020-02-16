@@ -51,10 +51,17 @@ public class CorpService extends CrudService<Corp, Long> {
     @Transactional
     public Corp createNewCorp(String name, String code, String adminUsername, String adminPassword) {
         Corp corp = buildCorp(name, code);
-        List<MenuItem> menuItems = buildMenuItems(code);
-        Role role = buildAdminRole(code, menuItems);
+
+        List<JkenModule> modules = IntegrationService.getModules();
+        List<String> authorities = IntegrationService.getAuthorities().stream().map(Authority::getCode).collect(Collectors.toList());
+
+        List<MenuItem> menuItems = buildMenuItems(code, modules);
+
+        Role role = buildAdminRole(code, menuItems, authorities);
+
         buildAdmin(code, role, adminUsername, adminPassword);
-        buildDicts(code);
+
+        buildDicts(code, modules);
         return corp;
     }
 
@@ -66,10 +73,10 @@ public class CorpService extends CrudService<Corp, Long> {
         return save(corp);
     }
 
-    protected List<MenuItem> buildMenuItems(String corpCode) {
+    protected List<MenuItem> buildMenuItems(String corpCode, List<JkenModule> modules) {
         final List<MenuItem> menuItems = new ArrayList<>();
         Integer sortNo = 1;
-        for (JkenModule module : IntegrationService.getModules()) {
+        for (JkenModule module : modules) {
             List<JkenModule.Mi> mis = module.getMenus();
             if (mis != null) {
                 buildMenus(menuItems, mis, null, corpCode, sortNo);
@@ -92,13 +99,13 @@ public class CorpService extends CrudService<Corp, Long> {
         }
     }
 
-    protected Role buildAdminRole(String corpCode, List<MenuItem> menuItems) {
+    protected Role buildAdminRole(String corpCode, List<MenuItem> menuItems, List<String> authorities) {
         Role role = roleService.createNew();
         role.setLocked(true);
         role.setName("管理员");
         role.setCode(Authority.AUTHORITY_ADMIN);
         role.setMenuItems(menuItems);
-        role.setAuthorities(IntegrationService.getAuthorities().stream().map(Authority::getCode).collect(Collectors.toList()));
+        role.setAuthorities(authorities);
         role.setCorpCode(corpCode);
         roleService.save(role);
         return role;
@@ -129,8 +136,8 @@ public class CorpService extends CrudService<Corp, Long> {
         return mi;
     }
 
-    private void buildDicts(String corpCode) {
-        IntegrationService.getModules().forEach(module -> {
+    private void buildDicts(String corpCode, List<JkenModule> modules) {
+        modules.forEach(module -> {
             if (module.getDicts() != null) {
                 module.getDicts().forEach(dict -> {
                     Dict dictEntity = dictService.createNew();

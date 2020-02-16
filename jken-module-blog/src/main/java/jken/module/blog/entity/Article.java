@@ -5,7 +5,7 @@
  * @LastModified: 2020-02-10T20:40:49.509+08:00
  */
 
-package jken.module.cms.entity;
+package jken.module.blog.entity;
 
 import jken.module.core.entity.User;
 import jken.support.data.jpa.CorpableEntity;

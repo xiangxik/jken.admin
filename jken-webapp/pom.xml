@@ -23,6 +23,11 @@
     <dependencies>
         <dependency>
             <groupId>jken</groupId>
+            <artifactId>jken-module-blog</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jken</groupId>
             <artifactId>jken-module-cms</artifactId>
             <version>${project.version}</version>
         </dependency>

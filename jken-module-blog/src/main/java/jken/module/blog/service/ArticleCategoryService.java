@@ -5,9 +5,9 @@
  * @LastModified: 2020-02-10T21:01:31.578+08:00
  */
 
-package jken.module.cms.service;
+package jken.module.blog.service;
 
-import jken.module.cms.entity.ArticleCategory;
+import jken.module.blog.entity.ArticleCategory;
 import jken.support.service.TreeService;
 import org.springframework.stereotype.Service;
 

@@ -99,6 +99,8 @@ public class IntegrationService {
             integration.integrate(module);
         }
 
+        AnnotationAwareOrderComparator.sort(modules);
+
         for (JkenModule module : modules) {
             if (module.getIgnorePatterns() != null && module.getIgnorePatterns().length > 0) {
                 Collections.addAll(ignorePatterns, module.getIgnorePatterns());
