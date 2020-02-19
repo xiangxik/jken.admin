@@ -5,7 +5,7 @@
  * @LastModified: 2020-02-01T20:59:46.468+08:00
  */
 
-package jken.module.core.controller;
+package jken.module.core.web;
 
 import com.google.common.base.Strings;
 import com.querydsl.core.types.Predicate;

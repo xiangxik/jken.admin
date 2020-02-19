@@ -1,6 +1,6 @@
-package jken.module.scheduler.model;
+package jken.module.web.model;
 
-import jken.module.scheduler.support.BooleanMap;
+import jken.module.web.support.BooleanMap;
 import org.quartz.*;
 
 import javax.validation.constraints.NotNull;

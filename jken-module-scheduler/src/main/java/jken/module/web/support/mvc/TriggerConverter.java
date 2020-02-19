@@ -1,6 +1,6 @@
-package jken.module.scheduler.support.mvc;
+package jken.module.web.support.mvc;
 
-import jken.module.scheduler.model.TriggerModel;
+import jken.module.web.model.TriggerModel;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;

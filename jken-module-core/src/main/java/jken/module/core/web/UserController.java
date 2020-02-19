@@ -5,7 +5,7 @@
  * @LastModified: 2020-02-05T19:35:47.651+08:00
  */
 
-package jken.module.core.controller;
+package jken.module.core.web;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;

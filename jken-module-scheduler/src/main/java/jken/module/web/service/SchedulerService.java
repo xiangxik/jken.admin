@@ -1,8 +1,8 @@
-package jken.module.scheduler.service;
+package jken.module.web.service;
 
 import com.google.common.base.Strings;
-import jken.module.scheduler.model.JobModel;
-import jken.module.scheduler.model.TriggerModel;
+import jken.module.web.model.JobModel;
+import jken.module.web.model.TriggerModel;
 import jken.security.CorpCodeHolder;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;

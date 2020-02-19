@@ -5,7 +5,7 @@
  * @LastModified: 2020-02-10T21:03:20.238+08:00
  */
 
-package jken.module.blog.controller;
+package jken.module.blog.web;
 
 import jken.module.blog.entity.ArticleCategory;
 import com.querydsl.core.types.Predicate;
