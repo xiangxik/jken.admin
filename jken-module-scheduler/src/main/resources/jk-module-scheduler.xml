@@ -21,8 +21,8 @@
     </menus>
     <dicts>
         <dict name="作业类型" code="job_class">
-            <item value="org.quartz.jobs.ee.mail.SendMailJob" name="发送邮件"/>
-            <item value="org.quartz.jobs.NativeJob" name="执行本地命令"/>
+            <item value="jken.module.scheduler.job.SendMailJob" name="发送邮件"/>
+            <item value="jken.module.scheduler.job.NativeJob" name="执行本地命令"/>
         </dict>
     </dicts>
 </module>

@@ -1,7 +1,7 @@
-package jken.module.web.model;
+package jken.module.scheduler.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jken.module.web.support.BooleanMap;
+import jken.module.scheduler.support.BooleanMap;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.quartz.impl.triggers.SimpleTriggerImpl;

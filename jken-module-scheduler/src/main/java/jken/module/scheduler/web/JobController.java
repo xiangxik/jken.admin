@@ -1,9 +1,9 @@
-package jken.module.web.controller;
+package jken.module.scheduler.web;
 
 import com.google.common.collect.Lists;
-import jken.module.web.model.JobModel;
-import jken.module.web.model.TriggerModel;
-import jken.module.web.service.SchedulerService;
+import jken.module.scheduler.model.JobModel;
+import jken.module.scheduler.model.TriggerModel;
+import jken.module.scheduler.service.SchedulerService;
 import jken.support.web.BaseController;
 import org.quartz.Job;
 import org.quartz.SchedulerException;

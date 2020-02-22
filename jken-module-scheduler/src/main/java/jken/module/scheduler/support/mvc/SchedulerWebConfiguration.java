@@ -1,4 +1,4 @@
-package jken.module.web.support.mvc;
+package jken.module.scheduler.support.mvc;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;

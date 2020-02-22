@@ -1,6 +1,6 @@
-package jken.module.web.support.mvc;
+package jken.module.scheduler.support.mvc;
 
-import jken.module.web.model.JobModel;
+import jken.module.scheduler.model.JobModel;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
