@@ -5,9 +5,13 @@ import jken.support.data.LogicDeleteable;
 import jken.support.data.Sortable;
 import jken.support.data.jpa.CorpableEntity;
 
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
+@Entity
+@Table(name = "tbl_station")
 public class Station extends CorpableEntity<User, Long> implements LogicDeleteable, Sortable {
 
     /**
@@ -25,7 +29,7 @@ public class Station extends CorpableEntity<User, Long> implements LogicDeleteab
     /**
      * seo关键字
      **/
-    private String seoKeyword;
+    private String seoKeywords;
     /**
      * seo标题
      **/
@@ -97,12 +101,12 @@ public class Station extends CorpableEntity<User, Long> implements LogicDeleteab
         this.seoDescription = seoDescription;
     }
 
-    public String getSeoKeyword() {
-        return seoKeyword;
+    public String getSeoKeywords() {
+        return seoKeywords;
     }
 
-    public void setSeoKeyword(String seoKeyword) {
-        this.seoKeyword = seoKeyword;
+    public void setSeoKeywords(String seoKeywords) {
+        this.seoKeywords = seoKeywords;
     }
 
     public String getSeoTitle() {

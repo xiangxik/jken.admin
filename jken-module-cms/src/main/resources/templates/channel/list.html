@@ -23,7 +23,7 @@
   <div class="layui-fluid">
     <div class="layui-card">
       <div class="layui-card-body">
-        <button sec:authorize="hasAuthority('articleCategory-add')" class="layui-btn" id="jk-create">新增</button>
+        <button sec:authorize="hasAuthority('channel-add')" class="layui-btn" id="jk-create">新增</button>
         <table class="layui-table layui-form" id="jk-treeTable"></table>
       </div>
     </div>
@@ -32,11 +32,11 @@
   <script src="https://www.layuicdn.com/layui/layui.js"></script>
   <script th:inline="javascript" type="text/javascript">
     var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
-    var listAble = /*[[${#authorization.expr("hasAuthority('articleCategory-list')")}]]*/false;
-    var viewAble = /*[[${#authorization.expr("hasAuthority('articleCategory-view')")}]]*/false;
-    var addAble = /*[[${#authorization.expr("hasAuthority('articleCategory-add')")}]]*/false;
-    var editAble = /*[[${#authorization.expr("hasAuthority('articleCategory-edit')")}]]*/false;
-    var deleteAble = /*[[${#authorization.expr("hasAuthority('articleCategory-delete')")}]]*/false;
+    var listAble = /*[[${#authorization.expr("hasAuthority('channel-list')")}]]*/false;
+    var viewAble = /*[[${#authorization.expr("hasAuthority('channel-view')")}]]*/false;
+    var addAble = /*[[${#authorization.expr("hasAuthority('channel-add')")}]]*/false;
+    var editAble = /*[[${#authorization.expr("hasAuthority('channel-edit')")}]]*/false;
+    var deleteAble = /*[[${#authorization.expr("hasAuthority('channel-delete')")}]]*/false;
   </script>
   <script>
     layui.config({
@@ -65,6 +65,11 @@
           align: 'left'
         },
         {
+          key: 'path',
+          title: '访问路径',
+          align: 'left'
+        },
+        {
           key: 'sortNo',
           title: '排序号',
           width: '60px',
@@ -88,24 +93,24 @@
 
       }
 
-      var articleCategoryTable = treeTable.render({
+      var channelTable = treeTable.render({
         id: "jk-treeTable",
         elem: '#jk-treeTable',
-        url: base + '/articleCategory?tree=',
+        url: base + '/channel?tree=',
         icon_key: 'name',
         is_checkbox: false,
         cols: cols
       });
 
       treeTable.reload = function () {
-        treeTable.render(articleCategoryTable);
+        treeTable.render(channelTable);
       };
       if (addAble) {
         $("#jk-create").on("click", function () {
           layer.open({
             type: 2,
-            title: '添加文章分类',
-            content: base + '/articleCategory/add',
+            title: '添加内容栏目',
+            content: base + '/channel/add',
             maxmin: true,
             area: ['800px', '800px'],
             btn: ['确定', '取消'],
@@ -126,8 +131,8 @@
             if (addAble) {
               layer.open({
                 type: 2,
-                title: '添加文章分类',
-                content: base + '/articleCategory/add?parent=' + id,
+                title: '添加内容栏目',
+                content: base + '/channel/add?parent=' + id,
                 maxmin: true,
                 area: ['800px', '800px'],
                 btn: ['确定', '取消'],
@@ -144,8 +149,8 @@
             if (viewAble) {
               layer.open({
                 type: 2,
-                title: '编辑文章分类',
-                content: base + '/articleCategory/' + id,
+                title: '编辑内容栏目',
+                content: base + '/channel/' + id,
                 maxmin: true,
                 area: ['800px', '800px'],
                 btn: editAble ? ['确定', '取消'] : ['关闭'],
@@ -162,7 +167,7 @@
             if (deleteAble) {
               layer.confirm('真的删除么？', function (index) {
                 $.ajax({
-                  url: base + '/articleCategory/' + id,
+                  url: base + '/channel/' + id,
                   dataType: 'json',
                   type: 'delete',
                   success: function (resp) {

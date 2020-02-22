@@ -1,12 +1,14 @@
 package jken.module.cms.entity;
 
 import jken.module.core.entity.User;
-import jken.support.data.Sortable;
 import jken.support.data.jpa.CorpableEntity;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public class Content extends CorpableEntity<User, Long> implements Sortable {
+@Entity
+@Table(name = "tbl_content")
+public class Content extends CorpableEntity<User, Long> {
 
     //浏览设置（1-允许游客访问 2-登录后访问）
     public enum ViewControl {
@@ -31,7 +33,12 @@ public class Content extends CorpableEntity<User, Long> implements Sortable {
         Directly, Contribute
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "station_id")
     private Station station;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
     private Channel channel;
 
     private Status status = Status.Draft;
@@ -123,6 +130,43 @@ public class Content extends CorpableEntity<User, Long> implements Sortable {
      * 是否已生成静态化页面
      */
     private boolean hasStatic;
+
+    /**
+     * seo描述
+     **/
+    private String seoDescription;
+    /**
+     * seo关键字
+     **/
+    private String seoKeywords;
+    /**
+     * seo标题
+     **/
+    private String seoTitle;
+
+    public String getSeoDescription() {
+        return seoDescription;
+    }
+
+    public void setSeoDescription(String seoDescription) {
+        this.seoDescription = seoDescription;
+    }
+
+    public String getSeoKeywords() {
+        return seoKeywords;
+    }
+
+    public void setSeoKeywords(String seoKeywords) {
+        this.seoKeywords = seoKeywords;
+    }
+
+    public String getSeoTitle() {
+        return seoTitle;
+    }
+
+    public void setSeoTitle(String seoTitle) {
+        this.seoTitle = seoTitle;
+    }
 
     public Station getStation() {
         return station;
@@ -340,13 +384,4 @@ public class Content extends CorpableEntity<User, Long> implements Sortable {
         this.hasStatic = hasStatic;
     }
 
-    @Override
-    public Integer getSortNo() {
-        return null;
-    }
-
-    @Override
-    public void setSortNo(Integer sortNo) {
-
-    }
 }

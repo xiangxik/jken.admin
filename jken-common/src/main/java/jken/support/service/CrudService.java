@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,7 @@ public abstract class CrudService<T, I extends Serializable> {
         return getRepository().findAllById(ids);
     }
 
+    @Transactional
     public <S extends T> List<S> saveAll(Iterable<S> entities) {
         return getRepository().saveAll(entities);
     }
@@ -49,14 +51,17 @@ public abstract class CrudService<T, I extends Serializable> {
         getRepository().flush();
     }
 
+    @Transactional
     public <S extends T> S saveAndFlush(S entity) {
         return getRepository().saveAndFlush(entity);
     }
 
+    @Transactional
     public void deleteInBatch(Iterable<T> entities) {
         getRepository().deleteInBatch(entities);
     }
 
+    @Transactional
     public void deleteAllInBatch() {
         getRepository().deleteAllInBatch();
     }
@@ -77,6 +82,7 @@ public abstract class CrudService<T, I extends Serializable> {
         return getRepository().findAll(pageable);
     }
 
+    @Transactional
     public <S extends T> S save(S entity) {
         return getRepository().save(entity);
     }
@@ -93,18 +99,22 @@ public abstract class CrudService<T, I extends Serializable> {
         return getRepository().count();
     }
 
+    @Transactional
     public void deleteById(I id) {
         getRepository().deleteById(id);
     }
 
+    @Transactional
     public void delete(T entity) {
         getRepository().delete(entity);
     }
 
+    @Transactional
     public void deleteAll(Iterable<? extends T> entities) {
         getRepository().deleteAll(entities);
     }
 
+    @Transactional
     public void deleteAll() {
         getRepository().deleteAll();
     }

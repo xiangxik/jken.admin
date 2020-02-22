@@ -4,12 +4,11 @@ import jken.module.core.entity.User;
 import jken.support.data.Corpable;
 import jken.support.data.jpa.TreeEntity;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "tbl_channel")
 public class Channel extends TreeEntity<Channel, User, Long> implements Corpable {
 
     /**
@@ -76,6 +75,19 @@ public class Channel extends TreeEntity<Channel, User, Long> implements Corpable
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "station_id")
     private Station station;
+
+    /**
+     * seo描述
+     **/
+    private String seoDescription;
+    /**
+     * seo关键字
+     **/
+    private String seoKeywords;
+    /**
+     * seo标题
+     **/
+    private String seoTitle;
 
     public String getPath() {
         return path;
@@ -211,6 +223,30 @@ public class Channel extends TreeEntity<Channel, User, Long> implements Corpable
 
     public void setStation(Station station) {
         this.station = station;
+    }
+
+    public String getSeoDescription() {
+        return seoDescription;
+    }
+
+    public void setSeoDescription(String seoDescription) {
+        this.seoDescription = seoDescription;
+    }
+
+    public String getSeoKeywords() {
+        return seoKeywords;
+    }
+
+    public void setSeoKeywords(String seoKeywords) {
+        this.seoKeywords = seoKeywords;
+    }
+
+    public String getSeoTitle() {
+        return seoTitle;
+    }
+
+    public void setSeoTitle(String seoTitle) {
+        this.seoTitle = seoTitle;
     }
 
     @Column(length = 100)
