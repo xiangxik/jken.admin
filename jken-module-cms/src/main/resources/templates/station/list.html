@@ -16,7 +16,7 @@
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
         name="viewport">
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
-    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+    <link media="all" rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}">
 </head>
 
 <body>
@@ -90,7 +90,7 @@
     </script>
     <script>
         layui.config({
-            base: base + '/static/layuiadmin/'
+            base: base + '/layuiadmin/'
         }).use(['table'], function () {
             var table = layui.table, form = layui.form;
             var $ = layui.$;

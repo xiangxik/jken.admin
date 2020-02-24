@@ -80,7 +80,6 @@ public class Article extends CorpableEntity<User, Long> {
     /**
      * 文章分类
      */
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private ArticleCategory category;

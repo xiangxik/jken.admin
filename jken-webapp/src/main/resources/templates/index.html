@@ -16,7 +16,7 @@
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
         name="viewport">
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
-    <link media="all" rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}">
+    <link media="all" rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}">
 </head>
 
 <body class="layui-layout-body">
@@ -99,6 +99,7 @@
             <div class="layui-side layui-side-menu">
                 <div class="layui-side-scroll">
                     <div class="layui-logo" lay-href="home">
+                        <img th:src="@{/images/logo-180.png}" style="height:48px;"/>
                         <span th:text="#{app.name}">jken system</span>
                     </div>
 
@@ -201,7 +202,7 @@
     </script>
     <script>
         layui.config({
-            base: base + '/static/layuiadmin/' //静态资源所在路径
+            base: base + '/layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
         }).use('index');

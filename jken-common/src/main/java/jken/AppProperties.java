@@ -24,7 +24,7 @@ public class AppProperties {
 
     public static class Security {
 
-        private List<String> ignorePatterns = Lists.newArrayList("/static/**", "/favicon.ico", "/h2/**");
+        private List<String> ignorePatterns = Lists.newArrayList("/js/**", "/images/**", "/css/**", "/layuiadmin/**", "/favicon.ico", "/h2/**");
 
         public List<String> getIgnorePatterns() {
             return ignorePatterns;

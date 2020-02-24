@@ -52,14 +52,14 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">页面标题</label>
                     <div class="layui-input-block">
-                        <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入页面标题"
+                        <input autocomplete="off" class="layui-input" placeholder="请输入页面标题"
                                th:field="*{seoTitle}" type="text">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">页面关键字</label>
                     <div class="layui-input-block">
-                        <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入页面关键字"
+                        <input autocomplete="off" class="layui-input" placeholder="请输入页面关键字"
                                th:field="*{seoKeywords}" type="text">
                     </div>
                 </div>
@@ -89,7 +89,7 @@
     </script>
     <script>
         layui.config({
-            base: base + '/static/layuiadmin/'
+            base: base + '/layuiadmin/'
         }).extend({
             edit: 'core/edit',
             xmSelect: 'core/xm-select' //主入口模块
