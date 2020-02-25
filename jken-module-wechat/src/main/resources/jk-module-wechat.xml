@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020.
+  ~ @Link: http://jken.site
+  ~ @Author: ken kong
+  ~ @LastModified: 2020-02-09T21:17:25.389+08:00
+  -->
+
+<module name="wechat" sortNo="900" ignorePatterns="/miniprogram/**">
+    <domains>
+        <domain name="小程序设置" code="wxaSetting">
+            <authority name="小程序设置查看" code="wxaSetting-view-info" patterns="/wxaSetting/info"/>
+            <authority name="小程序设置编辑" code="wxaSetting-edit-info" patterns="/wxaSetting/info" httpMethods="PUT"/>
+        </domain>
+    </domains>
+    <menus>
+        <mi name="微信管理" code="cms" iconCls="layui-icon-list">
+            <mi name="小程序设置" code="wxaSetting_info" href="wxaSetting/info"
+                authorities="wxaSetting-view-info,wxaSetting-edit-info"/>
+        </mi>
+    </menus>
+</module>

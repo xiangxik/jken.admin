@@ -30,11 +30,11 @@ public class IndexEndpoint {
         User currentUser = auditorAware.getCurrentAuditor().orElseThrow(RuntimeException::new);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("mis", TreeHelper.toTree(currentUser.getMenuItems()));
-        return "/index";
+        return "index";
     }
 
     @GetMapping({"/home"})
     public String homePage() {
-        return "/home";
+        return "home";
     }
 }

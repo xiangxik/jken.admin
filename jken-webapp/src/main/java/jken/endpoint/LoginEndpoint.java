@@ -26,7 +26,7 @@ public class LoginEndpoint {
     @GetMapping(value = "/login", params = "!error")
     public String loginPage(Model model) {
         model.addAttribute("corps", corpService.findAll());
-        return "/login";
+        return "login";
     }
 
     @GetMapping(value = "/login", params = "error")

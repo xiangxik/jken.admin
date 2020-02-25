@@ -1,5 +1,7 @@
 server:
-  port: 8080
+  port: 8081
+  servlet:
+    contextPath: /admin
   undertow:
     io-threads: 1
     worker-threads: 2

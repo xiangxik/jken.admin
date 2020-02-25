@@ -44,7 +44,7 @@ public class CorpController extends EntityController<Corp, Long> {
             entity = getService().createNew();
         }
         model.addAttribute("entity", entity);
-        return "/corp/add";
+        return "corp/add";
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CorpController extends EntityController<Corp, Long> {
         String adminUsername = getParameter("adminUsername");
         String adminPassword = getParameter("adminPassword");
 
-        if(Strings.isNullOrEmpty(adminUsername) || Strings.isNullOrEmpty(adminPassword)) {
+        if (Strings.isNullOrEmpty(adminUsername) || Strings.isNullOrEmpty(adminPassword)) {
             bindingResult.addError(new ObjectError("entity", "admin should not be null"));
         }
         if (bindingResult.hasErrors()) {
@@ -74,6 +74,9 @@ public class CorpController extends EntityController<Corp, Long> {
     @PutMapping(value = "/info")
     @ResponseBody
     public void saveInfo(@ModelAttribute @Valid Corp entity, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException("validate error");
+        }
         String corpCode = CorpCodeHolder.getCurrentCorpCode();
         Corp currentCorp = corpService.findByCode(corpCode);
 

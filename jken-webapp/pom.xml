@@ -36,6 +36,11 @@
             <artifactId>jken-module-scheduler</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>jken</groupId>
+            <artifactId>jken-module-wechat</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--        <dependency>-->
         <!--            <groupId>mysql</groupId>-->
         <!--            <artifactId>mysql-connector-java</artifactId>-->
@@ -59,6 +64,13 @@
                 <configuration>
                     <mainClass>jken.JkenSiteApplication</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

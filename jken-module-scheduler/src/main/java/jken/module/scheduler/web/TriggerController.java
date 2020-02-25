@@ -31,7 +31,7 @@ public class TriggerController extends BaseController {
      */
     @GetMapping(produces = "text/html")
     public String showList(Model model) {
-        return "/trigger/list";
+        return "trigger/list";
     }
 
     /**
@@ -77,7 +77,7 @@ public class TriggerController extends BaseController {
     @GetMapping(value = "/{id}", produces = "text/html")
     public String showDetailEdit(@PathVariable("id") TriggerModel entity, Model model) {
         model.addAttribute("entity", entity);
-        return "/trigger/edit_" + entity.getType();
+        return "trigger/edit_" + entity.getType();
     }
 
     /**

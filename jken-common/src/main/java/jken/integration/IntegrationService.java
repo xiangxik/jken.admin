@@ -106,20 +106,22 @@ public class IntegrationService {
                 Collections.addAll(ignorePatterns, module.getIgnorePatterns());
             }
 
-            for (JkenModule.Domain domain : module.getDomains()) {
-                if (domain.isCrud()) {
-                    String namePrefix = domain.getName();
-                    String codePrefix = domain.getCode();
-                    String patternPrefix = "/" + domain.getCode();
-                    authorities.add(authority(namePrefix + "列表", codePrefix + "-list", new String[]{patternPrefix + ""}, Authority.PatternType.ANT, HttpMethod.GET));
-                    authorities.add(authority(namePrefix + "查看", codePrefix + "-view", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.GET));
-                    authorities.add(authority(namePrefix + "新增", codePrefix + "-add", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.POST));
-                    authorities.add(authority(namePrefix + "修改", codePrefix + "-edit", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.PUT));
-                    authorities.add(authority(namePrefix + "删除", codePrefix + "-delete", new String[]{patternPrefix + ""}, Authority.PatternType.ANT, HttpMethod.DELETE));
-                }
-                if (domain.getAuthorities() != null) {
-                    for (Authority authority : domain.getAuthorities()) {
-                        authorities.add(authority);
+            if (module.getDomains() != null) {
+                for (JkenModule.Domain domain : module.getDomains()) {
+                    if (domain.isCrud()) {
+                        String namePrefix = domain.getName();
+                        String codePrefix = domain.getCode();
+                        String patternPrefix = "/" + domain.getCode();
+                        authorities.add(authority(namePrefix + "列表", codePrefix + "-list", new String[]{patternPrefix + ""}, Authority.PatternType.ANT, HttpMethod.GET));
+                        authorities.add(authority(namePrefix + "查看", codePrefix + "-view", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.GET));
+                        authorities.add(authority(namePrefix + "新增", codePrefix + "-add", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.POST));
+                        authorities.add(authority(namePrefix + "修改", codePrefix + "-edit", new String[]{patternPrefix + "/*"}, Authority.PatternType.ANT, HttpMethod.PUT));
+                        authorities.add(authority(namePrefix + "删除", codePrefix + "-delete", new String[]{patternPrefix + ""}, Authority.PatternType.ANT, HttpMethod.DELETE));
+                    }
+                    if (domain.getAuthorities() != null) {
+                        for (Authority authority : domain.getAuthorities()) {
+                            authorities.add(authority);
+                        }
                     }
                 }
             }

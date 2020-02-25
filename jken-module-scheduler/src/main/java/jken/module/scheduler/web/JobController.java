@@ -31,7 +31,7 @@ public class JobController extends BaseController {
      */
     @GetMapping(produces = "text/html")
     public String showList(Model model) {
-        return "/job/list";
+        return "job/list";
     }
 
     /**
@@ -72,7 +72,7 @@ public class JobController extends BaseController {
     @GetMapping(value = "/{id}", produces = "text/html")
     public String showDetailEdit(@PathVariable("id") JobModel entity, Model model) {
         model.addAttribute("entity", entity);
-        return "/job/edit_" + entity.getJobClass().getName();
+        return "job/edit_" + entity.getJobClass().getName();
     }
 
     /**
@@ -147,7 +147,7 @@ public class JobController extends BaseController {
     @GetMapping(value = "/{id}/triggers", produces = "text/html")
     public String showTriggers(@PathVariable("id") JobModel entity, Model model) {
         model.addAttribute("entity", entity);
-        return "/job/triggers";
+        return "job/triggers";
     }
 
     @GetMapping(value = "/{id}/triggers", produces = "application/json")
