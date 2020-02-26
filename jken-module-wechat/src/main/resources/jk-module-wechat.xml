@@ -15,8 +15,10 @@
     </domains>
     <menus>
         <mi name="微信管理" code="cms" iconCls="layui-icon-list">
-            <mi name="小程序设置" code="wxaSetting_info" href="wxaSetting/info"
-                authorities="wxaSetting-view-info,wxaSetting-edit-info"/>
+            <mi name="小程序" code="set">
+                <mi name="小程序设置" code="wxaSetting_info" href="wxaSetting/info"
+                    authorities="wxaSetting-view-info,wxaSetting-edit-info"/>
+            </mi>
         </mi>
     </menus>
 </module>

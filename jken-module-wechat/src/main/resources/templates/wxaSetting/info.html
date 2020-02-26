@@ -23,10 +23,10 @@
             margin: 0 auto;
         }
         .layui-form-label {
-            width: 120px;
+            width: 170px;
         }
         .layui-input-block {
-            margin-left: 150px;
+            margin-left: 200px;
         }
     </style>
 </head>
@@ -36,42 +36,42 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-header">设置公司资料</div>
+                    <div class="layui-card-header">小程序设置</div>
                     <div class="layui-card-body" pad15>
                         <div class="layui-form" id="jk-form" lay-filter="jk-form" th:object="${entity}">
                             <div class="layui-form-item">
-                                <label class="layui-form-label" jk:required>appid</label>
+                                <label class="layui-form-label" jk:required>AppID(小程序ID)</label>
                                 <div class="layui-input-block">
-                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入appid"
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppID(小程序ID)"
                                            th:field="*{appid}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label" jk:required>secret</label>
+                                <label class="layui-form-label" jk:required>AppSecret(小程序密钥)</label>
                                 <div class="layui-input-block">
-                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入secret"
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppSecret(小程序密钥)	"
                                            th:field="*{secret}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label" jk:required>token</label>
+                                <label class="layui-form-label" jk:required>Token(令牌)</label>
                                 <div class="layui-input-block">
                                     <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入token"
                                            th:field="*{token}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label" jk:required>aesKey</label>
+                                <label class="layui-form-label" jk:required>EncodingAESKey<br/>(消息加密密钥)</label>
                                 <div class="layui-input-block">
                                     <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入aesKey"
                                            th:field="*{aesKey}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label" jk:required>msgDataFormat</label>
-                                <div class="layui-input-inline">
-                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入msgDataFormat"
-                                           th:field="*{msgDataFormat}" type="text">
+                                <label class="layui-form-label" jk:required>数据格式</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" th:field="*{msgDataFormat}" value="JSON" title="JSON">
+                                    <input type="radio" th:field="*{msgDataFormat}" value="XML" title="XML">
                                 </div>
                             </div>
                             <div class="layui-form-item" sec:authorize="hasAuthority('wxaSetting-edit-info')">
