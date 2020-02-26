@@ -63,11 +63,11 @@ public class WxaSetting extends DataEntity<User, Long> implements Corpable {
 
     @Override
     public String getCorpCode() {
-        return null;
+        return corpCode;
     }
 
     @Override
     public void setCorpCode(String corpCode) {
-
+        this.corpCode = corpCode;
     }
 }

@@ -22,6 +22,12 @@
             position: relative;
             margin: 0 auto;
         }
+        .layui-form-label {
+            width: 120px;
+        }
+        .layui-input-block {
+            margin-left: 150px;
+        }
     </style>
 </head>
 
@@ -35,32 +41,37 @@
                         <div class="layui-form" id="jk-form" lay-filter="jk-form" th:object="${entity}">
                             <div class="layui-form-item">
                                 <label class="layui-form-label" jk:required>appid</label>
-                                <div class="layui-input-inline">
-                                    <div class="layui-form-mid" th:text="*{appid}"></div>
+                                <div class="layui-input-block">
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入appid"
+                                           th:field="*{appid}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" jk:required>secret</label>
-                                <div class="layui-input-inline">
-                                    <div class="layui-form-mid" th:text="*{secret}"></div>
+                                <div class="layui-input-block">
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入secret"
+                                           th:field="*{secret}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" jk:required>token</label>
-                                <div class="layui-input-inline">
-                                    <div class="layui-form-mid" th:text="*{token}"></div>
+                                <div class="layui-input-block">
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入token"
+                                           th:field="*{token}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" jk:required>aesKey</label>
-                                <div class="layui-input-inline">
-                                    <div class="layui-form-mid" th:text="*{aesKey}"></div>
+                                <div class="layui-input-block">
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入aesKey"
+                                           th:field="*{aesKey}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" jk:required>msgDataFormat</label>
                                 <div class="layui-input-inline">
-                                    <div class="layui-form-mid" th:text="*{msgDataFormat}"></div>
+                                    <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入msgDataFormat"
+                                           th:field="*{msgDataFormat}" type="text">
                                 </div>
                             </div>
                             <div class="layui-form-item" sec:authorize="hasAuthority('wxaSetting-edit-info')">
@@ -90,7 +101,7 @@
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
                 $.ajax({
-                    url: base + '/corp/info',
+                    url: base + '/wxaSetting/info',
                     data: data.field,
                     dataType: 'json',
                     type: 'put',
