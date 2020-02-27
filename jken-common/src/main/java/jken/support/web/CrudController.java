@@ -9,6 +9,7 @@ package jken.support.web;
 
 import jken.support.data.jpa.Entity;
 import jken.support.service.CrudService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -30,7 +31,8 @@ public class CrudController<T extends Entity<I>, I extends Serializable> extends
     public void afterPropertiesSet() {
         RequestMapping requestMapping = getClass().getAnnotation(RequestMapping.class);
         if (requestMapping != null) {
-            setViewDir(requestMapping.value()[0]);
+            String path = StringUtils.trimToEmpty(requestMapping.value()[0]);
+            setViewDir(StringUtils.removeStart(path, "/"));
         }
     }
 

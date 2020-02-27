@@ -1,22 +1,48 @@
 package jken.module.wechat.entity;
 
 import jken.module.core.entity.User;
-import jken.support.data.Corpable;
-import jken.support.data.jpa.DataEntity;
+import jken.support.data.jpa.CorpableEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tbl_miniprogram")
-public class WxaSetting extends DataEntity<User, Long> implements Corpable {
+public class Miniprogram extends CorpableEntity<User, Long> {
+
+    private String name;
+    private String logo;
+    private String description;
 
     private String appid;
     private String secret;
     private String token;
     private String aesKey;
     private String msgDataFormat;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getAppid() {
         return appid;
@@ -56,18 +82,5 @@ public class WxaSetting extends DataEntity<User, Long> implements Corpable {
 
     public void setMsgDataFormat(String msgDataFormat) {
         this.msgDataFormat = msgDataFormat;
-    }
-
-    @Column(length = 100, unique = true)
-    private String corpCode;
-
-    @Override
-    public String getCorpCode() {
-        return corpCode;
-    }
-
-    @Override
-    public void setCorpCode(String corpCode) {
-        this.corpCode = corpCode;
     }
 }

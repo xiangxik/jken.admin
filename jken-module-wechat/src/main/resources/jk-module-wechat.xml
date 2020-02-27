@@ -6,19 +6,14 @@
   ~ @LastModified: 2020-02-09T21:17:25.389+08:00
   -->
 
-<module name="wechat" sortNo="900" ignorePatterns="/miniprogram/**">
+<module name="wechat" sortNo="900" ignorePatterns="/wxa/**">
     <domains>
-        <domain name="小程序设置" code="wxaSetting">
-            <authority name="小程序设置查看" code="wxaSetting-view-info" patterns="/wxaSetting/info"/>
-            <authority name="小程序设置编辑" code="wxaSetting-edit-info" patterns="/wxaSetting/info" httpMethods="PUT"/>
-        </domain>
+        <domain name="小程序设置" code="miniprogram" crud="true"/>
     </domains>
     <menus>
-        <mi name="微信管理" code="cms" iconCls="layui-icon-list">
-            <mi name="小程序" code="set">
-                <mi name="小程序设置" code="wxaSetting_info" href="wxaSetting/info"
-                    authorities="wxaSetting-view-info,wxaSetting-edit-info"/>
-            </mi>
+        <mi name="微信管理" code="cms" iconCls="layui-icon-login-wechat">
+            <mi name="小程序" code="miniprogram" href="miniprogram"
+                authorities="miniprogram-list,miniprogram-view,miniprogram-add,miniprogram-edit,miniprogram-delete"/>
         </mi>
     </menus>
 </module>
