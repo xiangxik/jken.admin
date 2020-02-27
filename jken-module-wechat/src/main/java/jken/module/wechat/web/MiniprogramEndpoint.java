@@ -21,8 +21,8 @@ public class MiniprogramEndpoint {
     @Autowired
     private WxMaServiceFactory wxMaServiceFactory;
 
-    @GetMapping("/{id}")
-    public String joinUp(@PathVariable("id") Long id, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
+    @GetMapping("/{corp}/{id}")
+    public String joinUp(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
         WxMaService wxMaService = wxMaServiceFactory.get(id);
         if (wxMaService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
@@ -30,8 +30,8 @@ public class MiniprogramEndpoint {
         return "valid error";
     }
 
-    @PostMapping("/{id}")
-    public String service(@PathVariable("id") Long id, @RequestParam(name = "encrypt_type", required = false) String encryptType,
+    @PostMapping("/{corp}/{id}")
+    public String service(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam(name = "encrypt_type", required = false) String encryptType,
                           @RequestParam(name = "msg_signature", required = false) String msgSignature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
                           @RequestParam(name = "nonce", required = false) String nonce,
@@ -52,8 +52,8 @@ public class MiniprogramEndpoint {
         return isAesEncrypt ? outMessage.toEncryptedXml(config) : outMessage.toXml();
     }
 
-    @GetMapping("/{id}/authCode2Session")
-    public String authCode2Session(@PathVariable("id") Long id, @RequestParam("code") String code) {
+    @GetMapping("/{corp}/{id}/authCode2Session")
+    public String authCode2Session(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam("code") String code) {
         WxMaService wxMaService = wxMaServiceFactory.get(id);
         WxMaJscode2SessionResult result = null;
         try {
@@ -67,8 +67,8 @@ public class MiniprogramEndpoint {
         return "success";
     }
 
-    @GetMapping("/{id}/sendSubscribe")
-    public void sendSubscribeMessage(@PathVariable("id") Long id) {
+    @GetMapping("/{corp}/{id}/sendSubscribe")
+    public void sendSubscribeMessage(@PathVariable("corp") String corpCode, @PathVariable("id") Long id) {
         WxMaService wxMaService = wxMaServiceFactory.get(id);
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
         subscribeMessage.setToUser("onRr74nyDCAeuD7vem0mKXfvW7UQ");
