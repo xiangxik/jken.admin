@@ -5,6 +5,7 @@ import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import jken.module.wechat.entity.Miniprogram;
 import jken.module.wechat.repo.MiniprogramRepository;
+import org.apache.commons.codec.binary.Base64;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class WxMaServiceFactory {
         config.setAppid(setting.getAppid());
         config.setSecret(setting.getSecret());
         config.setToken(setting.getToken());
-        config.setAesKey(setting.getAesKey());
+        config.setAesKey(Base64.encodeBase64String(setting.getAesKey().getBytes()));
         config.setMsgDataFormat(setting.getMsgDataFormat());
 
         WxMaServiceImpl service = new WxMaServiceImpl();
