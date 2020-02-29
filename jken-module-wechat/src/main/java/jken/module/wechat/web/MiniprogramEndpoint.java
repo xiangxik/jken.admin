@@ -21,22 +21,22 @@ public class MiniprogramEndpoint {
     @Autowired
     private WxMaServiceFactory wxMaServiceFactory;
 
-    @GetMapping("/{corp}/{id}")
-    public String joinUp(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
-        WxMaService wxMaService = wxMaServiceFactory.get(id);
+    @GetMapping("/{corp}/{code}")
+    public String joinUp(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
+        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
         if (wxMaService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }
         return "valid error";
     }
 
-    @PostMapping("/{corp}/{id}")
-    public String service(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam(name = "encrypt_type", required = false) String encryptType,
+    @PostMapping("/{corp}/{code}")
+    public String service(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam(name = "encrypt_type", required = false) String encryptType,
                           @RequestParam(name = "msg_signature", required = false) String msgSignature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
                           @RequestParam(name = "nonce", required = false) String nonce,
                           @RequestBody(required = false) String data) {
-        WxMaService wxMaService = wxMaServiceFactory.get(id);
+        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
         WxMaConfig config = wxMaService.getWxMaConfig();
 
         boolean isJson = Objects.equals(config.getMsgDataFormat(), WxMaConstants.MsgDataFormat.JSON);
@@ -52,12 +52,12 @@ public class MiniprogramEndpoint {
         return isAesEncrypt ? outMessage.toEncryptedXml(config) : outMessage.toXml();
     }
 
-    @GetMapping("/{corp}/{id}/authCode2Session")
-    public String authCode2Session(@PathVariable("corp") String corpCode, @PathVariable("id") Long id, @RequestParam("code") String code) {
-        WxMaService wxMaService = wxMaServiceFactory.get(id);
+    @GetMapping("/{corp}/{code}/authCode2Session")
+    public String authCode2Session(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam("code") String jsCode) {
+        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
         WxMaJscode2SessionResult result = null;
         try {
-            result = wxMaService.jsCode2SessionInfo(code);
+            result = wxMaService.jsCode2SessionInfo(jsCode);
             System.out.println("openid:" + result.getOpenid());
             System.out.println("sessionKey:" + result.getSessionKey());
             System.out.println("unionid:" + result.getUnionid());
@@ -67,9 +67,9 @@ public class MiniprogramEndpoint {
         return "success";
     }
 
-    @GetMapping("/{corp}/{id}/sendSubscribe")
-    public void sendSubscribeMessage(@PathVariable("corp") String corpCode, @PathVariable("id") Long id) {
-        WxMaService wxMaService = wxMaServiceFactory.get(id);
+    @GetMapping("/{corp}/{code}/sendSubscribe")
+    public void sendSubscribeMessage(@PathVariable("corp") String corpCode, @PathVariable("code") String code) {
+        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
         subscribeMessage.setToUser("onRr74nyDCAeuD7vem0mKXfvW7UQ");
         subscribeMessage.setTemplateId("FcOZspWz6--7IWCiIgMYgWzy49AkzGNU4CF-pJYg6c8");

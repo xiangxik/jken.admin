@@ -35,9 +35,30 @@
     <div class="layui-form" id="jk-form" lay-filter="jk-form" style="padding: 20px 30px 0 0;" th:object="${entity}">
         <div class="layui-form-item">
             <label class="layui-form-label" jk:required>名称</label>
-            <div class="layui-input-block">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入名称，用于快速区分"
+            <div class="layui-input-inline">
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入名称"
                        th:field="*{name}" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" jk:required>代号</label>
+            <div class="layui-input-inline">
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入代号"
+                       th:field="*{code}" type="text">
+            </div>
+            <div class="layui-form-mid layui-word-aux">必须唯一</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">logo</label>
+            <div class="layui-input-block">
+                <input autocomplete="off" class="layui-input" maxlength="200" minlength="4"
+                       placeholder="请输入logo地址" th:field="*{logo}" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea autocomplete="off" class="layui-textarea" th:field="*{description}"></textarea>
             </div>
         </div>
 

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 public class Miniprogram extends CorpableEntity<User, Long> {
 
     private String name;
+    private String code;
     private String logo;
     private String description;
 
@@ -26,6 +27,14 @@ public class Miniprogram extends CorpableEntity<User, Long> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getLogo() {

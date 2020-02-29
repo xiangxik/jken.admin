@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class WxMaServiceFactory {
 
-    private final Map<Long, WxMaService> SERVICES = new HashMap<>();
+    private final Map<String, WxMaService> SERVICES = new HashMap<>();
 
     private final MiniprogramRepository miniprogramRepository;
 
@@ -19,14 +19,15 @@ public class WxMaServiceFactory {
         this.miniprogramRepository = miniprogramRepository;
     }
 
-    public WxMaService get(Long id) {
-        WxMaService service = SERVICES.get(id);
+    public WxMaService get(String code, String corpCode) {
+        String key = corpCode + '@' + code;
+        WxMaService service = SERVICES.get(key);
         if (service == null) {
             synchronized (this) {
                 if (service == null) {
-                    service = buildService(id);
+                    service = buildService(code, corpCode);
                     if (service != null) {
-                        SERVICES.put(id, service);
+                        SERVICES.put(key, service);
                     }
                 }
             }
@@ -34,8 +35,8 @@ public class WxMaServiceFactory {
         return service;
     }
 
-    protected WxMaService buildService(Long id) {
-        Miniprogram setting = miniprogramRepository.findById(id).orElseThrow(RuntimeException::new);
+    protected WxMaService buildService(String code, String corpCode) {
+        Miniprogram setting = miniprogramRepository.findByCodeAndCorpCode(code, corpCode);
 
         WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
         config.setAppid(setting.getAppid());

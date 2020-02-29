@@ -60,17 +60,26 @@
             </script>
 
                 <table class="layui-table"
-                    lay-data="{height: 'full-128', cellMinWidth: 120, page: true, limit:30, autoSort: false, url:'miniprogram?_path_filter=*,*.id,*.name,*.appid', id:'jk-table', toolbar: '#jk-toolbar'}"
+                    lay-data="{height: 'full-128', cellMinWidth: 120, page: true, limit:30, autoSort: false, url:'miniprogram?_path_filter=*,*.id,*.name,*.code,*.logo,*.appid', id:'jk-table', toolbar: '#jk-toolbar'}"
                     lay-filter="jk-table">
                     <thead>
                         <tr>
                             <th lay-data="{field:'id', checkbox:true}"></th>
-                            <th lay-data="{field:'name', sort: true}">名称</th>
+                            <th lay-data="{field:'name', sort: true, templet:'#nameTpl'}">名称</th>
+                            <th lay-data="{field:'code', sort: true}">代号</th>
                             <th lay-data="{field:'appid', sort: true}">appid</th>
                             <th lay-data="{width:100, toolbar: '#jk-tool', align: 'center'}" sec:authorize="hasAuthority('miniprogram-view')||hasAuthority('miniprogram-delete')">操作</th>
                         </tr>
                     </thead>
                 </table>
+
+                <script type="text/html" id="nameTpl">
+                    {{#  if(d.logo&&d.logo!=""){ }}
+                        <img src="{{d.logo}}" style="height:28px;" />
+                    {{#  } }}
+
+                    {{d.name}}
+                </script>
 
                 <script id="jk-tool" type="text/html">
                 <div class="layui-btn-group">
