@@ -46,9 +46,9 @@ public class IntegrationService {
         xStream.useAttributeFor(Authority.class, "patterns");
         xStream.useAttributeFor(Authority.class, "patternType");
         xStream.useAttributeFor(Authority.class, "httpMethods");
-        xStream.registerLocalConverter(Authority.class, "patterns", new StringToArrayConverter<>(String.class, i -> i));
-        xStream.registerLocalConverter(Authority.class, "patternType", new StringToArrayConverter<>(Authority.PatternType.class, i -> Authority.PatternType.valueOf(i)));
-        xStream.registerLocalConverter(Authority.class, "httpMethods", new StringToArrayConverter<>(HttpMethod.class, i -> HttpMethod.valueOf(i)));
+        xStream.registerLocalConverter(Authority.class, "patterns", new StringToArrayConverter<>(String.class, i -> i.trim()));
+        xStream.registerLocalConverter(Authority.class, "patternType", new StringToArrayConverter<>(Authority.PatternType.class, i -> Authority.PatternType.valueOf(i.trim())));
+        xStream.registerLocalConverter(Authority.class, "httpMethods", new StringToArrayConverter<>(HttpMethod.class, i -> HttpMethod.valueOf(i.trim())));
 
         xStream.alias("mi", JkenModule.Mi.class);
         xStream.useAttributeFor(JkenModule.Mi.class, "name");

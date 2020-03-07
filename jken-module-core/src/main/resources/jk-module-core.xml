@@ -6,7 +6,7 @@
   ~ @LastModified: 2020-02-09T21:17:25.389+08:00
   -->
 
-<module name="code" sortNo="0" ignorePatterns="/error, /error/**">
+<module name="code" sortNo="0" ignorePatterns="/error,/error/**">
     <domains>
         <domain name="公司" code="corp">
             <authority name="公司查看" code="corp-view-info" patterns="/corp/info"/>

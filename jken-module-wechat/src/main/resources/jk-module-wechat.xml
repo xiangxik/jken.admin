@@ -6,7 +6,7 @@
   ~ @LastModified: 2020-02-09T21:17:25.389+08:00
   -->
 
-<module name="wechat" sortNo="900" ignorePatterns="/wxa/**, /wxp/**">
+<module name="wechat" sortNo="900" ignorePatterns="/wxa/**,/wxp/**">
     <domains>
         <domain name="公众号" code="officialaccount" crud="true"/>
         <domain name="小程序" code="miniprogram" crud="true"/>
