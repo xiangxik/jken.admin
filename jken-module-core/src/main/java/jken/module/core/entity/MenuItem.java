@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_menu_item")
+@Table(name = "tbl_core_menu_item")
 public class MenuItem extends TreeEntity<MenuItem, User, Long> implements Corpable, Lockedable {
 
     @NotNull

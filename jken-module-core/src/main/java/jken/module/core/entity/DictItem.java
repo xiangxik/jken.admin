@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tbl_dict_item")
+@Table(name = "tbl_core_dict_item")
 public class DictItem extends TreeEntity<DictItem, User, Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)

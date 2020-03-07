@@ -5,6 +5,6 @@ import jken.support.data.jpa.QuerydslEntityRepository;
 
 public interface MiniprogramRepository extends QuerydslEntityRepository<Miniprogram, Long> {
 
-    Miniprogram findByCodeAndCorpCode(String code, String corpCode);
+    Miniprogram findByAppid(String appid);
 
 }

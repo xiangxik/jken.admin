@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_wechat_miniprogram")
-public class Miniprogram extends CorpableEntity<User, Long> {
+@Table(name = "tbl_wechat_official_account")
+public class OfficialAccount extends CorpableEntity<User, Long> {
 
     private String name;
     private String logo;

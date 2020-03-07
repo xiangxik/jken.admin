@@ -14,7 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "tbl_corp")
+@Table(name = "tbl_core_corp")
 public class Corp extends DataEntity<User, Long> implements Disabledable {
 
     @NotNull

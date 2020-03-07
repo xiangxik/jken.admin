@@ -20,15 +20,14 @@ public class WxMaServiceFactory {
         this.miniprogramRepository = miniprogramRepository;
     }
 
-    public WxMaService get(String code, String corpCode) {
-        String key = corpCode + '@' + code;
-        WxMaService service = SERVICES.get(key);
+    public WxMaService get(String appid) {
+        WxMaService service = SERVICES.get(appid);
         if (service == null) {
             synchronized (this) {
                 if (service == null) {
-                    service = buildService(code, corpCode);
+                    service = buildService(appid);
                     if (service != null) {
-                        SERVICES.put(key, service);
+                        SERVICES.put(appid, service);
                     }
                 }
             }
@@ -36,8 +35,8 @@ public class WxMaServiceFactory {
         return service;
     }
 
-    protected WxMaService buildService(String code, String corpCode) {
-        Miniprogram setting = miniprogramRepository.findByCodeAndCorpCode(code, corpCode);
+    protected WxMaService buildService(String appid) {
+        Miniprogram setting = miniprogramRepository.findByAppid(appid);
 
         WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
         config.setAppid(setting.getAppid());

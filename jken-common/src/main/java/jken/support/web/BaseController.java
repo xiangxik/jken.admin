@@ -7,6 +7,8 @@
 
 package jken.support.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.context.request.RequestAttributes;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseController {
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ConversionService conversionService;

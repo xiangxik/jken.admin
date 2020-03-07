@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_role")
+@Table(name = "tbl_core_role")
 public class Role extends CorpableEntity<User, Long> implements Lockedable {
 
     @NotNull
@@ -40,12 +40,12 @@ public class Role extends CorpableEntity<User, Long> implements Lockedable {
     private Collection<User> users;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_role_menu",
+    @JoinTable(name = "tbl_core_role_menu",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"))
     private List<MenuItem> menuItems;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tbl_role_authority")
+    @CollectionTable(name = "tbl_core_role_authority")
     private List<String> authorities;
 
     public String getName() {

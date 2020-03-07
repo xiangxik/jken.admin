@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_article_category")
+@Table(name = "tbl_blog_article_category")
 public class ArticleCategory extends TreeEntity<ArticleCategory, User, Long> implements Corpable {
 
     /**

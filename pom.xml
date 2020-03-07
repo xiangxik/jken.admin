@@ -30,9 +30,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
-        <servlet-api.version>3.1.0</servlet-api.version>
-        <springboot.version>2.2.4.RELEASE</springboot.version>
+        <servlet-api.version>4.0.3</servlet-api.version>
+        <springboot.version>2.2.5.RELEASE</springboot.version>
+        <thymeleaf-springsecurity5.version>3.0.4.RELEASE</thymeleaf-springsecurity5.version>
+        <xstream.version>1.4.11.1</xstream.version>
         <querydsl.version>4.2.2</querydsl.version>
+        <wechat-sdk.version>3.7.0</wechat-sdk.version>
     </properties>
 
     <dependencyManagement>

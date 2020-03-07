@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_article_tag")
+@Table(name = "tbl_blog_article_tag")
 public class ArticleTag extends SortEntity<User, Long> implements Corpable {
 
     /**

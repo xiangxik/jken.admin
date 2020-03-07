@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_dict")
+@Table(name = "tbl_core_dict")
 public class Dict extends CorpableEntity<User, Long> implements Lockedable {
 
     @NotNull

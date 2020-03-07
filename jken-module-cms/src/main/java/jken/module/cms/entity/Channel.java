@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tbl_channel")
+@Table(name = "tbl_cms_channel")
 public class Channel extends TreeEntity<Channel, User, Long> implements Corpable {
 
     /**

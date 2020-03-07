@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tbl_core_user")
 public class User extends CorpableEntity<User, Long> implements UserDetails, Lockedable, Disabledable, LogicDeleteable {
 
     private static final long serialVersionUID = -6175300458939892868L;
@@ -74,7 +74,7 @@ public class User extends CorpableEntity<User, Long> implements UserDetails, Loc
     private boolean deleted = false;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_user_role",
+    @JoinTable(name = "tbl_core_user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tbl_content")
+@Table(name = "tbl_cms_content")
 public class Content extends CorpableEntity<User, Long> {
 
     //浏览设置（1-允许游客访问 2-登录后访问）

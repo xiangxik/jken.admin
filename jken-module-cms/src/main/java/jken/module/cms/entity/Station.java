@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_station")
+@Table(name = "tbl_cms_station")
 public class Station extends CorpableEntity<User, Long> implements LogicDeleteable, Sortable {
 
     /**

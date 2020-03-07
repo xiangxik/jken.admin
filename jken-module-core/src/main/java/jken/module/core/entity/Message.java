@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_message")
+@Table(name = "tbl_core_message")
 public class Message extends DataEntity<User, Long> {
 
     @NotNull

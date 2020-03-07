@@ -15,28 +15,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/wxa")
+@RequestMapping("/wxa/{appid}")
 public class MiniprogramEndpoint {
 
     @Autowired
     private WxMaServiceFactory wxMaServiceFactory;
 
-    @GetMapping("/{corp}/{code}")
-    public String joinUp(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
-        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
+    @GetMapping
+    public String joinUp(@PathVariable("appid") String appid, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
+        WxMaService wxMaService = wxMaServiceFactory.get(appid);
         if (wxMaService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }
         return "valid error";
     }
 
-    @PostMapping("/{corp}/{code}")
-    public String service(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam(name = "encrypt_type", required = false) String encryptType,
+    @PostMapping
+    public String service(@PathVariable("appid") String appid, @RequestParam(name = "encrypt_type", required = false) String encryptType,
                           @RequestParam(name = "msg_signature", required = false) String msgSignature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
                           @RequestParam(name = "nonce", required = false) String nonce,
                           @RequestBody(required = false) String data) {
-        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
+        WxMaService wxMaService = wxMaServiceFactory.get(appid);
         WxMaConfig config = wxMaService.getWxMaConfig();
 
         boolean isJson = Objects.equals(config.getMsgDataFormat(), WxMaConstants.MsgDataFormat.JSON);
@@ -52,9 +52,9 @@ public class MiniprogramEndpoint {
         return isAesEncrypt ? outMessage.toEncryptedXml(config) : outMessage.toXml();
     }
 
-    @GetMapping("/{corp}/{code}/authCode2Session")
-    public String authCode2Session(@PathVariable("corp") String corpCode, @PathVariable("code") String code, @RequestParam("code") String jsCode) {
-        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
+    @GetMapping("/authCode2Session")
+    public String authCode2Session(@PathVariable("appid") String appid, @RequestParam("code") String jsCode) {
+        WxMaService wxMaService = wxMaServiceFactory.get(appid);
         WxMaJscode2SessionResult result = null;
         try {
             result = wxMaService.jsCode2SessionInfo(jsCode);
@@ -65,30 +65,6 @@ public class MiniprogramEndpoint {
             e.printStackTrace();
         }
         return "success";
-    }
-
-    @GetMapping("/{corp}/{code}/sendSubscribe")
-    public void sendSubscribeMessage(@PathVariable("corp") String corpCode, @PathVariable("code") String code) {
-        WxMaService wxMaService = wxMaServiceFactory.get(code, corpCode);
-        WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
-        subscribeMessage.setToUser("onRr74nyDCAeuD7vem0mKXfvW7UQ");
-        subscribeMessage.setTemplateId("FcOZspWz6--7IWCiIgMYgWzy49AkzGNU4CF-pJYg6c8");
-        subscribeMessage.setPage("pages/index/index");
-        WxMaSubscribeMessage.Data thing1 = new WxMaSubscribeMessage.Data();
-        thing1.setName("thing1");
-        thing1.setValue("abc");
-        subscribeMessage.addData(thing1);
-
-        WxMaSubscribeMessage.Data thing2 = new WxMaSubscribeMessage.Data();
-        thing2.setName("thing2");
-        thing2.setValue("def");
-        subscribeMessage.addData(thing2);
-
-        try {
-            wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
     }
 
 }

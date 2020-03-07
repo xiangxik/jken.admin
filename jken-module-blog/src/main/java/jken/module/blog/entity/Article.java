@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tbl_article")
+@Table(name = "tbl_blog_article")
 public class Article extends CorpableEntity<User, Long> {
 
     /**
@@ -88,7 +88,7 @@ public class Article extends CorpableEntity<User, Long> {
      * 标签
      */
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_article_to_tag",
+    @JoinTable(name = "tbl_blog_article_to_tag",
             joinColumns = @JoinColumn(name = "article_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     @OrderBy("order asc")
     private Set<ArticleTag> articleTags = new HashSet<>();
