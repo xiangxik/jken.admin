@@ -1,7 +1,6 @@
 package jken.module.wechat.web;
 
 import jken.module.wechat.support.WxMpServiceFactory;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
@@ -19,9 +18,6 @@ public class OfficialAccountEndpoint {
 
     @Autowired
     private WxMpServiceFactory wxMpServiceFactory;
-
-    @Autowired
-    private WxMpMessageRouter messageRouter;
 
     @GetMapping
     public String joinUp(@PathVariable("appid") String appid, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp,
@@ -63,7 +59,7 @@ public class OfficialAccountEndpoint {
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
-            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.route(appid, inMessage);
             if (outMessage == null) {
                 return "";
             }
@@ -74,7 +70,7 @@ public class OfficialAccountEndpoint {
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxMpService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
             logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
-            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.route(appid, inMessage);
             if (outMessage == null) {
                 return "";
             }
@@ -86,9 +82,9 @@ public class OfficialAccountEndpoint {
         return out;
     }
 
-    private WxMpXmlOutMessage route(WxMpXmlMessage message) {
+    private WxMpXmlOutMessage route(String appid, WxMpXmlMessage message) {
         try {
-            return this.messageRouter.route(message);
+            return wxMpServiceFactory.getMessageRouter(appid).route(message);
         } catch (Exception e) {
             logger.error("路由消息时出现异常！", e);
         }

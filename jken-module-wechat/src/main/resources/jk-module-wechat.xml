@@ -8,10 +8,13 @@
 
 <module name="wechat" sortNo="900" ignorePatterns="/wxa/**">
     <domains>
-        <domain name="小程序设置" code="miniprogram" crud="true"/>
+        <domain name="公众号" code="officialaccount" crud="true"/>
+        <domain name="小程序" code="miniprogram" crud="true"/>
     </domains>
     <menus>
         <mi name="微信管理" code="cms" iconCls="layui-icon-login-wechat">
+            <mi name="公众号" code="officialaccount" href="officialaccount"
+                authorities="officialaccount-list,officialaccount-view,officialaccount-add,officialaccount-edit,officialaccount-delete"/>
             <mi name="小程序" code="miniprogram" href="miniprogram"
                 authorities="miniprogram-list,miniprogram-view,miniprogram-add,miniprogram-edit,miniprogram-delete"/>
         </mi>

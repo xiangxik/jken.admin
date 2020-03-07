@@ -55,17 +55,17 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>AppID(小程序ID)</label>
+            <label class="layui-form-label" jk:required>AppID(公众号ID)</label>
             <div class="layui-input-inline">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppID(小程序ID)"
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppID(公众号ID)"
                        th:field="*{appid}" type="text">
             </div>
             <div class="layui-form-mid layui-word-aux">必须唯一</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>AppSecret(小程序密钥)</label>
+            <label class="layui-form-label" jk:required>AppSecret(公众号密钥)</label>
             <div class="layui-input-block">
-                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppSecret(小程序密钥)	"
+                <input autocomplete="off" class="layui-input" lay-verify="required" placeholder="请输入AppSecret(公众号密钥)	"
                        th:field="*{secret}" type="text">
             </div>
         </div>
@@ -83,13 +83,6 @@
                        th:field="*{aesKey}" type="text">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label" jk:required>数据格式</label>
-            <div class="layui-input-block">
-                <input type="radio" th:field="*{msgDataFormat}" value="JSON" title="JSON">
-                <input type="radio" th:field="*{msgDataFormat}" value="XML" title="XML">
-            </div>
-        </div>
         <div class="layui-form-item layui-hide">
             <input id="jk-form-submit" lay-filter="jk-form-submit" lay-submit type="button" value="确认添加">
             <input id="jk-form-edit" lay-filter="jk-form-edit" lay-submit type="button" value="确认编辑">
@@ -100,8 +93,8 @@
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
-        var addAble = /*[[${#authorization.expr("hasAuthority('miniprogram-add')")}]]*/false;
-        var editAble = /*[[${#authorization.expr("hasAuthority('miniprogram-edit')")}]]*/false;
+        var addAble = /*[[${#authorization.expr("hasAuthority('officialaccount-add')")}]]*/false;
+        var editAble = /*[[${#authorization.expr("hasAuthority('officialaccount-edit')")}]]*/false;
     </script>
     <script>
         layui.config({
@@ -116,7 +109,7 @@
             form.on('submit(jk-form-submit)', function (data) {
                 if (entityId && editAble || !entityId && addAble) {
                     $.ajax({
-                        url: base + '/miniprogram' + (entityId ? '/' + entityId : ''),
+                        url: base + '/officialaccount' + (entityId ? '/' + entityId : ''),
                         data: data.field,
                         dataType: 'json',
                         type: entityId ? 'put' : 'post',

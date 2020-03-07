@@ -18,7 +18,6 @@ public class OfficialAccount extends CorpableEntity<User, Long> {
     private String secret;
     private String token;
     private String aesKey;
-    private String msgDataFormat;
 
     public String getName() {
         return name;
@@ -74,13 +73,5 @@ public class OfficialAccount extends CorpableEntity<User, Long> {
 
     public void setAesKey(String aesKey) {
         this.aesKey = aesKey;
-    }
-
-    public String getMsgDataFormat() {
-        return msgDataFormat;
-    }
-
-    public void setMsgDataFormat(String msgDataFormat) {
-        this.msgDataFormat = msgDataFormat;
     }
 }

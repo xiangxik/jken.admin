@@ -16,7 +16,6 @@
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
         name="viewport">
     <link href="https://www.layuicdn.com/layui/css/layui.css" media="all" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/editormd/css/editormd.css}" />
     <style>
         .layui-fluid {
             padding: 15px;
@@ -57,8 +56,8 @@
                             </div>
                             <div class="layui-form-item layui-form-text">
                                 <label class="layui-form-label">内容</label>
-                                <div class="layui-input-block" id="editor">
-                                    <textarea th:field="*{content}" style="display:none;"></textarea>
+                                <div class="layui-input-block">
+                                    <textarea th:field="*{content}" id="editor"></textarea>
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -113,8 +112,7 @@
     </div>
 
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
-    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-    <script th:src="@{/editormd/editormd.min.js}"></script>
+    <script th:src="@{/js/tinymce/tinymce.min.js}" referrerpolicy="origin"></script>
     <script th:inline="javascript" type="text/javascript">
         var base = /*[[${#httpServletRequest.getContextPath()}]]*/"";
         var entityId = /*[[${entity.id}]]*/null;
@@ -127,16 +125,70 @@
             base: base + '/layuiadmin/'
         }).extend({
             edit: 'core/edit',
-            xmSelect: 'core/xm-select' //主入口模块
+            xmSelect: 'core/xm-select'
         }).use(['edit', 'xmSelect'], function () {
             var $ = layui.$, form = layui.form;
 
-            var editor = editormd("editor", {
-                height: 800,
-                path: base + "/editormd/lib/"
-            });
-
             var xmSelect = layui.xmSelect;
+
+            tinymce.init({
+                selector: '#editor',
+                language: 'zh_CN',
+                plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+                imagetools_cors_hosts: ['picsum.photos'],
+                menubar: 'file edit view insert format tools table help',
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                toolbar_sticky: true,
+                autosave_ask_before_unload: true,
+                autosave_interval: "30s",
+                autosave_prefix: "{path}{query}-{id}-",
+                autosave_restore_when_empty: false,
+                autosave_retention: "2m",
+                image_advtab: true,
+                link_list: [
+                    { title: 'My page 1', value: 'http://www.tinymce.com' },
+                    { title: 'My page 2', value: 'http://www.moxiecode.com' }
+                ],
+                image_list: [
+                    { title: 'My page 1', value: 'http://www.tinymce.com' },
+                    { title: 'My page 2', value: 'http://www.moxiecode.com' }
+                ],
+                image_class_list: [
+                    { title: 'None', value: '' },
+                    { title: 'Some class', value: 'class-name' }
+                ],
+                importcss_append: true,
+                height: 400,
+                file_picker_callback: function (callback, value, meta) {
+                    /* Provide file and text for the link dialog */
+                    if (meta.filetype === 'file') {
+                        callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+                    }
+
+                    /* Provide image and alt text for the image dialog */
+                    if (meta.filetype === 'image') {
+                        callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+                    }
+
+                    /* Provide alternative source and posted for the media dialog */
+                    if (meta.filetype === 'media') {
+                        callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+                    }
+                },
+                templates: [
+                    { title: 'New Table', description: 'creates a new table', content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>' },
+                    { title: 'Starting my story', description: 'A cure for writers block', content: 'Once upon a time...' },
+                    { title: 'New list with dates', description: 'New List with dates', content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>' }
+                ],
+                template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+                template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+                height: 600,
+                image_caption: true,
+                quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                noneditable_noneditable_class: "mceNonEditable",
+                toolbar_drawer: 'sliding',
+                contextmenu: "link image imagetools table",
+            });
 
             var categorySelect = xmSelect.render({
                 el: '#jk-category',
@@ -179,6 +231,8 @@
             //监听提交
             form.on('submit(jk-form-submit)', function (data) {
                 if (entityId && editAble || !entityId && addAble) {
+                    var content = tinymce.editors['editor'].getContent();
+                    data.field['content'] = content;
                     $.ajax({
                         url: base + '/article' + (entityId ? '/' + entityId : ''),
                         data: data.field,
