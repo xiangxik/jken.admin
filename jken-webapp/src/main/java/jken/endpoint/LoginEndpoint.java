@@ -7,7 +7,7 @@
 
 package jken.endpoint;
 
-import jdk.internal.joptsimple.internal.Strings;
+import com.google.common.base.Strings;
 import jken.module.core.entity.Corp;
 import jken.module.core.service.CorpService;
 import jken.security.CorpCodeHolder;

@@ -12,13 +12,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
-@ConfigurationProperties("app")
-public class AppProperties {
+@ConfigurationProperties("jken")
+public class JkenProperties {
 
     private String name = "jken";
     private String version = "1.0";
 
-    private String ownerCorp = "wl000";
+    private String ownerCorp = "wl";
 
     private final Security security = new Security();
 

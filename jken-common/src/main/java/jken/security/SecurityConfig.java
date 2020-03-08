@@ -8,7 +8,7 @@
 package jken.security;
 
 import com.google.common.collect.Iterables;
-import jken.AppProperties;
+import jken.JkenProperties;
 import jken.integration.Authority;
 import jken.integration.IntegrationService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,14 +28,14 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-@EnableConfigurationProperties(AppProperties.class)
+@EnableConfigurationProperties(JkenProperties.class)
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AppProperties properties;
+    private final JkenProperties properties;
 
-    public SecurityConfig(AppProperties properties) {
+    public SecurityConfig(JkenProperties properties) {
         this.properties = properties;
     }
 

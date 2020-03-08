@@ -41,6 +41,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         if (corpService.count() == 0) {
             corpService.createNewCorp("广州当凌信息科技有限公司", "wl", "admin", "qwe123");
             corpService.createNewCorp("广州微禹信息科技有限公司", "wy", "admin", "qwe123");
+            corpService.createNewCorp("广州XXXX有限公司", "demo", "admin", "qwe123");
         }
     }
 }

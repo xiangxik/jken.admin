@@ -8,7 +8,7 @@
 package jken.security;
 
 import com.google.common.collect.Lists;
-import jken.AppProperties;
+import jken.JkenProperties;
 import jken.integration.Authority;
 import jken.support.data.jpa.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import java.util.Optional;
 public abstract class AbstractUserDetailsService<U extends UserDetails, I extends Serializable> implements UserDetailsService, AuditorAware<U>, ApplicationContextAware {
 
     @Autowired
-    private AppProperties properties;
+    private JkenProperties properties;
 
     private ApplicationContext applicationContext;
 
