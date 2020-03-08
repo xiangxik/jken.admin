@@ -15,6 +15,7 @@ import java.util.Collection;
 
 public class CustomUserDetails<I extends Serializable> extends User {
 
+    public static final String CORP_CODE_HEADER = "corp_code";
     public static final String CORP_CODE_REQUEST_PARAMETER = "corpCode";
     public static final String CORP_CODE_COOKIE = "corp_code";
     private static final long serialVersionUID = 8063484673226426535L;

@@ -7,7 +7,6 @@
 
 package jken.security;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import jken.AppProperties;
 import jken.integration.Authority;
@@ -25,15 +24,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.WebUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -106,22 +99,6 @@ public abstract class AbstractUserDetailsService<U extends UserDetails, I extend
     }
 
     protected String obtainCorpCode() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        String corpCode = null;
-        if (requestAttributes != null) {
-            if (requestAttributes instanceof ServletRequestAttributes) {
-                HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-                corpCode = request.getParameter(CustomUserDetails.CORP_CODE_REQUEST_PARAMETER);
-
-                if (Strings.isNullOrEmpty(corpCode)) {
-                    Cookie cookie = WebUtils.getCookie(request, CustomUserDetails.CORP_CODE_COOKIE);
-                    if (cookie != null) {
-                        corpCode = cookie.getValue();
-                    }
-                }
-            }
-        }
-
-        return corpCode;
+        return CorpCodeHolder.obtainCorpCode();
     }
 }

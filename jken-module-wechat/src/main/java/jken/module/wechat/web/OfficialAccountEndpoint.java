@@ -4,6 +4,8 @@ import jken.module.wechat.support.WxMpServiceFactory;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.config.WxMpConfigStorage;
+import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +82,10 @@ public class OfficialAccountEndpoint {
 
         logger.debug("\n组装回复信息：{}", out);
         return out;
+    }
+
+    public static void main(String[] args) {
+
     }
 
     private WxMpXmlOutMessage route(String appid, WxMpXmlMessage message) {

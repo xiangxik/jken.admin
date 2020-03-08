@@ -7,7 +7,6 @@ import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +95,7 @@ public class WxMpServiceFactory {
         config.setAppId(setting.getAppid());
         config.setSecret(setting.getSecret());
         config.setToken(setting.getToken());
-        config.setAesKey(Base64.encodeBase64String(setting.getAesKey().getBytes()));
+        config.setAesKey(setting.getAesKey());
 
         WxMpService service = new WxMpServiceImpl();
         service.setWxMpConfigStorage(config);

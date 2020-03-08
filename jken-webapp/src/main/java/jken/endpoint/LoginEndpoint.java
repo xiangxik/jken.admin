@@ -7,7 +7,10 @@
 
 package jken.endpoint;
 
+import jdk.internal.joptsimple.internal.Strings;
+import jken.module.core.entity.Corp;
 import jken.module.core.service.CorpService;
+import jken.security.CorpCodeHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
@@ -25,7 +28,13 @@ public class LoginEndpoint {
 
     @GetMapping(value = "/login", params = "!error")
     public String loginPage(Model model) {
-        model.addAttribute("corps", corpService.findAll());
+        String corpCode = CorpCodeHolder.obtainCorpCode();
+        Corp corp = Strings.isNullOrEmpty(corpCode) ? null : corpService.findByCode(corpCode);
+        if (corp == null) {
+            model.addAttribute("corps", corpService.findAll());
+        } else {
+            model.addAttribute("corp", corp);
+        }
         return "login";
     }
 
